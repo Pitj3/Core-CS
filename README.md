@@ -1,4 +1,4 @@
-[CoreLogo]: https://github.com/Pitj3/Core/blob/master/Images/CoreLogoSide_HD_Dark_Resized.png
+[CoreLogo]: https://gitlab.com/Pitj3/Core-CS/blob/master/Images/CoreLogoSide_HD_Dark_Resized.png
 ![alt text][CoreLogo]
 
 Website: TBA
