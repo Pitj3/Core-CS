@@ -625,7 +625,7 @@ namespace CoreEngine.Engine.Input
         #endregion
 
         #region Events
-        public static void OnLoad(EventArgs e)
+        internal static void OnLoad(EventArgs e)
         {
             _keys = new ButtonState[(int)Key.LastKey];
             _mousebuttons = new ButtonState[(int)MouseButton.LastButton];
@@ -648,12 +648,12 @@ namespace CoreEngine.Engine.Input
             SetupInputEvents();
         }
 
-        public static void OnUnload(EventArgs e)
+        internal static void OnUnload(EventArgs e)
         {
 
         }
 
-        public static void OnRenderFrame(FrameEventArgs e)
+        internal static void OnRenderFrame(FrameEventArgs e)
         {
             for (int i = 0; i < (int)Key.LastKey; i++)
             {

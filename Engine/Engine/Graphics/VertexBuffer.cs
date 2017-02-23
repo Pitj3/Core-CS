@@ -59,7 +59,7 @@ namespace CoreEngine.Engine.Graphics
             this._size = size;
             GL.BindBuffer(BufferTarget.ArrayBuffer, _id);
 
-            float[] d = (float[])data;
+            MeshVertex[] d = (MeshVertex[])data;
 
             GL.BufferData(BufferTarget.ArrayBuffer, new IntPtr(size), d, (BufferUsageHint)_usage);
         }
@@ -86,6 +86,10 @@ namespace CoreEngine.Engine.Graphics
         public void Bind()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, _id);
+            for (int i = 0; i < _layout.GetLayout().Count; i++)
+            {
+                GL.EnableVertexAttribArray(i);
+            }
         }
 
         /// <summary>
@@ -94,6 +98,10 @@ namespace CoreEngine.Engine.Graphics
         public void Unbind()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            for (int i = 0; i < _layout.GetLayout().Count; i++)
+            {
+                GL.DisableVertexAttribArray(i);
+            }
         }
         #endregion
     }

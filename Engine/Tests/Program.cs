@@ -1,4 +1,5 @@
 ﻿using CoreEngine.Engine;
+using CoreEngine.Engine.Graphics;
 using CoreEngine.Engine.Application;
 
 namespace CoreEngine.Tests
@@ -7,7 +8,9 @@ namespace CoreEngine.Tests
     {
         static void Main(string[] args)
         {
-            CoreApplication app = Core.CreateCoreApplication(1280, 720);
+
+            Game app = new Game(1280, 720);
+
             app.Run();
         }
     }

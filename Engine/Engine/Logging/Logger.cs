@@ -32,7 +32,7 @@ namespace CoreEngine.Engine.Logging
         /// Called when the application is loaded
         /// </summary>
         /// <param name="e">Event arguments</param>
-        public static void OnLoad(EventArgs e)
+        internal static void OnLoad(EventArgs e)
         {
             _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         }

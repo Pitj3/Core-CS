@@ -4,6 +4,7 @@ using OpenTK;
 using CoreEngine.Engine.Input;
 using CoreEngine.Engine.Time;
 using CoreEngine.Engine.Logging;
+using CoreEngine.Engine.Graphics;
 
 namespace CoreEngine.Engine.Application
 {
@@ -43,7 +44,7 @@ namespace CoreEngine.Engine.Application
         /// <param name="title">Title of the window</param>
         /// <param name="fullscreen">Should this window by fullscreen</param>
         /// <param name="vsync">Should this windows use vsync</param>
-        public CoreApplication(uint width, uint height, string title, bool fullscreen, bool vsync) : base((int)width, (int)height, OpenTK.Graphics.GraphicsMode.Default, title, fullscreen?GameWindowFlags.Fullscreen:GameWindowFlags.Default)
+        public CoreApplication(uint width = 800, uint height = 600, string title = "Core Application", bool fullscreen = false, bool vsync = true) : base((int)width, (int)height, OpenTK.Graphics.GraphicsMode.Default, title, fullscreen?GameWindowFlags.Fullscreen:GameWindowFlags.Default)
         {
             this._width = width;
             this._height = height;
@@ -59,6 +60,8 @@ namespace CoreEngine.Engine.Application
                 fullscreen = fullscreen,
                 vsync = vsync
             };
+
+            Core.CurrentApplication = this;
         }
 
         /// <summary>
@@ -83,6 +86,9 @@ namespace CoreEngine.Engine.Application
             Logger.OnLoad(e);
             Logger.Log(LogLevel.DEBUG, "CoreApplication:OnLoad(e)");
             InputManager.OnLoad(e);
+
+            BufferLayout lay = new BufferLayout();
+            lay.Push<int>("test", 1, false);
         }
 
         /// <summary>
@@ -119,7 +125,6 @@ namespace CoreEngine.Engine.Application
             base.OnRenderFrame(e);
 
             InputManager.OnRenderFrame(e);
-            SwapBuffers();
         }
 
         /// <summary>
@@ -138,7 +143,6 @@ namespace CoreEngine.Engine.Application
         /// <param name="e">Event arguments</param>
         protected override void OnMove(EventArgs e)
         {
-            Logger.Log(LogLevel.DEBUG, "CoreApplication:OnMove(e)");
             base.OnMove(e);
         }
 

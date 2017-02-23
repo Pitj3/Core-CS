@@ -44,7 +44,7 @@ namespace CoreEngine.Engine.Graphics
         /// <param name="buffer">Buffer to push</param>
         public void PushBuffer(VertexBuffer buffer)
         {
-            Debug.Assert(_buffers.Contains(buffer));
+            Debug.Assert(!_buffers.Contains(buffer));
 
             _buffers.Add(buffer);
         }
