@@ -1,0 +1,12 @@
+- Finish calling all component events
+
+- Start implementing Components
+- Look into UI (moure is looking into this too)
+
+- Double check if bitmap loading is cross platform
+
+- Move all camera stuff to Camera component
+- Move all remaining code that should be in components, to a component
+
+- 3D rendering
+

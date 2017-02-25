@@ -56,7 +56,6 @@ namespace CoreEngine.Tests
 
             cam = GameObject.Instantiate(null) as GameObject;
             Camera camComp = cam.AddComponent<Camera>();
-            camComp.
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
