@@ -14,5 +14,10 @@ void main()
 {
 	vec4 texColor = texture2D(diffuse, fs_in.uv);
 
-	color = fs_in.color;
+	if(texColor.a < 0.5f)
+	{
+		discard;
+	}
+
+	color = texColor;
 }

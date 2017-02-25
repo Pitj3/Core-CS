@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CoreEngine.Engine.Core;
 
 namespace CoreEngine.Engine.Resources
 {
     /// <summary>
     /// Resource class
     /// </summary>
-    public abstract class Resource
+    public abstract class Resource : Object
     {
         #region Data
         private string _name;
@@ -24,21 +20,6 @@ namespace CoreEngine.Engine.Resources
         #endregion
 
         #region Public API
-        /// <summary>
-        /// Getter/Setter for the resource name
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-
-            set
-            {
-                _name = value;
-            }
-        }
 
         /// <summary>
         /// Abstract load function

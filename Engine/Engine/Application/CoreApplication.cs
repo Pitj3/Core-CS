@@ -4,7 +4,8 @@ using OpenTK;
 using CoreEngine.Engine.Input;
 using CoreEngine.Engine.Time;
 using CoreEngine.Engine.Logging;
-using CoreEngine.Engine.Graphics;
+
+using CoreEngine.Engine.Scene;
 
 namespace CoreEngine.Engine.Application
 {
@@ -33,6 +34,7 @@ namespace CoreEngine.Engine.Application
         private uint _width, _height;
         private string _title;
         private bool _fullscreen, _vsync;
+        private SceneManager _scene;
         #endregion
 
         #region Constructors
@@ -61,7 +63,7 @@ namespace CoreEngine.Engine.Application
                 vsync = vsync
             };
 
-            Core.CurrentApplication = this;
+            CoreEngine.CurrentApplication = this;
         }
 
         /// <summary>
@@ -87,8 +89,7 @@ namespace CoreEngine.Engine.Application
             Logger.Log(LogLevel.DEBUG, "CoreApplication:OnLoad(e)");
             InputManager.OnLoad(e);
 
-            BufferLayout lay = new BufferLayout();
-            lay.Push<int>("test", 1, false);
+            _scene = new SceneManager();
         }
 
         /// <summary>
@@ -114,6 +115,8 @@ namespace CoreEngine.Engine.Application
 
             if (InputManager.IsKeyDown(Key.Escape))
                 Close();
+
+            _scene.Update();
         }
 
         /// <summary>
@@ -123,6 +126,8 @@ namespace CoreEngine.Engine.Application
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+
+            _scene.Render();
 
             InputManager.OnRenderFrame(e);
         }

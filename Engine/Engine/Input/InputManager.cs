@@ -768,14 +768,14 @@ namespace CoreEngine.Engine.Input
 
         private static void SetupInputEvents()
         {
-            Core.CurrentApplication.Keyboard.KeyDown += Keyboard_KeyDown;
-            Core.CurrentApplication.Keyboard.KeyUp += Keyboard_KeyUp;
-            Core.CurrentApplication.Keyboard.KeyRepeat = true;
+            CoreEngine.CurrentApplication.Keyboard.KeyDown += Keyboard_KeyDown;
+            CoreEngine.CurrentApplication.Keyboard.KeyUp += Keyboard_KeyUp;
+            CoreEngine.CurrentApplication.Keyboard.KeyRepeat = true;
 
-            Core.CurrentApplication.Mouse.ButtonDown += Mouse_ButtonDown;
-            Core.CurrentApplication.Mouse.ButtonUp += Mouse_ButtonUp;
-            Core.CurrentApplication.Mouse.Move += Mouse_Move;
-            Core.CurrentApplication.Mouse.WheelChanged += Mouse_Wheel;
+            CoreEngine.CurrentApplication.Mouse.ButtonDown += Mouse_ButtonDown;
+            CoreEngine.CurrentApplication.Mouse.ButtonUp += Mouse_ButtonUp;
+            CoreEngine.CurrentApplication.Mouse.Move += Mouse_Move;
+            CoreEngine.CurrentApplication.Mouse.WheelChanged += Mouse_Wheel;
         }
 
         private static void Keyboard_KeyDown(object sender, KeyboardKeyEventArgs e)

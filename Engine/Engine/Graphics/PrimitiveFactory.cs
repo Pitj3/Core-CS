@@ -28,19 +28,19 @@ namespace CoreEngine.Engine.Graphics
             MeshVertex[] data = new MeshVertex[4];
 
             data[0].position = new Vector3(x, y, 0);
-	        data[0].uv = new Vector2(0, 1);
+	        data[0].uv = new Vector2(0, 0);
 	        data[0].color = new Vector4(1, 0, 0, 1);
 
 	        data[1].position = new Vector3(x + width, y, 0);
-	        data[1].uv = new Vector2(1, 1);
+	        data[1].uv = new Vector2(1, 0);
 	        data[1].color = new Vector4(1, 0, 0, 1);
 
 	        data[2].position = new Vector3(x + width, y + height, 0);
-	        data[2].uv = new Vector2(1, 0);
+	        data[2].uv = new Vector2(1, 1);
 	        data[2].color = new Vector4(1, 0, 0, 1);
 
 	        data[3].position = new Vector3(x, y + height, 0);
-	        data[3].uv = new Vector2(0, 0);
+	        data[3].uv = new Vector2(0, 1);
 	        data[3].color = new Vector4(1, 0, 0, 1);
 
             va = new VertexArray();

@@ -5,7 +5,7 @@ using CoreEngine.Engine.Application;
 
 namespace CoreEngine.Engine
 {
-    public static class Core
+    public static class CoreEngine
     {
         #region Data
         private static CoreApplication _currentApplication;
