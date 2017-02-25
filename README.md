@@ -41,7 +41,7 @@ Do you want to know what is planned in the future for the Core Engine?
 I'm looking for people that like to help out with this engine, I don't require you to be full time, if you can spare a few hours a week to check/write code, implement data structures, design architectures or help me think about design and future additions I would be very pleased.
 
 Right now I need the most:
-- Proficient Direct X programmer (currently we run only DX11, but support for DX9 would be great, since I will build in support for older OpenGL too.
+- Proficient Direct X programmer (Currently I have abandoned DX dev, it's taking me too much time to get DX on the same level as GL, if I come across a willing DX dev, it's back on the table)
 - Artist to help create art for the editor and possibly website.
 - Code Architecture designer to help properly structure the engine.
 - You! I need anyone who wants to help out and make this a great engine, if you feel like you can offer something great to this engine, write me a line!
