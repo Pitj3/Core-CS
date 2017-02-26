@@ -47,6 +47,11 @@ namespace CoreEngine.Engine.Scene
             Name = source;
             _path += source + ".txt";
 
+            if(!Directory.Exists("Content/Scenes/"))
+            {
+                Directory.CreateDirectory("Content/Scenes/");
+            }
+
             if (!File.Exists(_path))
             {
                 File.CreateText(_path).Close();
