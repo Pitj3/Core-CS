@@ -100,6 +100,7 @@ namespace CoreEngine.Engine.Core
         }
         #endregion
 
+        #region Operators
         /// <summary>
         /// Implicit bool operator
         /// </summary>
@@ -107,5 +108,6 @@ namespace CoreEngine.Engine.Core
         {
             return obj != null;
         }
+        #endregion
     }
 }

@@ -39,6 +39,8 @@ namespace CoreEngine.Tests
         {
             base.OnLoad(e);
 
+            SceneManager.LoadScene("Game");
+
             _mesh = PrimitiveFactory.CreateQuad(100, 100, 1050, 490);
 
             _shader = new Shader("Content/Shaders/default");
@@ -54,8 +56,11 @@ namespace CoreEngine.Tests
 
             _texture = new Texture2D("Content/Images/image.png");
 
-            cam = GameObject.Instantiate(null) as GameObject;
-            Camera camComp = cam.AddComponent<Camera>();
+            if(SceneManager.CurrentScene.GameObjects.Count == 0) // no object
+            {
+                cam = GameObject.Instantiate(null) as GameObject;
+                Camera camComp = cam.AddComponent<Camera>();
+            }
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -83,6 +88,13 @@ namespace CoreEngine.Tests
 
             SwapBuffers();
 
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            SceneManager.CurrentScene.Save();
         }
     }
 }

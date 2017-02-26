@@ -9,7 +9,7 @@ using CoreEngine.Engine.Scene;
 
 namespace CoreEngine.Engine.Application
 {
-    #region Data
+    #region Structs
     /// <summary>
     /// Creation params for the CoreApplication
     /// </summary>

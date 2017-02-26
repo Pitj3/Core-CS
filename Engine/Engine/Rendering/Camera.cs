@@ -12,6 +12,9 @@ using CoreEngine.Engine;
 namespace CoreEngine.Engine.Rendering
 {
     #region Enums
+    /// <summary>
+    /// Clear flags
+    /// </summary>
     [Flags]
     public enum ClearFlags
     {
@@ -21,6 +24,9 @@ namespace CoreEngine.Engine.Rendering
     }
     #endregion
 
+    /// <summary>
+    /// Camera class
+    /// </summary>
     public class Camera : CoreComponent
     {
         #region Data
@@ -31,42 +37,42 @@ namespace CoreEngine.Engine.Rendering
 
         private Color _clearColor;
 
-        private float _znear, _zfar;
-        private float _fov;
+        public float znear, zfar;
+        public float fov;
 
-        private float _aspect;
+        public float aspect;
 
-        private bool _orthographic;
+        public bool orthographic;
 
         private Vector2 _renderSize;
 
-        private ClearFlags _clearFlags;
+        public ClearFlags clearFlags;
 
         private Texture2D _renderTexture = null;
 
-        private Vector3 _eye, _look, _up;
+        public Vector3 eye, look, up;
         #endregion
 
         #region Construction
         public Camera()
         {
-            this._orthographic = true;
+            this.orthographic = true;
             _renderSize = new Vector2(CoreEngine.CurrentApplication.Width, CoreEngine.CurrentApplication.Height);
-            _fov = 60.0f;
+            fov = 60.0f;
 
-            _clearFlags |= ClearFlags.Depth;
+            clearFlags |= ClearFlags.Depth;
 
             _clearColor = Color.CornflowerBlue;
 
-            if (_orthographic)
+            if (orthographic)
             {
-                _znear = -10;
-                _zfar = 10;
+                znear = -10;
+                zfar = 10;
             }
             else
             {
-                _znear = 0.01f;
-                _zfar = 10000.0f;
+                znear = 0.01f;
+                zfar = 10000.0f;
             }
         }
         #endregion
@@ -75,22 +81,22 @@ namespace CoreEngine.Engine.Rendering
 
         public override void Awake()
         {
-            _eye = Vector3.Zero;
-            _look = Vector3.Zero;
-            _up = Vector3.UnitY;
+            eye = Vector3.Zero;
+            look = Vector3.Zero;
+            up = Vector3.UnitY;
 
-            if (_orthographic)
+            if (orthographic)
             {
                 // create ortho matrix
-                _projection = Matrix4.CreateOrthographicOffCenter(0, _renderSize.X, _renderSize.Y, 0, _znear, _zfar);
+                _projection = Matrix4.CreateOrthographicOffCenter(0, _renderSize.X, _renderSize.Y, 0, znear, zfar);
                 _view = Matrix4.Identity;
             }
             else
             {
-                _aspect = _renderSize.X / _renderSize.Y;
+                aspect = _renderSize.X / _renderSize.Y;
 
-                _projection = Matrix4.CreatePerspectiveFieldOfView(_fov, _aspect, _znear, _zfar);
-                _view = Matrix4.LookAt(_eye, _look, _up);
+                _projection = Matrix4.CreatePerspectiveFieldOfView(fov, aspect, znear, zfar);
+                _view = Matrix4.LookAt(eye, look, up);
             }
         }
 
@@ -119,6 +125,10 @@ namespace CoreEngine.Engine.Rendering
             if(_renderTexture)
             {
                 // render to texture
+            }
+            else
+            {
+
             }
         }
 

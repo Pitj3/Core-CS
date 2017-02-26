@@ -56,9 +56,11 @@
     <Compile Include="Application\CoreApplication.cs" />
     <Compile Include="Components\CoreComponent.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Core\JsonExtentions.cs" />
     <Compile Include="Core\Object.cs" />
     <Compile Include="Graphics\BufferLayout.cs" />
     <Compile Include="Graphics\IndexBuffer.cs" />
+    <Compile Include="Graphics\Material.cs" />
     <Compile Include="Graphics\Mesh.cs" />
     <Compile Include="Graphics\PrimitiveFactory.cs" />
     <Compile Include="Rendering\Camera.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\Texture2D.cs" />
     <Compile Include="Scene\GameObject.cs" />
+    <Compile Include="Scene\Scene.cs" />
     <Compile Include="Scene\SceneManager.cs" />
     <Compile Include="Time\CoreTime.cs" />
   </ItemGroup>

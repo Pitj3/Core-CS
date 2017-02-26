@@ -9,6 +9,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace CoreEngine.Engine.Graphics
 {
+    #region Structs
     /// <summary>
     /// Defines a vertex for a mesh
     /// </summary>
@@ -18,6 +19,7 @@ namespace CoreEngine.Engine.Graphics
         public Vector2 uv;
         public Vector4 color;
     }
+    #endregion
 
     /// <summary>
     /// Mesh class

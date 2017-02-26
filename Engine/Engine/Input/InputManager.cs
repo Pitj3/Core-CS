@@ -625,6 +625,10 @@ namespace CoreEngine.Engine.Input
         #endregion
 
         #region Events
+        /// <summary>
+        /// Called during the OnLoad of the application
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         internal static void OnLoad(EventArgs e)
         {
             _keys = new ButtonState[(int)Key.LastKey];
@@ -648,11 +652,19 @@ namespace CoreEngine.Engine.Input
             SetupInputEvents();
         }
 
+        /// <summary>
+        /// Called on the Unload of the application
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         internal static void OnUnload(EventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// Called on the Render of a frame
+        /// </summary>
+        /// <param name="e">Event arguments</param>
         internal static void OnRenderFrame(FrameEventArgs e)
         {
             for (int i = 0; i < (int)Key.LastKey; i++)

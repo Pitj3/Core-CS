@@ -7,6 +7,27 @@ using System.Collections.Generic;
 
 namespace CoreEngine.Engine.Scene
 {
+    #region Save Data
+    /// <summary>
+    /// Save version of a GameObject
+    /// </summary>
+    public class SaveGameObject
+    {
+        public string Name;
+        public bool Static;
+        //public Prefab prefab;
+
+        public Vector3 position;
+        public Quaternion rotation;
+        public List<CoreComponent> Components;
+        public GameObject Parent;
+        public List<SaveGameObject> Children;
+    }
+    #endregion
+
+    /// <summary>
+    /// GameObject class
+    /// </summary>
     public class GameObject : Object
     {
         #region Data
@@ -30,7 +51,27 @@ namespace CoreEngine.Engine.Scene
             T comp = new T();
             Components.Add(comp);
 
+            comp.Awake();
+            comp.Start();
+
             return comp;
+        }
+
+        /// <summary>
+        /// Add component by string
+        /// </summary>
+        /// <param name="classname">Component name</param>
+        public object AddComponent(string classname)
+        {
+            System.Type type = System.Type.GetType(classname);
+            object instance = System.Activator.CreateInstance(type);
+
+            Components.Add((CoreComponent)instance);
+
+            ((CoreComponent)instance).Awake();
+            ((CoreComponent)instance).Start();
+
+            return instance;
         }
 
         /// <summary>
@@ -153,6 +194,9 @@ namespace CoreEngine.Engine.Scene
             Parent = null;
         }
 
+        /// <summary>
+        /// Default implementation of the Instantiate function
+        /// </summary>
         public override Object Instantiate()
         {
             base.Instantiate();
@@ -160,11 +204,19 @@ namespace CoreEngine.Engine.Scene
             position = Vector3.Zero;
             rotation = Quaternion.Identity;
 
-            SceneManager.Scene.GameObjects.Add(this);
+            SceneManager.CurrentScene.GameObjects.Add(this);
+
+            Name = "GameObject";
 
             return this;
         }
 
+        /// <summary>
+        /// Implementation of the Instantiate function
+        /// </summary>
+        /// <param name="position">Position of the GameObject</param>
+        /// <param name="rotation">Rotation of the GameObject</param>
+        /// <returns></returns>
         public override Object Instantiate(Vector3 position, Quaternion rotation)
         {
             base.Instantiate(position, rotation);
@@ -172,11 +224,37 @@ namespace CoreEngine.Engine.Scene
             this.position = position;
             this.rotation = rotation;
 
-            SceneManager.Scene.GameObjects.Add(this);
+            SceneManager.CurrentScene.GameObjects.Add(this);
+
+            Name = "GameObject";
 
             return this;
         }
 
+        /// <summary>
+        /// Serialize this GameObject to save data
+        /// </summary>
+        public SaveGameObject Serialize()
+        {
+            SaveGameObject sgo = new SaveGameObject();
+            sgo.Name = Name;
+            sgo.Parent = Parent;
+            sgo.Static = Static;
+
+            List<SaveGameObject> childs = new List<SaveGameObject>();
+            foreach (GameObject child in Children)
+            {
+                childs.Add(child.Serialize());
+            }
+            sgo.Children = childs;
+
+            sgo.Components = Components;
+
+            sgo.position = position;
+            sgo.rotation = rotation;
+
+            return sgo;
+        }
         #endregion
 
         #region Private API
