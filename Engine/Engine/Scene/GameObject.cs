@@ -75,13 +75,13 @@ namespace CoreEngine.Engine.Scene
         }
 
         /// <summary>
-        /// Add component by string
+        /// Add component that already exists
         /// </summary>
-        /// <param name="classname">Component name</param>
-        internal object AddComponent(object t)
+        /// <param name="component">Component to add</param>
+        /// <returns></returns>
+        internal object AddComponent(object component)
         {
-            System.Type type = t.GetType();
-            CoreComponent instance = (CoreComponent)t;
+            CoreComponent instance = (CoreComponent)component;
 
             Components.Add(instance);
 
@@ -272,14 +272,6 @@ namespace CoreEngine.Engine.Scene
 
             return sgo;
         }
-        #endregion
-
-        #region Private API
-
-        #endregion
-
-        #region Protected API
-
         #endregion
     }
 }
