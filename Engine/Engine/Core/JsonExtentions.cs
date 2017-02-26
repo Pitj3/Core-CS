@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿// Copyright (C) 2017 Roderick Griffioen
+// This file is part of the "Core Engine".
+// For conditions of distribution and use, see copyright notice in Core.cs
+
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 

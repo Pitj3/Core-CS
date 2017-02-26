@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (C) 2017 Roderick Griffioen
+// This file is part of the "Core Engine".
+// For conditions of distribution and use, see copyright notice in Core.cs
+
+using System.Collections.Generic;
 
 using CoreEngine.Engine.Core;
 using CoreEngine.Engine.Components;

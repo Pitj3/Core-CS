@@ -1,4 +1,8 @@
-﻿using CoreEngine.Engine.Core;
+﻿// Copyright (C) 2017 Roderick Griffioen
+// This file is part of the "Core Engine".
+// For conditions of distribution and use, see copyright notice in Core.cs
+
+using CoreEngine.Engine.Core;
 
 using Newtonsoft.Json.Linq;
 
