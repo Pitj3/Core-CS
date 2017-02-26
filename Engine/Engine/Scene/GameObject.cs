@@ -64,12 +64,29 @@ namespace CoreEngine.Engine.Scene
         public object AddComponent(string classname)
         {
             System.Type type = System.Type.GetType(classname);
-            object instance = System.Activator.CreateInstance(type);
+            CoreComponent instance = (CoreComponent)System.Activator.CreateInstance(type);
 
-            Components.Add((CoreComponent)instance);
+            Components.Add(instance);
 
-            ((CoreComponent)instance).Awake();
-            ((CoreComponent)instance).Start();
+            instance.Awake();
+            instance.Start();
+
+            return instance;
+        }
+
+        /// <summary>
+        /// Add component by string
+        /// </summary>
+        /// <param name="classname">Component name</param>
+        internal object AddComponent(object t)
+        {
+            System.Type type = t.GetType();
+            CoreComponent instance = (CoreComponent)t;
+
+            Components.Add(instance);
+
+            instance.Awake();
+            instance.Start();
 
             return instance;
         }

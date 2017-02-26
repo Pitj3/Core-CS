@@ -1,5 +1,7 @@
 ﻿using CoreEngine.Engine.Core;
 
+using Newtonsoft.Json.Linq;
+
 namespace CoreEngine.Engine.Components
 { 
     /// <summary>
@@ -9,12 +11,14 @@ namespace CoreEngine.Engine.Components
     {
         #region Data
         public string type;
+        public System.Type systemType;
         #endregion
 
         #region Constructors
         public CoreComponent()
         {
             type = this.GetType().ToString();
+            systemType = this.GetType();
         }
         #endregion
 

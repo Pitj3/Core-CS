@@ -5,6 +5,7 @@ using System.IO;
 using CoreEngine.Engine.Components;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 using CoreEngine.Engine.Core;
 
@@ -22,6 +23,7 @@ namespace CoreEngine.Engine.Scene
         public string Name;
 
         private string _path = "Content/Scenes/";
+        private string _jsonData = "";
         #endregion
 
         #region Constructors
@@ -45,8 +47,6 @@ namespace CoreEngine.Engine.Scene
             Name = source;
             _path += source + ".txt";
 
-            string loaddata = "";
-
             if (!File.Exists(_path))
             {
                 File.CreateText(_path).Close();
@@ -56,32 +56,16 @@ namespace CoreEngine.Engine.Scene
             {
                 using (StreamReader sw = File.OpenText(_path))
                 {
-                    loaddata += sw.ReadToEnd();
+                    _jsonData += sw.ReadToEnd();
                     sw.Close();
                 }
             }
 
 
-            if (loaddata.Length == 0)
+            if (_jsonData.Length == 0)
                 return;
 
-            SaveGameObject[] sgoList = null;
-            sgoList = JsonConvert.DeserializeObject<SaveGameObject[]>(loaddata);
-
-            foreach (SaveGameObject sgo in sgoList)
-            {
-                GameObject go = GameObject.Instantiate(null, sgo.position, sgo.rotation) as GameObject;
-                go.Name = sgo.Name;
-                go.Static = sgo.Static;
-                go.Parent = sgo.Parent;
-
-                LoadChildren(sgo, go);
-
-                foreach (CoreComponent comp in sgo.Components)
-                {
-                    go.AddComponent(comp.type);
-                }
-            }
+            LoadGameObjects();
 
             foreach (GameObject go in GameObjects)
             {
@@ -139,6 +123,32 @@ namespace CoreEngine.Engine.Scene
         #endregion
 
         #region GameObject API
+
+        private int _currentObject = 0;
+
+        /// <summary>
+        /// Loads the game objects and components
+        /// </summary>
+        public void LoadGameObjects()
+        {
+            _currentObject = 0;
+            SaveGameObject[] sgoList = null;
+            sgoList = JsonConvert.DeserializeObject<SaveGameObject[]>(_jsonData);
+            
+            foreach (SaveGameObject sgo in sgoList)
+            {
+                GameObject go = GameObject.Instantiate(null, sgo.position, sgo.rotation) as GameObject;
+                go.Name = sgo.Name;
+                go.Static = sgo.Static;
+                go.Parent = sgo.Parent;
+
+                LoadComponents(sgo, go);
+
+                _currentObject++;
+                LoadChildren(sgo, go);
+            }
+        }
+
         /// <summary>
         /// Loads the children of a savegameobject
         /// </summary>
@@ -153,12 +163,31 @@ namespace CoreEngine.Engine.Scene
                 goChild.Static = sgoChild.Static;
                 goChild.Parent = parent;
 
-                foreach (CoreComponent comp in saveObj.Components)
-                {
-                    goChild.AddComponent(comp.type);
-                }
+                LoadComponents(saveObj, parent);
 
+                _currentObject++;
                 LoadChildren(sgoChild, goChild);
+            }
+        }
+
+        /// <summary>
+        /// Loads the components of the supplied savegameobject
+        /// </summary>
+        /// <param name="saveObj">Components will be loaded from this savegameobject</param>
+        /// <param name="parent">GameObject to parent the component to</param>
+        public void LoadComponents(SaveGameObject saveObj, GameObject parent)
+        {
+            JArray arr = JArray.Parse(_jsonData);
+            JToken comps = arr[_currentObject]["Components"];
+
+            int _currComp = 0;
+
+            foreach (JToken token in comps.Children()) // for every comp
+            {
+                object t = token.ToObject(saveObj.Components[_currComp].systemType);
+                parent.AddComponent(t);
+
+                _currComp++;
             }
         }
         #endregion
