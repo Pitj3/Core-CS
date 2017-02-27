@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Application\CoreApplication.cs" />
     <Compile Include="Components\CoreComponent.cs" />
+    <Compile Include="Components\MeshRenderer.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Core\JsonExtentions.cs" />
     <Compile Include="Core\Object.cs" />

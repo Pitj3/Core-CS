@@ -13,6 +13,7 @@ using CoreEngine.Engine.Application;
 using CoreEngine.Engine.Graphics;
 using CoreEngine.Engine.Resources;
 using CoreEngine.Engine.Scene;
+using CoreEngine.Engine.Components;
 
 using CoreEngine.Engine.Rendering;
 
@@ -56,10 +57,18 @@ namespace CoreEngine.Tests
 
             _texture = new Texture2D("Content/Images/image.png");
 
-            if(SceneManager.CurrentScene.GameObjects.Count == 0) // no object
+            Material mat = new Material(_shader);
+            mat.diffuseTexture = _texture;
+
+            //if (SceneManager.CurrentScene.GameObjects.Count == 0) // no object
             {
                 cam = GameObject.Instantiate(null) as GameObject;
                 Camera camComp = cam.AddComponent<Camera>();
+
+                GameObject logo = GameObject.Instantiate(null) as GameObject;
+                MeshRenderer renderer = logo.AddComponent<MeshRenderer>();
+                renderer.mesh = _mesh;
+                renderer.materials.Add(mat);
             }
         }
 
@@ -70,21 +79,11 @@ namespace CoreEngine.Tests
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            base.OnRenderFrame(e);
-
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
 
-            _shader.Bind();
+            base.OnRenderFrame(e);
 
-            Matrix4 mvp = Matrix4.CreateOrthographicOffCenter(0, 1280, 720, 0, -10, 10);
-            GL.UniformMatrix4(_mvpLoc, false, ref mvp);
-
-            GL.BindTexture(TextureTarget.Texture2D, _texture.ID);
-
-            _mesh.Render();
-
-            _shader.Unbind();
 
             SwapBuffers();
 

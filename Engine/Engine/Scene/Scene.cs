@@ -51,7 +51,7 @@ namespace CoreEngine.Engine.Scene
             Name = source;
             _path += source + ".txt";
 
-            if(!Directory.Exists("Content/Scenes/"))
+            if (!Directory.Exists("Content/Scenes/"))
             {
                 Directory.CreateDirectory("Content/Scenes/");
             }
@@ -63,6 +63,9 @@ namespace CoreEngine.Engine.Scene
             }
             else
             {
+                File.Delete(_path);
+                File.CreateText(_path).Close();
+
                 using (StreamReader sw = File.OpenText(_path))
                 {
                     _jsonData += sw.ReadToEnd();
@@ -112,6 +115,7 @@ namespace CoreEngine.Engine.Scene
             settings.Converters.Add(new Vector3Converter());
             settings.Converters.Add(new Vector4Converter());
             settings.Converters.Add(new QuaternionConverter());
+            settings.Converters.Add(new Matrix4Converter());
             savefile = JsonConvert.SerializeObject(sgoList, Formatting.Indented, settings);
 
             if (!File.Exists(_path))

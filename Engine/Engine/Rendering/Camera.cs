@@ -36,8 +36,8 @@ namespace CoreEngine.Engine.Rendering
         #region Data
         public static Camera Current;
 
-        private Matrix4 _projection;
-        private Matrix4 _view;
+        public Matrix4 projection;
+        public Matrix4 view;
 
         private Color _clearColor;
 
@@ -92,15 +92,15 @@ namespace CoreEngine.Engine.Rendering
             if (orthographic)
             {
                 // create ortho matrix
-                _projection = Matrix4.CreateOrthographicOffCenter(0, _renderSize.X, _renderSize.Y, 0, znear, zfar);
-                _view = Matrix4.Identity;
+                projection = Matrix4.CreateOrthographicOffCenter(0, _renderSize.X, _renderSize.Y, 0, znear, zfar);
+                view = Matrix4.Identity;
             }
             else
             {
                 aspect = _renderSize.X / _renderSize.Y;
 
-                _projection = Matrix4.CreatePerspectiveFieldOfView(fov, aspect, znear, zfar);
-                _view = Matrix4.LookAt(eye, look, up);
+                projection = Matrix4.CreatePerspectiveFieldOfView(fov, aspect, znear, zfar);
+                view = Matrix4.LookAt(eye, look, up);
             }
         }
 

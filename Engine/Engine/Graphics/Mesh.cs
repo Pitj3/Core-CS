@@ -31,15 +31,40 @@ namespace CoreEngine.Engine.Graphics
     public class Mesh
     {
         #region Data
-        private VertexArray _va;
-        private IndexBuffer _ib;
+        public VertexArray va;
+        public IndexBuffer ib;
+
+        public MeshVertex[] vertices;
+        public ushort[] indices;
+
         #endregion
 
         #region Constructors
-        public Mesh(VertexArray va, IndexBuffer ib)
+        public Mesh(MeshVertex[] vertices, ushort[] indices)
         {
-            this._va = va;
-            this._ib = ib;
+            this.vertices = vertices;
+            this.indices = indices;
+
+            va = new VertexArray();
+            va.Bind();
+
+            VertexBuffer vb = new VertexBuffer();
+            vb.SetData((uint)(System.Runtime.InteropServices.Marshal.SizeOf(typeof(MeshVertex)) * vertices.Length), vertices);
+
+            BufferLayout layout = new BufferLayout();
+
+            // TODO: Make this the default mesh data
+            layout.Push<Vector3>("POSITION");
+            layout.Push<Vector2>("TEXCOORD");
+            layout.Push<Vector4>("COLOR");
+
+            vb.SetLayout(layout);
+
+            va.PushBuffer(vb);
+
+            ib = new IndexBuffer(indices, 6);
+
+            va.Unbind();
         }
         #endregion
 
@@ -49,13 +74,7 @@ namespace CoreEngine.Engine.Graphics
         /// </summary>
         public void Render()
         {
-            _va.Bind();
-            _ib.Bind();
-
-            GL.DrawElements(BeginMode.Triangles, (int)_ib.GetCount(), DrawElementsType.UnsignedShort, 0);
-
-            _ib.Unbind();
-            _va.Unbind();
+            
         }
         #endregion
     }

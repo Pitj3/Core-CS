@@ -23,6 +23,9 @@ namespace CoreEngine.Engine.Resources
         private uint _width;
         private uint _height;
         private uint _bpp;
+
+        public TextureTarget target;
+        public TextureUnit unit;
         #endregion
 
         #region Constructors
@@ -55,18 +58,21 @@ namespace CoreEngine.Engine.Resources
         /// <param name="source">filesource (includes extension)</param>
         public override bool Load(string source)
         {
+            target = TextureTarget.Texture2D;
+            unit = TextureUnit.Texture0;
+
             _id = (uint)GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, (int)_id);
 
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(target, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(target, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(target, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(target, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
             Bitmap bmp = new Bitmap(source);
             BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            GL.TexImage2D(target, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
 
             _width = (uint)data.Width;
             _height = (uint)data.Height;
@@ -75,6 +81,23 @@ namespace CoreEngine.Engine.Resources
             bmp.UnlockBits(data);
 
             return true;
+        }
+
+        /// <summary>
+        /// Binds the texture
+        /// </summary>
+        public void Bind()
+        {
+            GL.ActiveTexture(unit);
+            GL.BindTexture(target, _id);
+        }
+
+        /// <summary>
+        /// Unbinds the texture
+        /// </summary>
+        public void Unbind()
+        {
+            GL.BindTexture(target, 0);
         }
         #endregion
     }

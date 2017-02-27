@@ -28,7 +28,6 @@ namespace CoreEngine.Engine.Graphics
         /// <param name="height"></param>
         public static Mesh CreateQuad(int x, int y, int width, int height)
         {
-            VertexArray va = null;
             MeshVertex[] data = new MeshVertex[4];
 
             data[0].position = new Vector3(x, y, 0);
@@ -47,28 +46,9 @@ namespace CoreEngine.Engine.Graphics
 	        data[3].uv = new Vector2(0, 1);
 	        data[3].color = new Vector4(1, 0, 0, 1);
 
-            va = new VertexArray();
-		    va.Bind();
-
-            VertexBuffer vb = new VertexBuffer();
-            vb.SetData((uint)(System.Runtime.InteropServices.Marshal.SizeOf(typeof(MeshVertex)) * 4), data);
-
-            BufferLayout layout = new BufferLayout();
-
-            layout.Push<Vector3>("POSITION");
-	        layout.Push<Vector2>("TEXCOORD");
-	        layout.Push<Vector4>("COLOR");
-
-	        vb.SetLayout(layout);
-
-            va.PushBuffer(vb);
-
             ushort[] indices = new ushort[6] { 0, 1, 2, 2, 3, 0 };
-            IndexBuffer ib = new IndexBuffer(indices, 6);
-
-            va.Unbind();
-
-	        return new Mesh(va, ib);
+            
+	        return new Mesh(data, indices);
         }
         #endregion
     }

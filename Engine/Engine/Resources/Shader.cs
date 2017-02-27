@@ -22,6 +22,9 @@ namespace CoreEngine.Engine.Resources
     {
         #region Data
         private uint _program;
+
+        public string vsSource = "";
+        public string fsSource = "";
         #endregion
 
         #region Constructors
@@ -38,9 +41,6 @@ namespace CoreEngine.Engine.Resources
         /// <param name="source">Filepath (without extension)</param>
         public override bool Load(string source)
         {
-            string vsSource = "";
-            string fsSource = "";
-
             if (!File.Exists(source + ".vs"))
             {
                 Logger.Log(LogLevel.ERROR, "Shader not found at location: " + source);
