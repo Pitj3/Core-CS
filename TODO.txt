@@ -1,12 +1,12 @@
-- Finish calling all component events
+- Finish calling all component events (IN PROGRESS)
 
-- Start implementing Components
+- Start implementing Components (IN PROGRESS)
 - Look into UI (moure is looking into this too)
 
 - Double check if bitmap loading is cross platform
 
-- Move all camera stuff to Camera component
-- Move all remaining code that should be in components, to a component
+- Move all camera stuff to Camera component (DONE)
+- Move all remaining code that should be in components, to a component (DONE)
 
 - 3D rendering
 

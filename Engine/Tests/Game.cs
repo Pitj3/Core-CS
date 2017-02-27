@@ -64,8 +64,10 @@ namespace CoreEngine.Tests
             {
                 cam = GameObject.Instantiate(null) as GameObject;
                 Camera camComp = cam.AddComponent<Camera>();
+                cam.Name = "Camera";
 
                 GameObject logo = GameObject.Instantiate(null) as GameObject;
+                logo.Name = "Logo";
                 MeshRenderer renderer = logo.AddComponent<MeshRenderer>();
                 renderer.mesh = _mesh;
                 renderer.materials.Add(mat);

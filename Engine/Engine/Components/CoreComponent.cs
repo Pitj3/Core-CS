@@ -23,6 +23,8 @@ namespace CoreEngine.Engine.Components
         {
             type = this.GetType().ToString();
             systemType = this.GetType();
+
+            Name = type;
         }
         #endregion
 

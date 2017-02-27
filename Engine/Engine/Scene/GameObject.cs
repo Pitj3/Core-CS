@@ -45,6 +45,13 @@ namespace CoreEngine.Engine.Scene
         public Quaternion rotation;
         #endregion
 
+        #region Constructors
+        public GameObject()
+        {
+            Name = "GameObject";
+        }
+        #endregion
+
         #region Public Component API
         /// <summary>
         /// Adds a component to the GameObject and returns the new component
@@ -250,6 +257,19 @@ namespace CoreEngine.Engine.Scene
             Name = "GameObject";
 
             return this;
+        }
+
+        public static GameObject Find(string name)
+        {
+            foreach(GameObject go in SceneManager.CurrentScene.GameObjects)
+            {
+                if(go.Name == name)
+                {
+                    return go;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
