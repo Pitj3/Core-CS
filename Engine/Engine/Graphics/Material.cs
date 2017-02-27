@@ -128,7 +128,7 @@ namespace CoreEngine.Engine.Graphics
         {
             // load vertex variables
             string[] vsLines = shader.vsSource.Split("/n".ToCharArray());
-            Logging.Logger.Log(Logging.LogLevel.DEBUG, vsLines.Length.ToString());
+            //Logging.Logger.Log(Logging.LogLevel.DEBUG, vsLines.Length.ToString());
 
             MaterialVariable projection = new MaterialVariable() { type = MaterialVariableType.MATRIX4, shaderType = MaterialVariableShaderType.VERTEX_SHADER, location = shader.GetVariableLocation("mvp"), value = null };
             shaderMembers.Add(projection);

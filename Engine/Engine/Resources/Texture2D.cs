@@ -26,6 +26,8 @@ namespace CoreEngine.Engine.Resources
 
         public TextureTarget target;
         public TextureUnit unit;
+
+        public string path = "";
         #endregion
 
         #region Constructors
@@ -58,6 +60,8 @@ namespace CoreEngine.Engine.Resources
         /// <param name="source">filesource (includes extension)</param>
         public override bool Load(string source)
         {
+            path = source;
+
             target = TextureTarget.Texture2D;
             unit = TextureUnit.Texture0;
 

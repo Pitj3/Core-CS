@@ -25,11 +25,14 @@ namespace CoreEngine.Engine.Resources
 
         public string vsSource = "";
         public string fsSource = "";
+
+        public string path = "";
         #endregion
 
         #region Constructors
         public Shader(string filepath)
         {
+            path = filepath;
             Debug.Assert(Load(filepath));
         }
         #endregion

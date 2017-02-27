@@ -63,8 +63,8 @@ namespace CoreEngine.Engine.Scene
             }
             else
             {
-                File.Delete(_path);
-                File.CreateText(_path).Close();
+                //File.Delete(_path);
+                //File.CreateText(_path).Close();
 
                 using (StreamReader sw = File.OpenText(_path))
                 {
@@ -116,6 +116,11 @@ namespace CoreEngine.Engine.Scene
             settings.Converters.Add(new Vector4Converter());
             settings.Converters.Add(new QuaternionConverter());
             settings.Converters.Add(new Matrix4Converter());
+            settings.Converters.Add(new MeshConverter());
+            settings.Converters.Add(new ShaderConverter());
+            settings.Converters.Add(new Texture2DConverter());
+            settings.Converters.Add(new MaterialConverter());
+
             savefile = JsonConvert.SerializeObject(sgoList, Formatting.Indented, settings);
 
             if (!File.Exists(_path))
@@ -128,7 +133,7 @@ namespace CoreEngine.Engine.Scene
             }
             else
             {
-                File.Delete(_path);
+                //File.Delete(_path);
                 File.WriteAllText(_path, savefile);
             }
         }
@@ -146,7 +151,19 @@ namespace CoreEngine.Engine.Scene
         {
             _currentObject = 0;
             SaveGameObject[] sgoList = null;
-            sgoList = JsonConvert.DeserializeObject<SaveGameObject[]>(_jsonData);
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.Converters.Add(new Vector2Converter());
+            settings.Converters.Add(new Vector3Converter());
+            settings.Converters.Add(new Vector4Converter());
+            settings.Converters.Add(new QuaternionConverter());
+            settings.Converters.Add(new Matrix4Converter());
+            settings.Converters.Add(new MeshConverter());
+            settings.Converters.Add(new ShaderConverter());
+            settings.Converters.Add(new Texture2DConverter());
+            settings.Converters.Add(new MaterialConverter());
+
+            sgoList = JsonConvert.DeserializeObject<SaveGameObject[]>(_jsonData, settings);
             
             foreach (SaveGameObject sgo in sgoList)
             {
@@ -195,9 +212,20 @@ namespace CoreEngine.Engine.Scene
 
             int _currComp = 0;
 
+            JsonSerializer ser = new JsonSerializer();
+            ser.Converters.Add(new Vector2Converter());
+            ser.Converters.Add(new Vector3Converter());
+            ser.Converters.Add(new Vector4Converter());
+            ser.Converters.Add(new QuaternionConverter());
+            ser.Converters.Add(new Matrix4Converter());
+            ser.Converters.Add(new MeshConverter());
+            ser.Converters.Add(new ShaderConverter());
+            ser.Converters.Add(new Texture2DConverter());
+            ser.Converters.Add(new MaterialConverter());
+
             foreach (JToken token in comps.Children()) // for every comp
             {
-                object t = token.ToObject(saveObj.Components[_currComp].systemType);
+                object t = token.ToObject(saveObj.Components[_currComp].systemType, ser);
                 parent.AddComponent(t);
 
                 _currComp++;

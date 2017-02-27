@@ -10,6 +10,9 @@ using System;
 
 using OpenTK;
 
+using CoreEngine.Engine.Graphics;
+using CoreEngine.Engine.Resources;
+
 namespace CoreEngine.Engine.Core
 {
     #region Converter Extensions
@@ -142,6 +145,103 @@ namespace CoreEngine.Engine.Core
                 M42 = quat.M42,
                 M43 = quat.M43,
                 M44 = quat.M44,
+            });
+        }
+    }
+
+    public class MeshConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Mesh);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject temp = JObject.Load(reader);
+            return new Mesh(temp["vertices"].ToObject<MeshVertex[]>(), temp["indices"].ToObject<ushort[]>());
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            Mesh mesh = (Mesh)value;
+            serializer.Serialize(writer, new
+            {
+                vertices = mesh.vertices,
+                indices = mesh.indices
+            });
+        }
+    }
+
+    public class ShaderConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Shader);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject temp = JObject.Load(reader);
+            return new Shader(temp["path"].ToString());
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            Shader shader = (Shader)value;
+            serializer.Serialize(writer, new
+            {
+                path = shader.path
+            });
+        }
+    }
+
+    public class Texture2DConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Texture2D);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject temp = JObject.Load(reader);
+            return new Texture2D(temp["path"].ToString()); // TODO: Load other texture data
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            Texture2D texture = (Texture2D)value;
+            serializer.Serialize(writer, new
+            {
+                path = texture.path // TODO: Write other texture data
+            });
+        }
+    }
+
+    public class MaterialConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Material);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject temp = JObject.Load(reader);
+            Material mat = new Material(new Shader(temp["shader"]["path"].ToString()));
+            mat.diffuseTexture = new Texture2D(temp["diffuseTexture"]["path"].ToString());
+
+            return mat;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            Material mat = (Material)value;
+            serializer.Serialize(writer, new
+            {
+                shader = mat.shader,
+                diffuseTexture = mat.diffuseTexture
             });
         }
     }

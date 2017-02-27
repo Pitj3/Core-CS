@@ -60,7 +60,7 @@ namespace CoreEngine.Tests
             Material mat = new Material(_shader);
             mat.diffuseTexture = _texture;
 
-            //if (SceneManager.CurrentScene.GameObjects.Count == 0) // no object
+            if (SceneManager.CurrentScene.GameObjects.Count == 0) // no object
             {
                 cam = GameObject.Instantiate(null) as GameObject;
                 Camera camComp = cam.AddComponent<Camera>();

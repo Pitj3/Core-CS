@@ -67,15 +67,5 @@ namespace CoreEngine.Engine.Graphics
             va.Unbind();
         }
         #endregion
-
-        #region Public API
-        /// <summary>
-        /// Renders this mesh
-        /// </summary>
-        public void Render()
-        {
-            
-        }
-        #endregion
     }
 }
