@@ -1,4 +1,4 @@
-- Finish calling all component events (IN PROGRESS)
+- Finish calling all component events (DONE, except collision, that will happen when implementing physics)
 
 - Start implementing Components (IN PROGRESS)
 - Look into UI (moure is looking into this too)

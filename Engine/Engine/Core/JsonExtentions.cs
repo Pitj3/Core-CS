@@ -17,71 +17,47 @@ namespace CoreEngine.Engine.Core
 {
     #region Converter Extensions
     /// <summary>
-    /// Vector2 converter
+    /// Vector converter
     /// </summary>
-    public class Vector2Converter : JsonConverter
+    public class VectorConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Vector2);
+            return objectType == typeof(Vector2) ||
+                objectType == typeof(Vector3) ||
+                objectType == typeof(Vector4);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject temp = JObject.Load(reader);
-            return new Vector2(((float?)temp["X"]).GetValueOrDefault(), ((float?)temp["Y"]).GetValueOrDefault());
+            if(objectType == typeof(Vector2))
+                return new Vector2(((float?)temp["X"]).GetValueOrDefault(), ((float?)temp["Y"]).GetValueOrDefault());
+            if(objectType == typeof(Vector3))
+                return new Vector3(((float?)temp["X"]).GetValueOrDefault(), ((float?)temp["Y"]).GetValueOrDefault(), ((float?)temp["Z"]).GetValueOrDefault());
+            if(objectType == typeof(Vector4))
+                return new Vector4(((float?)temp["X"]).GetValueOrDefault(), ((float?)temp["Y"]).GetValueOrDefault(), ((float?)temp["Z"]).GetValueOrDefault(), ((float?)temp["W"]).GetValueOrDefault());
+
+            return null;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            Vector2 vec = (Vector2)value;
-            serializer.Serialize(writer, new { X = vec.X, Y = vec.Y });
-        }
-    }
-
-    /// <summary>
-    /// Vector3 converter
-    /// </summary>
-    public class Vector3Converter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Vector3);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject temp = JObject.Load(reader);
-            return new Vector3(((float?)temp["X"]).GetValueOrDefault(), ((float?)temp["Y"]).GetValueOrDefault(), ((float?)temp["Z"]).GetValueOrDefault());
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            Vector3 vec = (Vector3)value;
-            serializer.Serialize(writer, new { X = vec.X, Y = vec.Y, Z = vec.Z });
-        }
-    }
-
-    /// <summary>
-    /// Vector4 converter
-    /// </summary>
-    public class Vector4Converter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Vector4);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject temp = JObject.Load(reader);
-            return new Vector4(((float?)temp["X"]).GetValueOrDefault(), ((float?)temp["Y"]).GetValueOrDefault(), ((float?)temp["Z"]).GetValueOrDefault(), ((float?)temp["W"]).GetValueOrDefault());
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            Vector4 vec = (Vector4)value;
-            serializer.Serialize(writer, new { X = vec.X, Y = vec.Y, Z = vec.Z, W = vec.W });
+            if (value.GetType() == typeof(Vector2))
+            {
+                Vector2 vec = (Vector2)value;
+                serializer.Serialize(writer, new { X = vec.X, Y = vec.Y });
+            }
+            if (value.GetType() == typeof(Vector3))
+            {
+                Vector3 vec = (Vector3)value;
+                serializer.Serialize(writer, new { X = vec.X, Y = vec.Y, Z = vec.Z });
+            }
+            if (value.GetType() == typeof(Vector4))
+            {
+                Vector4 vec = (Vector4)value;
+                serializer.Serialize(writer, new { X = vec.X, Y = vec.Y, Z = vec.Z, W = vec.W });
+            }
         }
     }
 
