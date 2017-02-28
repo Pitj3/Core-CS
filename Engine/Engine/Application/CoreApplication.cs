@@ -4,6 +4,7 @@
 
 using System;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 using CoreEngine.Engine.Input;
 using CoreEngine.Engine.Time;
@@ -131,6 +132,9 @@ namespace CoreEngine.Engine.Application
         {
             base.OnRenderFrame(e);
 
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
+
             _scene.Render();
 
             InputManager.OnRenderFrame(e);
@@ -171,6 +175,8 @@ namespace CoreEngine.Engine.Application
         /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
         {
+            SceneManager.CurrentScene.Save();
+
             Logger.Log(LogLevel.DEBUG, "CoreApplication:OnClosed(e)");
             base.OnClosed(e);
         }
