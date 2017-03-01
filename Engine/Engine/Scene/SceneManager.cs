@@ -39,6 +39,12 @@ namespace CoreEngine.Engine.Scene
             Scene scene = new Scene();
             scene.Load(name);
         }
+
+        public static void LoadSceneByString(string data, string path)
+        {
+            Scene scene = new Scene();
+            scene.LoadByString(data, path);
+        }
         #endregion
 
         #region Public API
@@ -47,6 +53,9 @@ namespace CoreEngine.Engine.Scene
         /// </summary>
         public void Update()
         {
+            if (CurrentScene == null)
+                return;
+
             foreach(GameObject go in CurrentScene.GameObjects)
             {
                 foreach (CoreComponent comp in go.Components)
@@ -61,6 +70,9 @@ namespace CoreEngine.Engine.Scene
         /// </summary>
         public void FixedUpdate()
         {
+            if (CurrentScene == null)
+                return;
+
             foreach (GameObject go in CurrentScene.GameObjects)
             {
                 foreach (CoreComponent comp in go.Components)
@@ -75,6 +87,9 @@ namespace CoreEngine.Engine.Scene
         /// </summary>
         public void Render()
         {
+            if (CurrentScene == null)
+                return;
+
             // grab all cameras
             List<Camera> _cameras = new List<Camera>();
             foreach (GameObject go in CurrentScene.GameObjects)

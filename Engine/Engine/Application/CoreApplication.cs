@@ -175,7 +175,8 @@ namespace CoreEngine.Engine.Application
         /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
         {
-            SceneManager.CurrentScene.Save();
+            if(SceneManager.CurrentScene != null)
+                SceneManager.CurrentScene.Save();
 
             Logger.Log(LogLevel.DEBUG, "CoreApplication:OnClosed(e)");
             base.OnClosed(e);

@@ -108,6 +108,38 @@ namespace CoreEngine.Engine.Scene
             }
         }
 
+        public void LoadByString(string source, string path)
+        {
+            Name = path;
+            _path += path + ".txt";
+
+            // load objects and stuff from source.
+            SceneManager.CurrentScene = this;
+
+            _jsonData = source;
+
+            if (_jsonData.Length == 0)
+                return;
+
+            LoadGameObjects();
+
+            foreach (GameObject go in GameObjects)
+            {
+                foreach (CoreComponent comp in go.Components)
+                {
+                    comp.Awake();
+                }
+            }
+
+            foreach (GameObject go in GameObjects)
+            {
+                foreach (CoreComponent comp in go.Components)
+                {
+                    comp.Start();
+                }
+            }
+        }
+
         /// <summary>
         /// Saves the scene
         /// </summary>
