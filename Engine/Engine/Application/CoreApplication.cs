@@ -12,6 +12,8 @@ using CoreEngine.Engine.Logging;
 
 using CoreEngine.Engine.Scene;
 
+using CoreEngine.Engine.Interface;
+
 namespace CoreEngine.Engine.Application
 {
     #region Structs
@@ -121,7 +123,7 @@ namespace CoreEngine.Engine.Application
             if (InputManager.IsKeyDown(Key.Escape))
                 Close();
 
-            _scene.Update();
+            _scene?.Update();
         }
 
         /// <summary>
@@ -135,7 +137,7 @@ namespace CoreEngine.Engine.Application
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
 
-            _scene.Render();
+            _scene?.Render();
 
             InputManager.OnRenderFrame(e);
         }

@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using System.Drawing;
-
-using CoreEngine.Engine.Application;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
-
-namespace Editor
+namespace Editor.Windows
 {
     static class Program
     {
@@ -24,12 +17,8 @@ namespace Editor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var threadEditor = new Thread(new ThreadStart(() =>
-            {
-                CoreEditor editor = new CoreEditor();
-                Application.Run(new CoreEditor());
-            }));
-            threadEditor.Start();
+
+            Application.Run(new Editor());
         }
     }
 }

@@ -61,7 +61,7 @@ namespace CoreEngine.Engine.Rendering
         public Camera()
         {
             this.orthographic = true;
-            _renderSize = new Vector2(CoreEngine.CurrentApplication.Width, CoreEngine.CurrentApplication.Height);
+            _renderSize = new Vector2(1280, 720);
             fov = 60.0f;
 
             clearFlags |= ClearFlags.Depth;

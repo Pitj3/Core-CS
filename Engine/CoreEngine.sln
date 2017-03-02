@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3AF25EDB-865F-40F3-9A21-1D3FC90D647A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{EE559EB1-F458-4266-97FF-4490792EFC3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor.Windows", "Editor.Windows\Editor.Windows.csproj", "{DC65DFBF-2E36-4C34-86E4-6962E744574F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{3AF25EDB-865F-40F3-9A21-1D3FC90D647A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AF25EDB-865F-40F3-9A21-1D3FC90D647A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AF25EDB-865F-40F3-9A21-1D3FC90D647A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE559EB1-F458-4266-97FF-4490792EFC3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE559EB1-F458-4266-97FF-4490792EFC3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE559EB1-F458-4266-97FF-4490792EFC3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE559EB1-F458-4266-97FF-4490792EFC3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC65DFBF-2E36-4C34-86E4-6962E744574F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC65DFBF-2E36-4C34-86E4-6962E744574F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC65DFBF-2E36-4C34-86E4-6962E744574F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC65DFBF-2E36-4C34-86E4-6962E744574F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
