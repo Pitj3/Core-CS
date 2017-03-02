@@ -28,16 +28,7 @@ namespace Editor.Windows
         {
             base.OnLoad(e);
 
-            Application.Idle += Application_Idle;
-        }
-
-        private void Application_Idle(object sender, EventArgs e)
-        {
-            while(GLWidget.IsIdle)
-            {
-                OnUpdateFrame();
-                OnRenderFrame();
-            }
+            Redraw();
         }
 
         private void OnUpdateFrame()
@@ -50,7 +41,7 @@ namespace Editor.Windows
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
 
-            GLWidget.SwapBuffers();
+            GLView.SwapBuffers();
         }
 
         private void AboutEditorButton(object sender, EventArgs e)
@@ -65,18 +56,77 @@ namespace Editor.Windows
 
         private void GLWidgetPaint(object sender, PaintEventArgs e)
         {
-            GLWidget.MakeCurrent();
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            GLWidget.SwapBuffers();
+            GLView.SwapBuffers();
         }
 
         private void GLWidgetResize(object sender, EventArgs e)
         {
-            if (GLWidget.ClientSize.Height == 0)
-                GLWidget.ClientSize = new System.Drawing.Size(GLWidget.ClientSize.Width, 1);
+            if (GLView.ClientSize.Height == 0)
+                GLView.ClientSize = new System.Drawing.Size(GLView.ClientSize.Width, 1);
 
-            GL.Viewport(0, 0, GLWidget.ClientSize.Width, GLWidget.ClientSize.Height);
+            GL.Viewport(0, 0, GLView.ClientSize.Width, GLView.ClientSize.Height);
+        }
+
+        private void GLWidgetKeyDown(object sender, KeyEventArgs e)
+        {
+            Redraw();
+        }
+
+        private void GLWidgetKeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            Redraw();
+        }
+
+        public void Redraw()
+        {
+            OnUpdateFrame();
+            OnRenderFrame();
+        }
+
+        public void AddSceneItem()
+        {
+            GO go = new GO();
+            go.name = "GameObject" + ListHierachy.Items.Count;
+            go.id = ListHierachy.Items.Count;
+
+            LogToConsolePanel("Created Object: " + go.name);
+
+            ListHierachy.BeginUpdate();
+
+            ListHierachy.Items.Add(go);
+
+            ListHierachy.EndUpdate();
+
+            Redraw();
+        }
+
+        private void ListHierarchyObjectSelected(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void GameObjectCreateButton(object sender, EventArgs e)
+        {
+            AddSceneItem();
+        }
+
+        public void LogToConsolePanel(object text)
+        {
+            ConsoleWindow.Items.Add(text.ToString());
+        }
+    }
+
+    public class GO
+    {
+        public string name = "Gameobject";
+        public int id = 1;
+
+        public override string ToString()
+        {
+            return name;
         }
     }
 }
