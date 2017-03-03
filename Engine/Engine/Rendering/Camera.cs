@@ -46,7 +46,37 @@ namespace CoreEngine.Engine.Rendering
 
         public float aspect;
 
-        public bool orthographic;
+        private bool _ortho = true;
+        public bool orthographic
+        {
+            get
+            {
+                return _ortho;
+            }
+            set
+            {
+                _ortho = value;
+                if(value)
+                {
+                    znear = -10;
+                    zfar = 10;
+
+                    // create ortho matrix
+                    projection = Matrix4.CreateOrthographicOffCenter(0, _renderSize.X, _renderSize.Y, 0, znear, zfar);
+                    view = Matrix4.Identity;
+                }
+                else
+                {
+                    znear = 0.01f;
+                    zfar = 10000.0f;
+
+                    aspect = _renderSize.X / _renderSize.Y;
+
+                    projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), aspect, znear, zfar);
+                    view = Matrix4.LookAt(eye, look, up);
+                }
+            }
+        }
 
         private Vector2 _renderSize;
 
@@ -60,7 +90,6 @@ namespace CoreEngine.Engine.Rendering
         #region Construction
         public Camera()
         {
-            this.orthographic = true;
             _renderSize = new Vector2(1280, 720);
             fov = 60.0f;
 
@@ -68,7 +97,7 @@ namespace CoreEngine.Engine.Rendering
 
             _clearColor = Color.CornflowerBlue;
 
-            if (orthographic)
+            if (_ortho)
             {
                 znear = -10;
                 zfar = 10;
@@ -85,11 +114,11 @@ namespace CoreEngine.Engine.Rendering
 
         public override void Awake()
         {
-            eye = Vector3.Zero;
+            eye = new Vector3(10, 10, 10);
             look = Vector3.Zero;
-            up = Vector3.UnitY;
+            up = new Vector3(0, 1, 0);
 
-            if (orthographic)
+            if (_ortho)
             {
                 // create ortho matrix
                 projection = Matrix4.CreateOrthographicOffCenter(0, _renderSize.X, _renderSize.Y, 0, znear, zfar);
@@ -99,7 +128,7 @@ namespace CoreEngine.Engine.Rendering
             {
                 aspect = _renderSize.X / _renderSize.Y;
 
-                projection = Matrix4.CreatePerspectiveFieldOfView(fov, aspect, znear, zfar);
+                projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), aspect, znear, zfar);
                 view = Matrix4.LookAt(eye, look, up);
             }
         }
@@ -126,6 +155,11 @@ namespace CoreEngine.Engine.Rendering
 
         public override void OnPreRender()
         {
+            if(!_ortho)
+            {
+                view = Matrix4.LookAt(eye, look, up);
+            }
+
             if(_renderTexture)
             {
                 // render to texture

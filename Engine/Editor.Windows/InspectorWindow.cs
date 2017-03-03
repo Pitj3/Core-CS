@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using CoreEngine.Engine.Scene;
+using CoreEngine.Engine.Components;
 
 namespace Editor.Windows
 {
@@ -17,6 +18,11 @@ namespace Editor.Windows
             // update inspector
             _currentObject = (GameObject)ListHierachy.SelectedItem;
 
+            if (_currentObject == null)
+                return;
+
+            InspectorComponentsBox.Items.Clear();
+
             // load gameobject data to inspector
             PositionX.Text = _currentObject.position.X.ToString();
             PositionY.Text = _currentObject.position.Y.ToString();
@@ -26,6 +32,11 @@ namespace Editor.Windows
             RotationY.Text = _currentObject.rotation.Xyz.Y.ToString();
             RotationZ.Text = _currentObject.rotation.Xyz.Z.ToString();
 
+            foreach (CoreComponent comp in _currentObject.Components)
+            {
+                InspectorComponentsBox.Items.Add(comp.type);
+            }
+
             InspectorPanel.Visible = true;
         }
 
@@ -34,8 +45,20 @@ namespace Editor.Windows
 
         }
 
-        private void AddComponentSelectionBoxSelectedComponent(object sender, EventArgs e)
+        private void GLWidgetMouseClick(object sender, MouseEventArgs e)
         {
+            InspectorPanel.Visible = false;
+
+            ListHierachy.SelectedItem = null;
+        }
+
+        private void AddComponentSelectionBoxSelectedComponent(object sender, EventArgs e)
+        { 
+            if (_currentObject == null)
+                return;
+
+            _currentObject.AddComponent(((CoreComponent)AddComponentSelectionBox.SelectedItem).systemType.ToString());
+
             InspectorComponentsBox.Items.Add(AddComponentSelectionBox.SelectedItem.ToString());
             AddComponentSelectionBox.Text = "";
             AddComponentSelectionBox.SelectedText = "";

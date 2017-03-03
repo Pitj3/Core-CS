@@ -62,7 +62,7 @@ namespace CoreEngine.Engine.Graphics
 
             va.PushBuffer(vb);
 
-            ib = new IndexBuffer(indices, 6);
+            ib = new IndexBuffer(indices, (uint)indices.Length);
 
             va.Unbind();
         }

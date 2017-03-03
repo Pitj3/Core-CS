@@ -106,10 +106,12 @@ namespace CoreEngine.Engine.Graphics
         {
             shader.Bind();
 
-            Matrix4 mvp = Camera.Current.projection;
+            Matrix4 mvp = Camera.Current.view * Camera.Current.projection;
             GL.UniformMatrix4(shaderMembers[0].location, false, ref mvp);
 
-            GL.Uniform1(shader.GetVariableLocation("diffuse"), (int)diffuseTexture?.unit);
+            int loc = shader.GetVariableLocation("diffuse");
+
+            GL.Uniform1(loc, 0);
             diffuseTexture?.Bind();
         }
 

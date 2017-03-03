@@ -41,6 +41,8 @@ namespace Editor.Windows
             this.TopMenuEditOption = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenuCreateOption = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateMenuGameObjectOption = new System.Windows.Forms.ToolStripMenuItem();
+            this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cubeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenuWindowsOption = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenuAboutOption = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutMenuAboutItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +67,7 @@ namespace Editor.Windows
             this.PositionY = new System.Windows.Forms.TextBox();
             this.PositionX = new System.Windows.Forms.TextBox();
             this.Physics = new System.Windows.Forms.TabPage();
+            this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenu.SuspendLayout();
             this.PanelHierarchy.SuspendLayout();
             this.RightSidePanel.SuspendLayout();
@@ -144,7 +147,9 @@ namespace Editor.Windows
             // TopMenuCreateOption
             // 
             this.TopMenuCreateOption.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CreateMenuGameObjectOption});
+            this.CreateMenuGameObjectOption,
+            this.dToolStripMenuItem,
+            this.cameraToolStripMenuItem});
             this.TopMenuCreateOption.Name = "TopMenuCreateOption";
             this.TopMenuCreateOption.Size = new System.Drawing.Size(53, 20);
             this.TopMenuCreateOption.Text = "Create";
@@ -152,9 +157,24 @@ namespace Editor.Windows
             // CreateMenuGameObjectOption
             // 
             this.CreateMenuGameObjectOption.Name = "CreateMenuGameObjectOption";
-            this.CreateMenuGameObjectOption.Size = new System.Drawing.Size(140, 22);
+            this.CreateMenuGameObjectOption.Size = new System.Drawing.Size(152, 22);
             this.CreateMenuGameObjectOption.Text = "GameObject";
             this.CreateMenuGameObjectOption.Click += new System.EventHandler(this.GameObjectCreateButton);
+            // 
+            // dToolStripMenuItem
+            // 
+            this.dToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cubeToolStripMenuItem});
+            this.dToolStripMenuItem.Name = "dToolStripMenuItem";
+            this.dToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem.Text = "3D";
+            // 
+            // cubeToolStripMenuItem
+            // 
+            this.cubeToolStripMenuItem.Name = "cubeToolStripMenuItem";
+            this.cubeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cubeToolStripMenuItem.Text = "Cube";
+            this.cubeToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreate3DCubeButton);
             // 
             // TopMenuWindowsOption
             // 
@@ -188,6 +208,7 @@ namespace Editor.Windows
             this.GLView.Paint += new System.Windows.Forms.PaintEventHandler(this.GLWidgetPaint);
             this.GLView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GLWidgetKeyDown);
             this.GLView.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.GLWidgetKeyPress);
+            this.GLView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.GLWidgetMouseClick);
             this.GLView.Resize += new System.EventHandler(this.GLWidgetResize);
             // 
             // PanelHierarchy
@@ -377,6 +398,13 @@ namespace Editor.Windows
             this.Physics.Text = "Physics";
             this.Physics.UseVisualStyleBackColor = true;
             // 
+            // cameraToolStripMenuItem
+            // 
+            this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cameraToolStripMenuItem.Text = "Camera";
+            this.cameraToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreateCamera);
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -444,6 +472,9 @@ namespace Editor.Windows
         private CheckedListBox InspectorComponentsBox;
         private Label ComponentSelectLabel;
         private ComboBox AddComponentSelectionBox;
+        private ToolStripMenuItem dToolStripMenuItem;
+        private ToolStripMenuItem cubeToolStripMenuItem;
+        private ToolStripMenuItem cameraToolStripMenuItem;
     }
 }
 
