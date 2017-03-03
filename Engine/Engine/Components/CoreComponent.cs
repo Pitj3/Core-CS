@@ -9,17 +9,28 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CoreEngine.Engine.Components
-{ 
+{
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Field, AllowMultiple = false)]
+    public sealed class IgnoreInspectorAttribute : System.Attribute
+    {
+        public override string ToString()
+        {
+            return "Ignore in Inspector";
+        }
+    }
+
     /// <summary>
     /// Base CoreComponent class
     /// </summary>
     public class CoreComponent : Object
     {
         #region Data
+        [IgnoreInspector]
         public string type;
+        [IgnoreInspector]
         public System.Type systemType;
 
-        [JsonIgnore]
+        [IgnoreInspector, JsonIgnore]
         public GameObject parent;
         #endregion
 

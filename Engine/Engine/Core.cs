@@ -28,6 +28,7 @@ namespace CoreEngine.Engine
     /// <summary>
     /// Base class of the engine
     /// </summary>
+    
     public static class CoreEngine
     {
         #region Data

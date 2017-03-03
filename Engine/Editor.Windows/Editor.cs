@@ -43,7 +43,7 @@ namespace Editor.Windows
 
             Redraw();
 
-            this.AddComponentSelectionBox.Items.Add(new CoreEngine.Engine.Rendering.Camera());
+            //this.AddComponentSelectionBox.Items.Add(new CoreEngine.Engine.Rendering.Camera());
 
             _sceneManager = new SceneManager();
 
@@ -62,6 +62,22 @@ namespace Editor.Windows
             GLView.Dispose();
         }
 
+        private void GLViewKeyDown(object sender, KeyEventArgs e)
+        {
+            Redraw();
+        }
+
+        private void GLViewPaint(object sender, PaintEventArgs e)
+        {
+            Redraw();
+        }
+
+        private void GLViewResize(object sender, EventArgs e)
+        {
+            //resize
+            Redraw();
+        }
+
         private void OnUpdateFrame()
         {
             _sceneManager?.Update();
@@ -75,7 +91,10 @@ namespace Editor.Windows
             // render editor
 
             if (Camera.Current == null)
+            {
+                GLView.SwapBuffers();
                 return;
+            }
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
@@ -118,30 +137,6 @@ namespace Editor.Windows
             Environment.Exit(0);
         }
 
-        private void GLWidgetPaint(object sender, PaintEventArgs e)
-        {
-            OnUpdateFrame();
-            OnRenderFrame();
-        }
-
-        private void GLWidgetResize(object sender, EventArgs e)
-        {
-            if (GLView.ClientSize.Height == 0)
-                GLView.ClientSize = new System.Drawing.Size(GLView.ClientSize.Width, 1);
-
-            GL.Viewport(0, 0, GLView.ClientSize.Width, GLView.ClientSize.Height);
-        }
-
-        private void GLWidgetKeyDown(object sender, KeyEventArgs e)
-        {
-            Redraw();
-        }
-
-        private void GLWidgetKeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            Redraw();
-        }
-
         public void Redraw()
         {
             OnUpdateFrame();
@@ -150,34 +145,34 @@ namespace Editor.Windows
 
         public void AddSceneItem(GameObject obj)
         {
-            LogToConsolePanel("Created Object: " + obj.Name);
+            /*LogToConsolePanel("Created Object: " + obj.Name);
 
-            ListHierachy.BeginUpdate();
+            ListHierarchy.BeginUpdate();
 
-            ListHierachy.Items.Add(obj);
+            ListHierarchy.Items.Add(obj);
 
-            ListHierachy.EndUpdate();
+            ListHierarchy.EndUpdate();
 
-            Redraw();
+            Redraw();*/
         }
 
         private void GameObjectCreateButton(object sender, EventArgs e)
         {
-            GameObject obj = GameObject.Instantiate(null) as GameObject;
-            obj.Name = "GameObject" + ListHierachy.Items.Count;
+            /*GameObject obj = GameObject.Instantiate(null) as GameObject;
+            obj.Name = "GameObject" + ListHierarchy.Items.Count;
 
-            AddSceneItem(obj);
+            AddSceneItem(obj);*/
         }
 
         public void LogToConsolePanel(object text)
         {
-            ConsoleWindow.Items.Add(text.ToString());
+            //ConsoleWindow.Items.Add(text.ToString());
         }
 
         private void CreateMenuCreate3DCubeButton(object sender, EventArgs e)
         {
-            GameObject obj = GameObject.Instantiate(null) as GameObject;
-            obj.Name = "Cube" + ListHierachy.Items.Count;
+            /*GameObject obj = GameObject.Instantiate(null) as GameObject;
+            obj.Name = "Cube" + ListHierarchy.Items.Count;
 
             Material mat = new Material(new Shader("Content/Shaders/default"));
             mat.diffuseTexture = new Texture2D("Content/Images/cube.png");
@@ -186,13 +181,13 @@ namespace Editor.Windows
             renderer.mesh = PrimitiveFactory.CreateCube(1);
             renderer.AddMaterial(mat);
 
-            AddSceneItem(obj);
+            AddSceneItem(obj);*/
         }
 
         private void CreateMenuCreateCamera(object sender, EventArgs e)
         {
-            GameObject obj = GameObject.Instantiate(null) as GameObject;
-            obj.Name = "Camera" + ListHierachy.Items.Count;
+            /*GameObject obj = GameObject.Instantiate(null) as GameObject;
+            obj.Name = "Camera" + ListHierarchy.Items.Count;
 
             obj.position = new Vector3(10, 10, 10);
 
@@ -201,56 +196,56 @@ namespace Editor.Windows
 
             Camera.Current = cam;
 
-            AddSceneItem(obj);
+            AddSceneItem(obj);*/
         }
 
         private void FileMenuSaveOptionClicked(object sender, EventArgs e)
         {
-            if(SceneManager.CurrentScene.Name == "unnamed")
+            /*if(SceneManager.CurrentScene.Name == "unnamed")
             {
                 // open file dialog
                 SaveSceneDialog.ShowDialog();
                 return;
             }
 
-            SceneManager.CurrentScene.Save();
+            SceneManager.CurrentScene.Save();*/
         }
 
         private void SaveSceneDialog_FileOk(object sender, CancelEventArgs e)
         {
-            string[] arr = SaveSceneDialog.FileName.Split('\\');
+            /*string[] arr = SaveSceneDialog.FileName.Split('\\');
             string scenename = arr[arr.Length - 1];
 
             SceneManager.CurrentScene.Name = scenename;
 
-            SceneManager.CurrentScene.Save(SaveSceneDialog.FileName.TrimEnd(scenename.ToCharArray()));
+            SceneManager.CurrentScene.Save(SaveSceneDialog.FileName.TrimEnd(scenename.ToCharArray()));*/
         }
 
         private void FileMenuLoadOptionClicked(object sender, EventArgs e)
         {
-            LoadSceneDialog.ShowDialog();
+            //LoadSceneDialog.ShowDialog();
         }
 
         private void LoadSceneDialog_FileOk(object sender, CancelEventArgs e)
         {
-            ListHierachy.Items.Clear();
+            /*ListHierarchy.Items.Clear();
 
             SceneManager.LoadScene(LoadSceneDialog.FileName);
 
             foreach(GameObject go in SceneManager.CurrentScene.GameObjects)
             {
                 AddSceneItem(go);
-            }
+            }*/
         }
 
         private void FileMenuNewOptionClicked(object sender, EventArgs e)
         {
-            Scene newScene = new Scene();
+            /*Scene newScene = new Scene();
             SceneManager.CurrentScene = newScene;
 
-            ListHierachy.Items.Clear();
+            ListHierarchy.Items.Clear();
 
-            CreateMenuCreateCamera(null, null);
+            CreateMenuCreateCamera(null, null);*/
         }
     }
 }

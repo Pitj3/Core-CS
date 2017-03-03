@@ -36,15 +36,17 @@ namespace CoreEngine.Engine.Rendering
         #region Data
         public static Camera Current;
 
+        [IgnoreInspector]
         public Matrix4 projection;
+        [IgnoreInspector]
         public Matrix4 view;
 
-        private Color _clearColor;
+        public Color ClearColor;
 
         public float znear, zfar;
         public float fov;
 
-        public float aspect;
+        private float _aspect;
 
         private bool _ortho = true;
         public bool orthographic
@@ -62,7 +64,7 @@ namespace CoreEngine.Engine.Rendering
                     zfar = 10;
 
                     // create ortho matrix
-                    projection = Matrix4.CreateOrthographicOffCenter(0, _renderSize.X, _renderSize.Y, 0, znear, zfar);
+                    projection = Matrix4.CreateOrthographicOffCenter(0, RenderSize.X, RenderSize.Y, 0, znear, zfar);
                     view = Matrix4.Identity;
                 }
                 else
@@ -70,32 +72,33 @@ namespace CoreEngine.Engine.Rendering
                     znear = 0.01f;
                     zfar = 10000.0f;
 
-                    aspect = _renderSize.X / _renderSize.Y;
+                    _aspect = RenderSize.X / RenderSize.Y;
 
-                    projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), aspect, znear, zfar);
+                    projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);
                     view = Matrix4.LookAt(eye, look, up);
                 }
             }
         }
 
-        private Vector2 _renderSize;
+        public Vector2 RenderSize;
 
         public ClearFlags clearFlags;
 
         private Texture2D _renderTexture = null;
 
         public Vector3 eye, look, up;
+
         #endregion
 
         #region Construction
         public Camera()
         {
-            _renderSize = new Vector2(1280, 720);
+            RenderSize = new Vector2(1280, 720);
             fov = 60.0f;
 
             clearFlags |= ClearFlags.Depth;
 
-            _clearColor = Color.CornflowerBlue;
+            ClearColor = Color.CornflowerBlue;
 
             if (_ortho)
             {
@@ -121,14 +124,14 @@ namespace CoreEngine.Engine.Rendering
             if (_ortho)
             {
                 // create ortho matrix
-                projection = Matrix4.CreateOrthographicOffCenter(0, _renderSize.X, _renderSize.Y, 0, znear, zfar);
+                projection = Matrix4.CreateOrthographicOffCenter(0, RenderSize.X, RenderSize.Y, 0, znear, zfar);
                 view = Matrix4.Identity;
             }
             else
             {
-                aspect = _renderSize.X / _renderSize.Y;
+                _aspect = RenderSize.X / RenderSize.Y;
 
-                projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), aspect, znear, zfar);
+                projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);
                 view = Matrix4.LookAt(eye, look, up);
             }
         }

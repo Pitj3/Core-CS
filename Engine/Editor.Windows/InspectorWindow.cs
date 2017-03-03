@@ -18,12 +18,12 @@ namespace Editor.Windows
         private void ListHierarchyObjectSelected(object sender, EventArgs e)
         {
             // update inspector
-            _currentObject = (GameObject)ListHierachy.SelectedItem;
+            /*_currentObject = (GameObject)ListHierarchy.SelectedItem;
 
             if (_currentObject == null)
                 return;
 
-            InspectorComponentsBox.Items.Clear();
+            InspectorComponentsTable.Controls.Clear();
 
             // load gameobject data to inspector
             PositionX.Text = _currentObject.position.X.ToString();
@@ -34,12 +34,50 @@ namespace Editor.Windows
             RotationY.Text = _currentObject.rotationEuler.Y.ToString();
             RotationZ.Text = _currentObject.rotationEuler.Z.ToString();
 
+            float height = 0.0f;
+
             foreach (CoreComponent comp in _currentObject.Components)
             {
-                InspectorComponentsBox.Items.Add(comp.type);
+                InspectorComponentView view = new InspectorComponentView();
+                view.Controls["ComponentNameLabel"].Text = comp.Name;
+
+                System.Reflection.FieldInfo[] fields = comp.GetType().GetFields();
+
+                foreach (System.Reflection.FieldInfo info in fields)
+                {
+                    bool skipVar = false;
+                    foreach (object atrr in info.GetCustomAttributes(true))
+                    {
+                        if (atrr is IgnoreInspectorAttribute)
+                        {
+                            skipVar = true;
+                            break;
+                        }
+                    }
+
+                    if (skipVar)
+                        continue;
+
+                    ComponentVariableView compVarView = new ComponentVariableView();
+                    compVarView.Controls["VariableName"].Text = info.Name;
+                    compVarView.Controls["VariableValueBox"].Text = info.GetValue(comp).ToString();
+
+                    height += compVarView.Height + 6; // Apperently winforms does this padding?
+
+                    view.Controls["VariableViewPanel"].Controls["ComponentVariableTable"].Controls.Add(compVarView);
+                }
+
+                view.Height = (int)height + 20;
+                view.Controls["VariableViewPanel"].Height = (int)height + 10;
+                view.Controls["VariableViewPanel"].Controls["ComponentVariableTable"].Height = (int)height;
+                view.Anchor = AnchorStyles.Top;
+
+                InspectorComponentsTable.Controls.Add(view);
             }
 
-            InspectorPanel.Visible = true;
+            InspectorPanel.Controls["InspectorComponentsTable"].Height = (int)height;
+
+            InspectorPanel.Visible = true;*/
         }
 
         private void InspectorComponentsBoxComponentSelected(object sender, EventArgs e)
@@ -49,24 +87,63 @@ namespace Editor.Windows
 
         private void GLWidgetMouseClick(object sender, MouseEventArgs e)
         {
-            InspectorPanel.Visible = false;
+            /*InspectorPanel.Visible = false;
 
-            ListHierachy.SelectedItem = null;
+            ListHierarchy.SelectedItem = null;*/
         }
 
         private void AddComponentSelectionBoxSelectedComponent(object sender, EventArgs e)
         { 
-            if (_currentObject == null)
+            /*if (_currentObject == null)
                 return;
 
-            _currentObject.AddComponent(((CoreComponent)AddComponentSelectionBox.SelectedItem).systemType.ToString());
+            CoreComponent comp = (CoreComponent)_currentObject.AddComponent(((CoreComponent)AddComponentSelectionBox.SelectedItem).systemType.ToString());
 
-            InspectorComponentsBox.Items.Add(AddComponentSelectionBox.SelectedItem.ToString());
+            InspectorComponentView view = new InspectorComponentView();
+            view.Controls["ComponentNameLabel"].Text = comp.Name;
+
+            System.Reflection.FieldInfo[] fields = comp.GetType().GetFields();
+
+            float height = 0.0f;
+
+            foreach (System.Reflection.FieldInfo info in fields)
+            {
+                bool skipVar = false;
+                foreach (object atrr in info.GetCustomAttributes(true))
+                {
+                    if (atrr is IgnoreInspectorAttribute)
+                    {
+                        skipVar = true;
+                        break;
+                    }
+                }
+
+                if (skipVar)
+                    continue;
+
+                ComponentVariableView compVarView = new ComponentVariableView();
+                compVarView.Controls["VariableName"].Text = info.Name;
+                compVarView.Controls["VariableValueBox"].Text = info.GetValue(comp).ToString();
+
+                height += compVarView.Height + 6; // Apperently winforms does this padding?
+
+                view.Controls["VariableViewPanel"].Controls["ComponentVariableTable"].Controls.Add(compVarView);
+            }
+
+            view.Height = (int)height + 20;
+            view.Controls["VariableViewPanel"].Height = (int)height + 10;
+            view.Controls["VariableViewPanel"].Controls["ComponentVariableTable"].Height = (int)height;
+            view.Anchor = AnchorStyles.Top;
+
+            InspectorComponentsTable.Controls.Add(view);
+
+            InspectorPanel.Controls["InspectorComponentsTable"].Height += (int)height;
+
             AddComponentSelectionBox.Text = "";
-            AddComponentSelectionBox.SelectedText = "";
+            AddComponentSelectionBox.SelectedText = "";*/
         }
 
-        private void PositionXBoxChanged(object sender, EventArgs e)
+       /* private void PositionXBoxChanged(object sender, EventArgs e)
         {
             float r = 0.0f;
             if (float.TryParse(PositionX.Text, out r))
@@ -181,6 +258,6 @@ namespace Editor.Windows
 
                 RotationZ.Text = _currentObject.rotationEuler.Z.ToString();
             }
-        }
+        }*/
     }
 }

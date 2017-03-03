@@ -14,10 +14,8 @@ namespace CoreEngine.Engine.Core
     public class Object
     {
         #region Data
-        public bool Enabled;
+        public bool Enabled = true;
         public string Name;
-        // TODO: GameObject
-        // TODO: Transform
         #endregion
 
         #region Static API
