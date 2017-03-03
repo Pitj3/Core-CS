@@ -12,11 +12,16 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 using CoreEngine.Engine.Input;
+using CoreEngine.Engine.Scene;
 
 namespace Editor.Windows
 {
     public partial class Editor : Form
     {
+        #region Data
+        private GameObject _currentObject;
+        #endregion
+
         public Editor()
         {
             InitializeComponent();
@@ -29,6 +34,8 @@ namespace Editor.Windows
             base.OnLoad(e);
 
             Redraw();
+
+            this.AddComponentSelectionBox.Items.Add("Camera");
         }
 
         private void OnUpdateFrame()
@@ -88,11 +95,10 @@ namespace Editor.Windows
 
         public void AddSceneItem()
         {
-            GO go = new GO();
-            go.name = "GameObject" + ListHierachy.Items.Count;
-            go.id = ListHierachy.Items.Count;
+            GameObject go = new GameObject();
+            go.Name = "GameObject" + ListHierachy.Items.Count;
 
-            LogToConsolePanel("Created Object: " + go.name);
+            LogToConsolePanel("Created Object: " + go.Name);
 
             ListHierachy.BeginUpdate();
 
@@ -103,11 +109,6 @@ namespace Editor.Windows
             Redraw();
         }
 
-        private void ListHierarchyObjectSelected(object sender, EventArgs e)
-        {
-            
-        }
-
         private void GameObjectCreateButton(object sender, EventArgs e)
         {
             AddSceneItem();
@@ -116,17 +117,6 @@ namespace Editor.Windows
         public void LogToConsolePanel(object text)
         {
             ConsoleWindow.Items.Add(text.ToString());
-        }
-    }
-
-    public class GO
-    {
-        public string name = "Gameobject";
-        public int id = 1;
-
-        public override string ToString()
-        {
-            return name;
         }
     }
 }
