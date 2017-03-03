@@ -47,7 +47,7 @@ namespace CoreEngine.Tests
         {
             base.OnLoad(e);
 
-            SceneManager.LoadScene("Game");
+            SceneManager.LoadScene("Content/Scenes/Game.txt");
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)

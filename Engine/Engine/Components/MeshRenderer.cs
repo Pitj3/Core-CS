@@ -39,5 +39,12 @@ namespace CoreEngine.Engine.Components
             materials[0].Unbind();
         }
         #endregion
+
+        #region Public API
+        public void AddMaterial(Material mat)
+        {
+            materials.Add(mat);
+        }
+        #endregion
     }
 }

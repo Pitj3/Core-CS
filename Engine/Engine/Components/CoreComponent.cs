@@ -3,7 +3,9 @@
 // For conditions of distribution and use, see copyright notice in Core.cs
 
 using CoreEngine.Engine.Core;
+using CoreEngine.Engine.Scene;
 
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CoreEngine.Engine.Components
@@ -16,6 +18,9 @@ namespace CoreEngine.Engine.Components
         #region Data
         public string type;
         public System.Type systemType;
+
+        [JsonIgnore]
+        public GameObject parent;
         #endregion
 
         #region Constructors

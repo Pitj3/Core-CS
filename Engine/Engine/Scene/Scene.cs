@@ -24,13 +24,15 @@ namespace CoreEngine.Engine.Scene
     {
         #region Data
         public List<GameObject> GameObjects = new List<GameObject>();
-        public string Name;
+        public string Name = "unnamed";
 
         private string _path = "Content/Scenes/";
         private string _jsonData = "";
 
         private JsonSerializer _jsonSerializer;
         private JsonConverter[] _converters;
+
+        public GameObject CurrentObject;
         #endregion
 
         #region Constructors
@@ -64,13 +66,10 @@ namespace CoreEngine.Engine.Scene
             // load objects and stuff from source.
             SceneManager.CurrentScene = this;
 
-            Name = source;
-            _path += source + ".txt";
+            string[] arr = source.Split('\\');
+            Name = arr[arr.Length - 1];
 
-            if (!Directory.Exists("Content/Scenes/"))
-            {
-                Directory.CreateDirectory("Content/Scenes/");
-            }
+            _path = source;
 
             if (!File.Exists(_path))
             {
@@ -143,8 +142,14 @@ namespace CoreEngine.Engine.Scene
         /// <summary>
         /// Saves the scene
         /// </summary>
-        public void Save()
+        public void Save(string overridepath = "")
         {
+            if(overridepath != "")
+            {
+                _path = overridepath;
+                _path += Name;
+            }
+
             string savefile = "";
             SaveGameObject[] sgoList = new SaveGameObject[GameObjects.Count];
 
@@ -153,9 +158,13 @@ namespace CoreEngine.Engine.Scene
             {
                 sgoList[i] = go.Serialize();
                 i++;
-            }     
+            }
 
-            savefile = JsonConvert.SerializeObject(sgoList, Formatting.Indented, _converters);
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.Converters = _converters;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+            savefile = JsonConvert.SerializeObject(sgoList, Formatting.Indented, settings);
 
             if (!File.Exists(_path))
             {

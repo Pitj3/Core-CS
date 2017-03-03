@@ -140,7 +140,11 @@ namespace CoreEngine.Engine.Rendering
 
         public override void Update()
         {
-            
+            if (!_ortho)
+            {
+                eye = parent.position;
+                view = Matrix4.LookAt(eye, look, up);
+            }
         }
 
         public override void FixedUpdate()
@@ -155,11 +159,7 @@ namespace CoreEngine.Engine.Rendering
 
         public override void OnPreRender()
         {
-            if(!_ortho)
-            {
-                view = Matrix4.LookAt(eye, look, up);
-            }
-
+            
             if(_renderTexture)
             {
                 // render to texture

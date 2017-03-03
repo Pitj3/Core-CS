@@ -9,6 +9,8 @@ using OpenTK;
 
 using System.Collections.Generic;
 
+using Newtonsoft.Json;
+
 namespace CoreEngine.Engine.Scene
 {
     #region Save Data
@@ -43,6 +45,9 @@ namespace CoreEngine.Engine.Scene
         // TODO: transform
         public Vector3 position;
         public Quaternion rotation;
+
+        [JsonIgnore]
+        public Vector3 rotationEuler;
         #endregion
 
         #region Constructors
@@ -62,6 +67,8 @@ namespace CoreEngine.Engine.Scene
             T comp = new T();
             Components.Add(comp);
 
+            comp.parent = this;
+
             comp.Awake();
             comp.Start();
 
@@ -79,6 +86,8 @@ namespace CoreEngine.Engine.Scene
 
             Components.Add(instance);
 
+            instance.parent = this;
+
             instance.Awake();
             instance.Start();
 
@@ -95,6 +104,8 @@ namespace CoreEngine.Engine.Scene
             CoreComponent instance = (CoreComponent)component;
 
             Components.Add(instance);
+
+            instance.parent = this;
 
             instance.Awake();
             instance.Start();

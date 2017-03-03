@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System;
 
 using CoreEngine.Engine.Rendering;
+using CoreEngine.Engine.Components;
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -106,8 +107,30 @@ namespace CoreEngine.Engine.Graphics
         {
             shader.Bind();
 
-            Matrix4 mvp = Camera.Current.view * Camera.Current.projection;
-            GL.UniformMatrix4(shaderMembers[0].location, false, ref mvp);
+            Matrix4 projection = Camera.Current.projection;
+            GL.UniformMatrix4(shaderMembers[0].location, false, ref projection);
+
+            Matrix4 view = Camera.Current.view;
+            GL.UniformMatrix4(shaderMembers[1].location, false, ref view);
+
+            Scene.GameObject go = Scene.SceneManager.CurrentScene.CurrentObject;
+
+            if (go != null)
+            {
+                //Matrix4 model = Matrix4.CreateTranslation(parent.parent.position);
+                //model *= Matrix4.CreateRotationY(parent.parent.rotation.Xyz.Y);
+
+                Matrix4 model = Matrix4.CreateTranslation(go.position);
+
+                Vector3 axis;
+                float angle;
+
+                go.rotation.ToAxisAngle(out axis, out angle);
+
+                model *= Matrix4.CreateFromAxisAngle(axis, angle);
+
+                GL.UniformMatrix4(shaderMembers[2].location, false, ref model);
+            }
 
             int loc = shader.GetVariableLocation("diffuse");
 
@@ -132,8 +155,14 @@ namespace CoreEngine.Engine.Graphics
             string[] vsLines = shader.vsSource.Split("/n".ToCharArray());
             //Logging.Logger.Log(Logging.LogLevel.DEBUG, vsLines.Length.ToString());
 
-            MaterialVariable projection = new MaterialVariable() { type = MaterialVariableType.MATRIX4, shaderType = MaterialVariableShaderType.VERTEX_SHADER, location = shader.GetVariableLocation("mvp"), value = null };
+            MaterialVariable projection = new MaterialVariable() { type = MaterialVariableType.MATRIX4, shaderType = MaterialVariableShaderType.VERTEX_SHADER, location = shader.GetVariableLocation("projection"), value = null };
             shaderMembers.Add(projection);
+
+            MaterialVariable view = new MaterialVariable() { type = MaterialVariableType.MATRIX4, shaderType = MaterialVariableShaderType.VERTEX_SHADER, location = shader.GetVariableLocation("view"), value = null };
+            shaderMembers.Add(view);
+
+            MaterialVariable model = new MaterialVariable() { type = MaterialVariableType.MATRIX4, shaderType = MaterialVariableShaderType.VERTEX_SHADER, location = shader.GetVariableLocation("model"), value = null };
+            shaderMembers.Add(model);
         }
         #endregion
     }

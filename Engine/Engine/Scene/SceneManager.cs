@@ -58,6 +58,7 @@ namespace CoreEngine.Engine.Scene
 
             foreach(GameObject go in CurrentScene.GameObjects)
             {
+                CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
                     comp.Update();
@@ -75,6 +76,7 @@ namespace CoreEngine.Engine.Scene
 
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
                     comp.FixedUpdate();
@@ -124,6 +126,7 @@ namespace CoreEngine.Engine.Scene
 
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
                     if (comp is Camera)
@@ -143,6 +146,7 @@ namespace CoreEngine.Engine.Scene
 
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
                     if (comp is Camera)
@@ -162,6 +166,7 @@ namespace CoreEngine.Engine.Scene
 
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
                     if (comp is Camera)

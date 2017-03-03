@@ -43,6 +43,7 @@ namespace Editor.Windows
             this.CreateMenuGameObjectOption = new System.Windows.Forms.ToolStripMenuItem();
             this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cubeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenuWindowsOption = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenuAboutOption = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutMenuAboutItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +68,8 @@ namespace Editor.Windows
             this.PositionY = new System.Windows.Forms.TextBox();
             this.PositionX = new System.Windows.Forms.TextBox();
             this.Physics = new System.Windows.Forms.TabPage();
-            this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveSceneDialog = new System.Windows.Forms.SaveFileDialog();
+            this.LoadSceneDialog = new System.Windows.Forms.OpenFileDialog();
             this.TopMenu.SuspendLayout();
             this.PanelHierarchy.SuspendLayout();
             this.RightSidePanel.SuspendLayout();
@@ -108,12 +110,14 @@ namespace Editor.Windows
             this.FileMenuNewOption.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.FileMenuNewOption.Size = new System.Drawing.Size(187, 22);
             this.FileMenuNewOption.Text = "New";
+            this.FileMenuNewOption.Click += new System.EventHandler(this.FileMenuNewOptionClicked);
             // 
             // FileMenuLoadOption
             // 
             this.FileMenuLoadOption.Name = "FileMenuLoadOption";
             this.FileMenuLoadOption.Size = new System.Drawing.Size(187, 22);
             this.FileMenuLoadOption.Text = "Load";
+            this.FileMenuLoadOption.Click += new System.EventHandler(this.FileMenuLoadOptionClicked);
             // 
             // FileMenuSaveOption
             // 
@@ -121,6 +125,7 @@ namespace Editor.Windows
             this.FileMenuSaveOption.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.FileMenuSaveOption.Size = new System.Drawing.Size(187, 22);
             this.FileMenuSaveOption.Text = "Save";
+            this.FileMenuSaveOption.Click += new System.EventHandler(this.FileMenuSaveOptionClicked);
             // 
             // FileMenuSaveAllOption
             // 
@@ -157,7 +162,7 @@ namespace Editor.Windows
             // CreateMenuGameObjectOption
             // 
             this.CreateMenuGameObjectOption.Name = "CreateMenuGameObjectOption";
-            this.CreateMenuGameObjectOption.Size = new System.Drawing.Size(152, 22);
+            this.CreateMenuGameObjectOption.Size = new System.Drawing.Size(140, 22);
             this.CreateMenuGameObjectOption.Text = "GameObject";
             this.CreateMenuGameObjectOption.Click += new System.EventHandler(this.GameObjectCreateButton);
             // 
@@ -166,15 +171,22 @@ namespace Editor.Windows
             this.dToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cubeToolStripMenuItem});
             this.dToolStripMenuItem.Name = "dToolStripMenuItem";
-            this.dToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.dToolStripMenuItem.Text = "3D";
             // 
             // cubeToolStripMenuItem
             // 
             this.cubeToolStripMenuItem.Name = "cubeToolStripMenuItem";
-            this.cubeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cubeToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.cubeToolStripMenuItem.Text = "Cube";
             this.cubeToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreate3DCubeButton);
+            // 
+            // cameraToolStripMenuItem
+            // 
+            this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.cameraToolStripMenuItem.Text = "Camera";
+            this.cameraToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreateCamera);
             // 
             // TopMenuWindowsOption
             // 
@@ -398,12 +410,19 @@ namespace Editor.Windows
             this.Physics.Text = "Physics";
             this.Physics.UseVisualStyleBackColor = true;
             // 
-            // cameraToolStripMenuItem
+            // SaveSceneDialog
             // 
-            this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
-            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.cameraToolStripMenuItem.Text = "Camera";
-            this.cameraToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreateCamera);
+            this.SaveSceneDialog.DefaultExt = "txt";
+            this.SaveSceneDialog.FileName = "untitled";
+            this.SaveSceneDialog.Filter = "Scene Files|*.txt";
+            this.SaveSceneDialog.InitialDirectory = "Content/Scenes";
+            this.SaveSceneDialog.Title = "Save Scene";
+            this.SaveSceneDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.SaveSceneDialog_FileOk);
+            // 
+            // LoadSceneDialog
+            // 
+            this.LoadSceneDialog.Filter = "Scene Files|*.txt";
+            this.LoadSceneDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.LoadSceneDialog_FileOk);
             // 
             // Editor
             // 
@@ -475,6 +494,8 @@ namespace Editor.Windows
         private ToolStripMenuItem dToolStripMenuItem;
         private ToolStripMenuItem cubeToolStripMenuItem;
         private ToolStripMenuItem cameraToolStripMenuItem;
+        public SaveFileDialog SaveSceneDialog;
+        private OpenFileDialog LoadSceneDialog;
     }
 }
 

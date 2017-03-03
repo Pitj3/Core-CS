@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using System.Windows.Forms;
 
+using OpenTK;
+
 using CoreEngine.Engine.Scene;
 using CoreEngine.Engine.Components;
 
@@ -28,9 +30,9 @@ namespace Editor.Windows
             PositionY.Text = _currentObject.position.Y.ToString();
             PositionZ.Text = _currentObject.position.Z.ToString();
 
-            RotationX.Text = _currentObject.rotation.Xyz.X.ToString();
-            RotationY.Text = _currentObject.rotation.Xyz.Y.ToString();
-            RotationZ.Text = _currentObject.rotation.Xyz.Z.ToString();
+            RotationX.Text = _currentObject.rotationEuler.X.ToString();
+            RotationY.Text = _currentObject.rotationEuler.Y.ToString();
+            RotationZ.Text = _currentObject.rotationEuler.Z.ToString();
 
             foreach (CoreComponent comp in _currentObject.Components)
             {
@@ -70,9 +72,14 @@ namespace Editor.Windows
             if (float.TryParse(PositionX.Text, out r))
             {
                 _currentObject.position.X = r;
+                Redraw();
             }
             else
             {
+                if(PositionX.Text == "")
+                {
+                    _currentObject.position.X = 0;
+                }
                 PositionX.Text = _currentObject.position.X.ToString();
             }
         }
@@ -83,9 +90,14 @@ namespace Editor.Windows
             if (float.TryParse(PositionY.Text, out r))
             {
                 _currentObject.position.Y = r;
+                Redraw();
             }
             else
             {
+                if (PositionY.Text == "")
+                {
+                    _currentObject.position.Y = 0;
+                }
                 PositionY.Text = _currentObject.position.Y.ToString();
             }
         }
@@ -96,23 +108,15 @@ namespace Editor.Windows
             if (float.TryParse(PositionZ.Text, out r))
             {
                 _currentObject.position.Z = r;
+                Redraw();
             }
             else
             {
+                if (PositionZ.Text == "")
+                {
+                    _currentObject.position.Z = 0;
+                }
                 PositionZ.Text = _currentObject.position.Z.ToString();
-            }
-        }
-
-        private void RotationYBoxChanged(object sender, EventArgs e)
-        {
-            float r = 0.0f;
-            if (float.TryParse(RotationY.Text, out r))
-            {
-                _currentObject.rotation *= OpenTK.Quaternion.FromEulerAngles(0, r, 0);
-            }
-            else
-            {
-                RotationY.Text = _currentObject.rotation.Xyz.Z.ToString();
             }
         }
 
@@ -121,11 +125,40 @@ namespace Editor.Windows
             float r = 0.0f;
             if (float.TryParse(RotationX.Text, out r))
             {
-                _currentObject.rotation *= OpenTK.Quaternion.FromEulerAngles(r, 0, 0);
+                _currentObject.rotationEuler.X = r;
+                _currentObject.rotation = OpenTK.Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(r), MathHelper.DegreesToRadians(_currentObject.rotationEuler.Y), MathHelper.DegreesToRadians(_currentObject.rotationEuler.Z));
+                Redraw();
             }
             else
             {
-                RotationX.Text = _currentObject.rotation.Xyz.X.ToString();
+                if (RotationX.Text == "")
+                {
+                    _currentObject.rotationEuler.X = 0;
+                    _currentObject.rotation = OpenTK.Quaternion.FromEulerAngles(0, MathHelper.DegreesToRadians(_currentObject.rotationEuler.Y), MathHelper.DegreesToRadians(_currentObject.rotationEuler.Z));
+                }
+
+                RotationX.Text = _currentObject.rotationEuler.X.ToString();
+            }
+        }
+
+        private void RotationYBoxChanged(object sender, EventArgs e)
+        {
+            float r = 0.0f;
+            if (float.TryParse(RotationY.Text, out r))
+            {
+                _currentObject.rotation = OpenTK.Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(_currentObject.rotationEuler.X), MathHelper.DegreesToRadians(r), MathHelper.DegreesToRadians(_currentObject.rotationEuler.Z));
+                _currentObject.rotationEuler.Y = r;
+                Redraw();
+            }
+            else
+            {
+                if (RotationY.Text == "")
+                {
+                    _currentObject.rotationEuler.Y = 0;
+                    _currentObject.rotation = OpenTK.Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(_currentObject.rotationEuler.X), 0, MathHelper.DegreesToRadians(_currentObject.rotationEuler.Z));
+                }
+
+                RotationY.Text = _currentObject.rotationEuler.Y.ToString();
             }
         }
 
@@ -134,11 +167,19 @@ namespace Editor.Windows
             float r = 0.0f;
             if (float.TryParse(RotationZ.Text, out r))
             {
-                _currentObject.rotation *= OpenTK.Quaternion.FromEulerAngles(0, 0, r);
+                _currentObject.rotationEuler.Z = r;
+                _currentObject.rotation = OpenTK.Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(_currentObject.rotationEuler.X), MathHelper.DegreesToRadians(_currentObject.rotationEuler.Y), MathHelper.DegreesToRadians(r));
+                Redraw();
             }
             else
             {
-                RotationZ.Text = _currentObject.rotation.Xyz.Z.ToString();
+                if (RotationZ.Text == "")
+                {
+                    _currentObject.rotationEuler.Z = 0;
+                    _currentObject.rotation = OpenTK.Quaternion.FromEulerAngles(MathHelper.DegreesToRadians(_currentObject.rotationEuler.X), MathHelper.DegreesToRadians(_currentObject.rotationEuler.Y), 0);
+                }
+
+                RotationZ.Text = _currentObject.rotationEuler.Z.ToString();
             }
         }
     }

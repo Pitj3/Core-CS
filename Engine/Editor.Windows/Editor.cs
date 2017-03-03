@@ -49,6 +49,10 @@ namespace Editor.Windows
 
             _currentScene = new Scene();
             SceneManager.CurrentScene = _currentScene;
+
+            CreateMenuCreateCamera(null, null);
+
+            GL.Enable(EnableCap.DepthTest);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -60,7 +64,7 @@ namespace Editor.Windows
 
         private void OnUpdateFrame()
         {
-            
+            _sceneManager?.Update();
         }
 
         private void OnRenderFrame()
@@ -69,15 +73,16 @@ namespace Editor.Windows
             GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
 
             // render editor
+
+            if (Camera.Current == null)
+                return;
+
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            Matrix4 pers = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), 1280.0f / 720.0f, 0.01f, 1000.0f);
-            GL.LoadMatrix(ref pers);
+            GL.LoadMatrix(ref Camera.Current.projection);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-
-            Matrix4 view = Matrix4.LookAt(10, 10, 10, 0, 0, 0, 0, 1, 0);
-            GL.LoadMatrix(ref view);
+            GL.LoadMatrix(ref Camera.Current.view);
 
 
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
@@ -179,7 +184,7 @@ namespace Editor.Windows
 
             MeshRenderer renderer = obj.AddComponent<MeshRenderer>();
             renderer.mesh = PrimitiveFactory.CreateCube(1);
-            renderer.materials.Add(mat);
+            renderer.AddMaterial(mat);
 
             AddSceneItem(obj);
         }
@@ -189,10 +194,63 @@ namespace Editor.Windows
             GameObject obj = GameObject.Instantiate(null) as GameObject;
             obj.Name = "Camera" + ListHierachy.Items.Count;
 
+            obj.position = new Vector3(10, 10, 10);
+
             Camera cam = obj.AddComponent<Camera>();
             cam.orthographic = false;
 
+            Camera.Current = cam;
+
             AddSceneItem(obj);
+        }
+
+        private void FileMenuSaveOptionClicked(object sender, EventArgs e)
+        {
+            if(SceneManager.CurrentScene.Name == "unnamed")
+            {
+                // open file dialog
+                SaveSceneDialog.ShowDialog();
+                return;
+            }
+
+            SceneManager.CurrentScene.Save();
+        }
+
+        private void SaveSceneDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            string[] arr = SaveSceneDialog.FileName.Split('\\');
+            string scenename = arr[arr.Length - 1];
+
+            SceneManager.CurrentScene.Name = scenename;
+
+            SceneManager.CurrentScene.Save(SaveSceneDialog.FileName.TrimEnd(scenename.ToCharArray()));
+        }
+
+        private void FileMenuLoadOptionClicked(object sender, EventArgs e)
+        {
+            LoadSceneDialog.ShowDialog();
+        }
+
+        private void LoadSceneDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            ListHierachy.Items.Clear();
+
+            SceneManager.LoadScene(LoadSceneDialog.FileName);
+
+            foreach(GameObject go in SceneManager.CurrentScene.GameObjects)
+            {
+                AddSceneItem(go);
+            }
+        }
+
+        private void FileMenuNewOptionClicked(object sender, EventArgs e)
+        {
+            Scene newScene = new Scene();
+            SceneManager.CurrentScene = newScene;
+
+            ListHierachy.Items.Clear();
+
+            CreateMenuCreateCamera(null, null);
         }
     }
 }
