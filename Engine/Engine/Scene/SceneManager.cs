@@ -58,6 +58,9 @@ namespace CoreEngine.Engine.Scene
 
             foreach(GameObject go in CurrentScene.GameObjects)
             {
+                if (go.Enabled == false)
+                    continue;
+
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
@@ -76,6 +79,9 @@ namespace CoreEngine.Engine.Scene
 
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                if (go.Enabled == false)
+                    continue;
+
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
@@ -96,6 +102,9 @@ namespace CoreEngine.Engine.Scene
             List<Camera> _cameras = new List<Camera>();
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                if (go.Enabled == false)
+                    continue;
+
                 foreach (CoreComponent comp in go.Components)
                 {
                     if(comp is Camera)
@@ -126,6 +135,9 @@ namespace CoreEngine.Engine.Scene
 
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                if (go.Enabled == false)
+                    continue;
+
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
@@ -146,6 +158,9 @@ namespace CoreEngine.Engine.Scene
 
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                if (go.Enabled == false)
+                    continue;
+
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
@@ -166,6 +181,9 @@ namespace CoreEngine.Engine.Scene
 
             foreach (GameObject go in CurrentScene.GameObjects)
             {
+                if (go.Enabled == false)
+                    continue;
+
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {

@@ -75,6 +75,7 @@
     <Compile Include="Editor.Designer.cs">
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorWindow.cs" />
     <Compile Include="InspectorComponentView.cs">
       <SubType>UserControl</SubType>
     </Compile>

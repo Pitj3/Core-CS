@@ -61,12 +61,16 @@ namespace Editor.Windows
             this.MainEditorCenterPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.MainEditorBottomPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.MainEditorRightPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
+            this.HierarchyPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
+            this.HierarchyHeader = new ComponentFactory.Krypton.Toolkit.KryptonHeader();
+            this.HierarchyTree = new ComponentFactory.Krypton.Toolkit.KryptonTreeView();
+            this.InspectorPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
+            this.InspectorHeader = new ComponentFactory.Krypton.Toolkit.KryptonHeader();
             this.MainEditorLeftPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.childToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorPanel)).BeginInit();
             this.MainEditorPanel.SuspendLayout();
@@ -75,18 +79,24 @@ namespace Editor.Windows
             this.MainEditorCenterPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorBottomPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorRightPanel)).BeginInit();
+            this.MainEditorRightPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.HierarchyPanel)).BeginInit();
+            this.HierarchyPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.InspectorPanel)).BeginInit();
+            this.InspectorPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorLeftPanel)).BeginInit();
             this.SuspendLayout();
             // 
             // GLView
             // 
             this.GLView.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.GLView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GLView.Location = new System.Drawing.Point(0, 0);
+            this.GLView.Location = new System.Drawing.Point(399, 51);
             this.GLView.Name = "GLView";
-            this.GLView.Size = new System.Drawing.Size(1904, 961);
+            this.GLView.Size = new System.Drawing.Size(1106, 761);
             this.GLView.TabIndex = 0;
             this.GLView.VSync = false;
+            this.GLView.Load += new System.EventHandler(this.GLViewLoaded);
+            this.GLView.Click += new System.EventHandler(this.GLViewClicked);
             this.GLView.Paint += new System.Windows.Forms.PaintEventHandler(this.GLViewPaint);
             this.GLView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GLViewKeyDown);
             this.GLView.Resize += new System.EventHandler(this.GLViewResize);
@@ -176,6 +186,7 @@ namespace Editor.Windows
             // 
             this.TopMenuCreateOption.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CreateMenuGameObjectOption,
+            this.childToolStripMenuItem,
             this.dToolStripMenuItem,
             this.cameraToolStripMenuItem});
             this.TopMenuCreateOption.ForeColor = System.Drawing.SystemColors.ButtonFace;
@@ -187,7 +198,7 @@ namespace Editor.Windows
             // 
             this.CreateMenuGameObjectOption.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.CreateMenuGameObjectOption.Name = "CreateMenuGameObjectOption";
-            this.CreateMenuGameObjectOption.Size = new System.Drawing.Size(140, 22);
+            this.CreateMenuGameObjectOption.Size = new System.Drawing.Size(152, 22);
             this.CreateMenuGameObjectOption.Text = "GameObject";
             this.CreateMenuGameObjectOption.Click += new System.EventHandler(this.GameObjectCreateButton);
             // 
@@ -197,14 +208,14 @@ namespace Editor.Windows
             this.dToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cubeToolStripMenuItem});
             this.dToolStripMenuItem.Name = "dToolStripMenuItem";
-            this.dToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.dToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.dToolStripMenuItem.Text = "3D";
             // 
             // cubeToolStripMenuItem
             // 
             this.cubeToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.cubeToolStripMenuItem.Name = "cubeToolStripMenuItem";
-            this.cubeToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
+            this.cubeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cubeToolStripMenuItem.Text = "Cube";
             this.cubeToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreate3DCubeButton);
             // 
@@ -212,7 +223,7 @@ namespace Editor.Windows
             // 
             this.cameraToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
-            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cameraToolStripMenuItem.Text = "Camera";
             this.cameraToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreateCamera);
             // 
@@ -294,9 +305,7 @@ namespace Editor.Windows
             this.MainEditorCenterPanel.Controls.Add(this.MainEditorBottomPanel);
             this.MainEditorCenterPanel.Controls.Add(this.MainEditorRightPanel);
             this.MainEditorCenterPanel.Controls.Add(this.MainEditorLeftPanel);
-            this.MainEditorCenterPanel.Controls.Add(this.GLView);
-            this.MainEditorCenterPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainEditorCenterPanel.Location = new System.Drawing.Point(0, 0);
+            this.MainEditorCenterPanel.Location = new System.Drawing.Point(0, 50);
             this.MainEditorCenterPanel.Margin = new System.Windows.Forms.Padding(0);
             this.MainEditorCenterPanel.Name = "MainEditorCenterPanel";
             this.MainEditorCenterPanel.Size = new System.Drawing.Size(1904, 961);
@@ -315,6 +324,8 @@ namespace Editor.Windows
             // 
             // MainEditorRightPanel
             // 
+            this.MainEditorRightPanel.Controls.Add(this.HierarchyPanel);
+            this.MainEditorRightPanel.Controls.Add(this.InspectorPanel);
             this.MainEditorRightPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.MainEditorRightPanel.Location = new System.Drawing.Point(1504, 0);
             this.MainEditorRightPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -323,6 +334,66 @@ namespace Editor.Windows
             this.MainEditorRightPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.MainEditorRightPanel.StateCommon.Color2 = System.Drawing.Color.Black;
             this.MainEditorRightPanel.TabIndex = 0;
+            // 
+            // HierarchyPanel
+            // 
+            this.HierarchyPanel.Controls.Add(this.HierarchyHeader);
+            this.HierarchyPanel.Controls.Add(this.HierarchyTree);
+            this.HierarchyPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.HierarchyPanel.Location = new System.Drawing.Point(0, 0);
+            this.HierarchyPanel.Name = "HierarchyPanel";
+            this.HierarchyPanel.Size = new System.Drawing.Size(400, 400);
+            this.HierarchyPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.HierarchyPanel.TabIndex = 0;
+            // 
+            // HierarchyHeader
+            // 
+            this.HierarchyHeader.AccessibleDescription = "";
+            this.HierarchyHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.HierarchyHeader.Location = new System.Drawing.Point(0, 0);
+            this.HierarchyHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.HierarchyHeader.Name = "HierarchyHeader";
+            this.HierarchyHeader.Size = new System.Drawing.Size(400, 29);
+            this.HierarchyHeader.TabIndex = 0;
+            this.HierarchyHeader.Values.Description = "The current scene";
+            this.HierarchyHeader.Values.Heading = "Hierarchy";
+            this.HierarchyHeader.Values.Image = null;
+            // 
+            // HierarchyTree
+            // 
+            this.HierarchyTree.CheckBoxes = true;
+            this.HierarchyTree.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.HierarchyTree.Location = new System.Drawing.Point(0, 29);
+            this.HierarchyTree.Margin = new System.Windows.Forms.Padding(0);
+            this.HierarchyTree.Name = "HierarchyTree";
+            this.HierarchyTree.Size = new System.Drawing.Size(400, 371);
+            this.HierarchyTree.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.HierarchyTree.StateCommon.Node.Back.Color1 = System.Drawing.Color.White;
+            this.HierarchyTree.StateCommon.Node.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.HierarchyTree.TabIndex = 0;
+            this.HierarchyTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.HierarchyTreeNodeMouseClick);
+            // 
+            // InspectorPanel
+            // 
+            this.InspectorPanel.Controls.Add(this.InspectorHeader);
+            this.InspectorPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.InspectorPanel.Location = new System.Drawing.Point(0, 400);
+            this.InspectorPanel.Name = "InspectorPanel";
+            this.InspectorPanel.Size = new System.Drawing.Size(400, 561);
+            this.InspectorPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.InspectorPanel.TabIndex = 1;
+            // 
+            // InspectorHeader
+            // 
+            this.InspectorHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.InspectorHeader.Location = new System.Drawing.Point(0, 0);
+            this.InspectorHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.InspectorHeader.Name = "InspectorHeader";
+            this.InspectorHeader.Size = new System.Drawing.Size(400, 29);
+            this.InspectorHeader.TabIndex = 0;
+            this.InspectorHeader.Values.Description = "The current object";
+            this.InspectorHeader.Values.Heading = "Inspector";
+            this.InspectorHeader.Values.Image = null;
             // 
             // MainEditorLeftPanel
             // 
@@ -356,17 +427,6 @@ namespace Editor.Windows
             this.label2.TabIndex = 2;
             this.label2.Text = "ASSETS";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(1591, 108);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(144, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "HIERARCHY + INSPECTOR";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -378,16 +438,13 @@ namespace Editor.Windows
             this.label4.TabIndex = 4;
             this.label4.Text = "CONSOLE";
             // 
-            // label5
+            // childToolStripMenuItem
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(673, 220);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(82, 13);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "OPENGL VIEW";
+            this.childToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.childToolStripMenuItem.Name = "childToolStripMenuItem";
+            this.childToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.childToolStripMenuItem.Text = "Child";
+            this.childToolStripMenuItem.Click += new System.EventHandler(this.CreateChildGameObject);
             // 
             // Editor
             // 
@@ -395,11 +452,10 @@ namespace Editor.Windows
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1904, 961);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.GLView);
             this.Controls.Add(this.TopMenu);
             this.Controls.Add(this.MainEditorPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -408,6 +464,7 @@ namespace Editor.Windows
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CoreEngine Editor - Windows";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.Editor_Load);
             this.TopMenu.ResumeLayout(false);
             this.TopMenu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorPanel)).EndInit();
@@ -417,6 +474,13 @@ namespace Editor.Windows
             this.MainEditorCenterPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorBottomPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorRightPanel)).EndInit();
+            this.MainEditorRightPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.HierarchyPanel)).EndInit();
+            this.HierarchyPanel.ResumeLayout(false);
+            this.HierarchyPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.InspectorPanel)).EndInit();
+            this.InspectorPanel.ResumeLayout(false);
+            this.InspectorPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorLeftPanel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -458,9 +522,13 @@ namespace Editor.Windows
         private GLControl GLView;
         private Label label1;
         private Label label2;
-        private Label label3;
         private Label label4;
-        private Label label5;
+        private ComponentFactory.Krypton.Toolkit.KryptonPanel HierarchyPanel;
+        private ComponentFactory.Krypton.Toolkit.KryptonHeader HierarchyHeader;
+        private ComponentFactory.Krypton.Toolkit.KryptonPanel InspectorPanel;
+        private ComponentFactory.Krypton.Toolkit.KryptonHeader InspectorHeader;
+        private ComponentFactory.Krypton.Toolkit.KryptonTreeView HierarchyTree;
+        private ToolStripMenuItem childToolStripMenuItem;
     }
 }
 

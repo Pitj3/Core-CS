@@ -18,16 +18,14 @@ using CoreEngine.Engine.Rendering;
 using CoreEngine.Engine.Graphics;
 using CoreEngine.Engine.Components;
 using CoreEngine.Engine.Resources;
+using ComponentFactory.Krypton.Toolkit;
 
 namespace Editor.Windows
 {
     public partial class Editor : Form
     {
         #region Data
-        private GameObject _currentObject;
-
-        private Scene _currentScene;
-        private SceneManager _sceneManager;
+        private EditorWindow _editorWindow;
         #endregion
 
         public Editor()
@@ -41,18 +39,9 @@ namespace Editor.Windows
         {
             base.OnLoad(e);
 
-            Redraw();
-
-            //this.AddComponentSelectionBox.Items.Add(new CoreEngine.Engine.Rendering.Camera());
-
-            _sceneManager = new SceneManager();
-
-            _currentScene = new Scene();
-            SceneManager.CurrentScene = _currentScene;
-
-            CreateMenuCreateCamera(null, null);
-
-            GL.Enable(EnableCap.DepthTest);
+            _editorWindow = new EditorWindow();
+            _editorWindow.GLView = this.GLView;
+            _editorWindow.OnLoad(e);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -64,67 +53,23 @@ namespace Editor.Windows
 
         private void GLViewKeyDown(object sender, KeyEventArgs e)
         {
-            Redraw();
+            _editorWindow?.Redraw();
+        }
+
+        internal KryptonTreeView GetHierarchy()
+        {
+            return this.HierarchyTree;
         }
 
         private void GLViewPaint(object sender, PaintEventArgs e)
         {
-            Redraw();
+            _editorWindow?.Redraw();
         }
 
         private void GLViewResize(object sender, EventArgs e)
         {
             //resize
-            Redraw();
-        }
-
-        private void OnUpdateFrame()
-        {
-            _sceneManager?.Update();
-        }
-
-        private void OnRenderFrame()
-        {
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
-
-            // render editor
-
-            if (Camera.Current == null)
-            {
-                GLView.SwapBuffers();
-                return;
-            }
-
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
-            GL.LoadMatrix(ref Camera.Current.projection);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-            GL.LoadMatrix(ref Camera.Current.view);
-
-
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-            GL.PushMatrix();
-            GL.Translate(0, 0, 0);
-            GL.Begin(PrimitiveType.Quads);
-            for(int x = -10; x < 10; x++)
-            {
-                for(int z = -10; z < 10; z++)
-                {
-                    GL.Vertex3(x + 1, 0, z);
-                    GL.Vertex3(x, 0, z);
-                    GL.Vertex3(x, 0, z + 1);
-                    GL.Vertex3(x + 1, 0, z + 1);
-                }
-            }
-            GL.End();
-            GL.PopMatrix();
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-
-            _sceneManager?.Render();
-
-            GLView.SwapBuffers();
+            _editorWindow?.Redraw();
         }
 
         private void AboutEditorButton(object sender, EventArgs e)
@@ -135,12 +80,6 @@ namespace Editor.Windows
         private void ExitEditorButton(object sender, EventArgs e)
         {
             Environment.Exit(0);
-        }
-
-        public void Redraw()
-        {
-            OnUpdateFrame();
-            OnRenderFrame();
         }
 
         public void AddSceneItem(GameObject obj)
@@ -158,45 +97,17 @@ namespace Editor.Windows
 
         private void GameObjectCreateButton(object sender, EventArgs e)
         {
-            /*GameObject obj = GameObject.Instantiate(null) as GameObject;
-            obj.Name = "GameObject" + ListHierarchy.Items.Count;
-
-            AddSceneItem(obj);*/
-        }
-
-        public void LogToConsolePanel(object text)
-        {
-            //ConsoleWindow.Items.Add(text.ToString());
+            _editorWindow.CreateEmptyGameObject();
         }
 
         private void CreateMenuCreate3DCubeButton(object sender, EventArgs e)
         {
-            /*GameObject obj = GameObject.Instantiate(null) as GameObject;
-            obj.Name = "Cube" + ListHierarchy.Items.Count;
-
-            Material mat = new Material(new Shader("Content/Shaders/default"));
-            mat.diffuseTexture = new Texture2D("Content/Images/cube.png");
-
-            MeshRenderer renderer = obj.AddComponent<MeshRenderer>();
-            renderer.mesh = PrimitiveFactory.CreateCube(1);
-            renderer.AddMaterial(mat);
-
-            AddSceneItem(obj);*/
+            _editorWindow.CreateCubeGameObject();
         }
 
         private void CreateMenuCreateCamera(object sender, EventArgs e)
         {
-            /*GameObject obj = GameObject.Instantiate(null) as GameObject;
-            obj.Name = "Camera" + ListHierarchy.Items.Count;
-
-            obj.position = new Vector3(10, 10, 10);
-
-            Camera cam = obj.AddComponent<Camera>();
-            cam.orthographic = false;
-
-            Camera.Current = cam;
-
-            AddSceneItem(obj);*/
+            _editorWindow.CreateCameraGameObject();
         }
 
         private void FileMenuSaveOptionClicked(object sender, EventArgs e)
@@ -246,6 +157,34 @@ namespace Editor.Windows
             ListHierarchy.Items.Clear();
 
             CreateMenuCreateCamera(null, null);*/
+        }
+
+        private void Editor_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void HierarchyTreeNodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            _editorWindow.Redraw();
+
+            if(HierarchyTree.SelectedNode != null)
+                _editorWindow.CurrentObject = HierarchyTree.SelectedNode.Tag as GameObject;
+        }
+
+        private void GLViewLoaded(object sender, EventArgs e)
+        {
+
+        }
+
+        private void GLViewClicked(object sender, EventArgs e)
+        {
+            _editorWindow.Clicked();
+        }
+
+        private void CreateChildGameObject(object sender, EventArgs e)
+        {
+            _editorWindow.CreateChildGameObject();
         }
     }
 }

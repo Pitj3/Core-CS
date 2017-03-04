@@ -8,6 +8,7 @@ namespace Editor.Windows
 {
     static class Program
     {
+        public static Editor editor;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,8 +18,9 @@ namespace Editor.Windows
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            editor = new Editor();
 
-            Application.Run(new Editor());
+            Application.Run(editor);
         }
     }
 }
