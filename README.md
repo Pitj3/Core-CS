@@ -17,6 +17,7 @@ Email: roderick.griffioen@gmail.com
 - Components working properly now, they are saved as they should, including the resources they might use
 - Check the latest commit message to see the latest changes, screenshots and blog about the progress are in the makings!
 
+# Core Engine
 #### Isn't this engine also being made in C++?
 Yes, yes it is. I opted for trying this out in C# too since I am getting more fluent in C# and am finding it easier to work in so far.  
 I might find out that C++ is still the way to go, but I want to try this direction for a bit.
