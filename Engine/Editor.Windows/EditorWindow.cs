@@ -22,6 +22,17 @@ using System.Reflection;
 
 namespace Editor.Windows
 {
+    public struct ComponentSelectorObject
+    {
+        public string name;
+        public string fullname;
+
+        public override string ToString()
+        {
+            return name;
+        }
+    }
+
     public class EditorWindow
     {
         #region Data
@@ -33,6 +44,8 @@ namespace Editor.Windows
         public SceneManager sceneManager;
 
         public GLControl GLView;
+
+        private List<ComponentSelectorObject> componentList = new List<ComponentSelectorObject>();
 
         // References to controls
         private ComponentFactory.Krypton.Toolkit.KryptonTreeView _hierarchyTreeView;
@@ -68,9 +81,26 @@ namespace Editor.Windows
         {
             ConverterLoader.Load();
 
-            Redraw();
+            Redraw();     
 
-            //this.AddComponentSelectionBox.Items.Add(new CoreEngine.Engine.Rendering.Camera());
+            AssemblyName[] names = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+            foreach (AssemblyName assem in names)
+            {
+                Assembly a = Assembly.Load(assem);
+                IEnumerable<Type> classes = from t in a.GetTypes() where t.IsClass select t;
+
+                foreach (Type elem in classes)
+                {
+                    if (elem.BaseType != null && elem.BaseType.Name == "CoreComponent")
+                    {
+                        ComponentSelectorObject o = new ComponentSelectorObject();
+                        o.name = elem.Name;
+                        o.fullname = elem.FullName;
+                        componentList.Add(o);
+                        //this.AddComponentSelectionBox.Items.Add(new CoreEngine.Engine.Rendering.Camera());
+                    }
+                }
+            }
 
             _hierarchyTreeView = Program.editor.GetHierarchy();
             _inspectorComponentPanel = Program.editor.GetInspector();
@@ -252,12 +282,10 @@ namespace Editor.Windows
                 }
             }
         }
-        #endregion
 
-        #region Private API
-        private void UpdateInspector(GameObject obj)
+        public void UpdateInspector(GameObject obj)
         {
-            if(obj)
+            if (obj)
             {
                 _inspectorTransformGrid.SelectedObject = null;
                 _inspectorComponentPanel.Controls.Clear();
@@ -274,7 +302,7 @@ namespace Editor.Windows
 
                     foreach (PropertyInfo prop in comp.GetType().GetProperties())
                     {
-                        
+
                     }
 
                     view.Initialize(comp);
@@ -282,6 +310,15 @@ namespace Editor.Windows
                     view.Height = 200;
                     _inspectorComponentPanel.Controls.Add(view);
                 }
+
+                AddNewComponentSelector selector = new AddNewComponentSelector();
+                selector.Dock = DockStyle.Top;
+
+                selector.data = componentList;
+
+                selector.Initialize();
+
+                _inspectorComponentPanel.Controls.Add(selector);
             }
             else
             {
@@ -293,7 +330,9 @@ namespace Editor.Windows
                 // no object, clear inspector
             }
         }
+        #endregion
 
+        #region Private API
         private void AddObjectToHierarchy(GameObject obj)
         {
             System.Windows.Forms.TreeNode node = new System.Windows.Forms.TreeNode(obj.Name);

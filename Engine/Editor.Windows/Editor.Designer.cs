@@ -299,6 +299,7 @@ namespace Editor.Windows
             this.MainEditorPanel.Name = "MainEditorPanel";
             this.MainEditorPanel.Size = new System.Drawing.Size(1904, 961);
             this.MainEditorPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.MainEditorPanel.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.MainEditorPanel.TabIndex = 0;
             // 
             // MainEditorToolbar
@@ -309,6 +310,7 @@ namespace Editor.Windows
             this.MainEditorToolbar.Name = "MainEditorToolbar";
             this.MainEditorToolbar.Size = new System.Drawing.Size(1904, 50);
             this.MainEditorToolbar.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.MainEditorToolbar.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.MainEditorToolbar.TabIndex = 0;
             // 
             // MainEditorCenterPanel
@@ -321,6 +323,7 @@ namespace Editor.Windows
             this.MainEditorCenterPanel.Name = "MainEditorCenterPanel";
             this.MainEditorCenterPanel.Size = new System.Drawing.Size(1904, 961);
             this.MainEditorCenterPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.MainEditorCenterPanel.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.MainEditorCenterPanel.TabIndex = 0;
             // 
             // MainEditorBottomPanel
@@ -331,6 +334,7 @@ namespace Editor.Windows
             this.MainEditorBottomPanel.Name = "MainEditorBottomPanel";
             this.MainEditorBottomPanel.Size = new System.Drawing.Size(1104, 200);
             this.MainEditorBottomPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.MainEditorBottomPanel.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.MainEditorBottomPanel.TabIndex = 0;
             // 
             // MainEditorRightPanel
@@ -344,6 +348,7 @@ namespace Editor.Windows
             this.MainEditorRightPanel.Size = new System.Drawing.Size(400, 961);
             this.MainEditorRightPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.MainEditorRightPanel.StateCommon.Color2 = System.Drawing.Color.Black;
+            this.MainEditorRightPanel.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.MainEditorRightPanel.TabIndex = 0;
             // 
             // HierarchyPanel
@@ -355,12 +360,14 @@ namespace Editor.Windows
             this.HierarchyPanel.Name = "HierarchyPanel";
             this.HierarchyPanel.Size = new System.Drawing.Size(400, 400);
             this.HierarchyPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.HierarchyPanel.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.HierarchyPanel.TabIndex = 0;
             // 
             // HierarchyHeader
             // 
             this.HierarchyHeader.AccessibleDescription = "";
             this.HierarchyHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.HierarchyHeader.HeaderStyle = ComponentFactory.Krypton.Toolkit.HeaderStyle.Primary;
             this.HierarchyHeader.Location = new System.Drawing.Point(0, 0);
             this.HierarchyHeader.Margin = new System.Windows.Forms.Padding(0);
             this.HierarchyHeader.Name = "HierarchyHeader";
@@ -379,8 +386,12 @@ namespace Editor.Windows
             this.HierarchyTree.Name = "HierarchyTree";
             this.HierarchyTree.Size = new System.Drawing.Size(400, 371);
             this.HierarchyTree.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.HierarchyTree.StateCommon.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.HierarchyTree.StateCommon.Node.Back.Color1 = System.Drawing.Color.White;
+            this.HierarchyTree.StateCommon.Node.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.HierarchyTree.StateCommon.Node.Content.ShortText.Color1 = System.Drawing.Color.White;
+            this.HierarchyTree.StateCommon.Node.Content.ShortText.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.HierarchyTree.StateCommon.Node.Content.ShortText.Trim = ComponentFactory.Krypton.Toolkit.PaletteTextTrim.Inherit;
             this.HierarchyTree.TabIndex = 0;
             this.HierarchyTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.HierarchyTreeNodeMouseClick);
             // 
@@ -394,11 +405,13 @@ namespace Editor.Windows
             this.InspectorPanel.Name = "InspectorPanel";
             this.InspectorPanel.Size = new System.Drawing.Size(400, 561);
             this.InspectorPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.InspectorPanel.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.InspectorPanel.TabIndex = 1;
             // 
             // InspectorHeader
             // 
             this.InspectorHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.InspectorHeader.HeaderStyle = ComponentFactory.Krypton.Toolkit.HeaderStyle.Primary;
             this.InspectorHeader.Location = new System.Drawing.Point(0, 0);
             this.InspectorHeader.Margin = new System.Windows.Forms.Padding(0);
             this.InspectorHeader.Name = "InspectorHeader";
@@ -431,16 +444,18 @@ namespace Editor.Windows
             this.TransformGrid.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
             this.TransformGrid.ViewForeColor = System.Drawing.Color.White;
             this.TransformGrid.Visible = false;
-            this.TransformGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(TransformGrid_PropertyValueChanged);
+            this.TransformGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.TransformGrid_PropertyValueChanged);
             // 
             // InspectorComponentsPanel
             // 
+            this.InspectorComponentsPanel.AutoScroll = true;
             this.InspectorComponentsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.InspectorComponentsPanel.Location = new System.Drawing.Point(0, 149);
             this.InspectorComponentsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.InspectorComponentsPanel.Name = "InspectorComponentsPanel";
             this.InspectorComponentsPanel.Size = new System.Drawing.Size(400, 412);
             this.InspectorComponentsPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.InspectorComponentsPanel.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.InspectorComponentsPanel.TabIndex = 0;
             // 
             // MainEditorLeftPanel
@@ -451,6 +466,7 @@ namespace Editor.Windows
             this.MainEditorLeftPanel.Name = "MainEditorLeftPanel";
             this.MainEditorLeftPanel.Size = new System.Drawing.Size(400, 961);
             this.MainEditorLeftPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MainEditorLeftPanel.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.MainEditorLeftPanel.TabIndex = 0;
             // 
             // label1
