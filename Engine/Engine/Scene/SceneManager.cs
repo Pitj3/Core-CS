@@ -64,6 +64,9 @@ namespace CoreEngine.Engine.Scene
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
+                    if (comp.Enabled == false)
+                        continue;
+
                     comp.Update();
                 }
             }
@@ -85,6 +88,9 @@ namespace CoreEngine.Engine.Scene
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
+                    if (comp.Enabled == false)
+                        continue;
+
                     comp.FixedUpdate();
                 }
             }
@@ -107,7 +113,7 @@ namespace CoreEngine.Engine.Scene
 
                 foreach (CoreComponent comp in go.Components)
                 {
-                    if(comp is Camera)
+                    if(comp is Camera && comp.Enabled == true)
                     {
                         _cameras.Add((Camera)comp);
                     }
@@ -141,7 +147,7 @@ namespace CoreEngine.Engine.Scene
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
-                    if (comp is Camera)
+                    if (comp is Camera || comp.Enabled == false)
                         continue;
 
                     comp.OnPreRender();
@@ -164,7 +170,7 @@ namespace CoreEngine.Engine.Scene
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
-                    if (comp is Camera)
+                    if (comp is Camera || comp.Enabled == false)
                         continue;
 
                     comp.OnRenderObject();
@@ -187,7 +193,7 @@ namespace CoreEngine.Engine.Scene
                 CurrentScene.CurrentObject = go;
                 foreach (CoreComponent comp in go.Components)
                 {
-                    if (comp is Camera)
+                    if (comp is Camera || comp.Enabled == false)
                         continue;
 
                     comp.OnPostRender();

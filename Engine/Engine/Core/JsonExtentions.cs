@@ -135,7 +135,11 @@ namespace CoreEngine.Engine.Core
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject temp = JObject.Load(reader);
-            return new Mesh(temp["vertices"].ToObject<MeshVertex[]>(), temp["indices"].ToObject<ushort[]>());
+
+            MeshVertex[] vertices = temp["vertices"].ToObject<MeshVertex[]>(serializer);
+            ushort[] indices = temp["indices"].ToObject<ushort[]>(serializer);
+
+            return new Mesh(vertices, indices);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -26,7 +26,10 @@ namespace CoreEngine.Engine.Components
         {
             base.OnRenderObject();
 
-            materials[0].Bind();
+            if (mesh == null)
+                return;
+
+            materials[0]?.Bind();
 
             mesh.va.Bind();
             mesh.ib.Bind();
@@ -36,7 +39,7 @@ namespace CoreEngine.Engine.Components
             mesh.ib.Unbind();
             mesh.va.Unbind();
 
-            materials[0].Unbind();
+            materials[0]?.Unbind();
         }
         #endregion
 

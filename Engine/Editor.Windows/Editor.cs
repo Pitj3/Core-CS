@@ -109,51 +109,51 @@ namespace Editor.Windows
 
         private void FileMenuSaveOptionClicked(object sender, EventArgs e)
         {
-            /*if(SceneManager.CurrentScene.Name == "unnamed")
+            if(SceneManager.CurrentScene.Name == "unnamed")
             {
                 // open file dialog
                 SaveSceneDialog.ShowDialog();
                 return;
             }
 
-            SceneManager.CurrentScene.Save();*/
+            SceneManager.CurrentScene.Save();
         }
 
         private void SaveSceneDialog_FileOk(object sender, CancelEventArgs e)
         {
-            /*string[] arr = SaveSceneDialog.FileName.Split('\\');
+            string[] arr = SaveSceneDialog.FileName.Split('\\');
             string scenename = arr[arr.Length - 1];
 
             SceneManager.CurrentScene.Name = scenename;
 
-            SceneManager.CurrentScene.Save(SaveSceneDialog.FileName.TrimEnd(scenename.ToCharArray()));*/
+            SceneManager.CurrentScene.Save(SaveSceneDialog.FileName.TrimEnd(scenename.ToCharArray()));
         }
 
         private void FileMenuLoadOptionClicked(object sender, EventArgs e)
         {
-            //LoadSceneDialog.ShowDialog();
+            LoadSceneDialog.ShowDialog();
         }
 
         private void LoadSceneDialog_FileOk(object sender, CancelEventArgs e)
         {
-            /*ListHierarchy.Items.Clear();
+            this.HierarchyTree.Nodes.Clear();
 
             SceneManager.LoadScene(LoadSceneDialog.FileName);
 
             foreach(GameObject go in SceneManager.CurrentScene.GameObjects)
             {
-                AddSceneItem(go);
-            }*/
+                editorWindow.AddObjectToHierarchy(go);
+            }
         }
 
         private void FileMenuNewOptionClicked(object sender, EventArgs e)
         {
-            /*Scene newScene = new Scene();
+            Scene newScene = new Scene();
             SceneManager.CurrentScene = newScene;
 
-            ListHierarchy.Items.Clear();
+            this.HierarchyTree.Nodes.Clear();
 
-            CreateMenuCreateCamera(null, null);*/
+            editorWindow.CreateCameraGameObject();
         }
 
         private void Editor_Load(object sender, EventArgs e)

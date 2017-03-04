@@ -30,6 +30,8 @@ namespace Editor.Windows
 
     public partial class InspectorComponentView : UserControl
     {
+        public CoreComponent component;
+
         public InspectorComponentView()
         {
             InitializeComponent();
@@ -54,6 +56,8 @@ namespace Editor.Windows
 
         public void Initialize(CoreComponent comp)
         {
+            this.component = comp;
+
             string[] arr = comp.type.Split('.');
             string name = arr[arr.Length - 1];
             this.ComponentHeader.Text = name;
@@ -63,6 +67,27 @@ namespace Editor.Windows
 
         private void ComponentProperties_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
+            Program.editor.editorWindow.Redraw();
+        }
+
+        private void InspectorComponentView_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void DeleteLinkLabel_Click(object sender, System.EventArgs e)
+        {
+            CoreEngine.Engine.Core.Object.Destroy(component);
+
+            Program.editor.editorWindow.UpdateInspector(Program.editor.editorWindow.CurrentObject);
+
+            Program.editor.editorWindow.Redraw();
+        }
+
+        private void ComponentEnabled_CheckedChanged(object sender, System.EventArgs e)
+        {
+            component.Enabled = this.ComponentEnabled.Checked;
+
             Program.editor.editorWindow.Redraw();
         }
     }

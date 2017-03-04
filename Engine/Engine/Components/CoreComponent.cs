@@ -104,6 +104,8 @@ namespace CoreEngine.Engine.Components
             base.Destroy();
 
             OnDestroy();
+
+            parent.Components.Remove(this);
         }
         #endregion
     }

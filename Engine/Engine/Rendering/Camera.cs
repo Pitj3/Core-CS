@@ -52,15 +52,15 @@ namespace CoreEngine.Engine.Rendering
         public Vector3 look { get; set; }
         public Vector3 up { get; set; }
 
-        public bool orthographic
+        private bool _orthographic
         {
             get
             {
-                return _ortho;
+                return orthographic;
             }
             set
             {
-                _ortho = value;
+                orthographic = value;
                 if(value)
                 {
                     znear = -10;
@@ -84,7 +84,7 @@ namespace CoreEngine.Engine.Rendering
 
         private float _aspect;
         private Texture2D _renderTexture = null;
-        private bool _ortho = true;
+        public bool orthographic { get; set; }
 
         #endregion
 
@@ -98,7 +98,10 @@ namespace CoreEngine.Engine.Rendering
 
             clearColor = Color.CornflowerBlue;
 
-            if (_ortho)
+            orthographic = true;
+
+            _orthographic = orthographic;
+            if (_orthographic)
             {
                 znear = -10;
                 zfar = 10;
@@ -115,11 +118,10 @@ namespace CoreEngine.Engine.Rendering
 
         public override void Awake()
         {
-            parent.transform.position = new Vector3(10, 10, 10);
             look = Vector3.Zero;
             up = new Vector3(0, 1, 0);
 
-            if (_ortho)
+            if (_orthographic)
             {
                 // create ortho matrix
                 projection = Matrix4.CreateOrthographicOffCenter(0, renderSize.X, renderSize.Y, 0, znear, zfar);
@@ -141,7 +143,9 @@ namespace CoreEngine.Engine.Rendering
 
         public override void Update()
         {
-            if (!_ortho)
+            _orthographic = orthographic;
+
+            if (!_orthographic)
             {
                 parent.transform.position = parent.transform.position;
                 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);

@@ -245,7 +245,16 @@ namespace CoreEngine.Engine.Scene
 
             foreach (JToken token in comps.Children()) // for every comp
             {
-                object t = token.ToObject(saveObj.Components[_currComp].systemType, _jsonSerializer);
+                object t = null;
+                try
+                {
+                    t = token.ToObject(saveObj.Components[_currComp].systemType, _jsonSerializer);
+                }
+                catch(JsonException e)
+                {
+                    Console.WriteLine(e);
+                }
+
                 parent.AddComponent(t);
 
                 _currComp++;

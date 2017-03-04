@@ -61,6 +61,9 @@ namespace Editor.Windows
 
             set
             {
+                if (currentObject == value)
+                    return;
+
                 currentObject = value;
                 // update inspector
                 UpdateInspector(currentObject);
@@ -307,7 +310,7 @@ namespace Editor.Windows
 
                     view.Initialize(comp);
                     view.Dock = DockStyle.Top;
-                    view.Height = 200;
+                    //view.Height = 200;
                     _inspectorComponentPanel.Controls.Add(view);
                 }
 
@@ -330,20 +333,18 @@ namespace Editor.Windows
                 // no object, clear inspector
             }
         }
-        #endregion
 
-        #region Private API
-        private void AddObjectToHierarchy(GameObject obj)
+        public void AddObjectToHierarchy(GameObject obj)
         {
             System.Windows.Forms.TreeNode node = new System.Windows.Forms.TreeNode(obj.Name);
             node.Checked = true;
             node.Tag = obj;
 
-            if(obj.Parent != null)
+            if (obj.Parent != null)
             {
                 foreach (TreeNode n in _hierarchyTreeView.Nodes)
                 {
-                    if(n.Tag == obj.Parent)
+                    if (n.Tag == obj.Parent)
                     {
                         n.Nodes.Add(node);
                         break;
@@ -357,7 +358,11 @@ namespace Editor.Windows
             _hierarchyTreeView.Nodes.Add(node);
 
             Redraw();
-        }  
+        }
+        #endregion
+
+        #region Private API
+
         #endregion
     }
 }
