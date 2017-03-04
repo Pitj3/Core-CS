@@ -13,6 +13,8 @@ I stream making parts of this engine on twitch where you can join in and have so
 
 <b>The changelog can be found at the bottom of this page.</b>
 
+---
+
 #### Core Tech
 When the engine is finished it will be/contain:
 
@@ -74,4 +76,6 @@ Coming back online soon!
 
 ---
 
-Logo is made by Konstantinos Mourelas
+## Special thanks to:
+
+<b>Konstantinos Mourelas for making the sweet looking logo!</b>
