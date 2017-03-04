@@ -5,6 +5,14 @@ Website: TBA
 Email: roderick.griffioen@gmail.com
 
 # Changelog
+3-5-17
+- Added editor to project
+- Editor can now edit objects properties
+- Editor can create new object and add components
+- Editor can load and save with dialogs
+
+
+3-2-17
 - Wiki now contains sample code!
 - Components working properly now, they are saved as they should, including the resources they might use
 - Check the latest commit message to see the latest changes, screenshots and blog about the progress are in the makings!
