@@ -11,6 +11,8 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
+using CoreEngine.Engine.Math;
+
 namespace CoreEngine.Engine.Scene
 {
     #region Save Data
@@ -43,17 +45,27 @@ namespace CoreEngine.Engine.Scene
         public GameObject Parent;
 
         // TODO: transform
-        public Vector3 position;
-        public Quaternion rotation;
+        public Transform transform
+        {
+            get
+            {
+                return _transform;
+            }
+            set
+            {
+                _transform = value;
+            }
+        }
 
-        [JsonIgnore]
-        public Vector3 rotationEuler;
+        private Transform _transform;
         #endregion
 
         #region Constructors
         public GameObject()
         {
             Name = "GameObject";
+
+            _transform = new Math.Transform();
         }
         #endregion
 
@@ -240,8 +252,8 @@ namespace CoreEngine.Engine.Scene
         {
             base.Instantiate();
 
-            position = Vector3.Zero;
-            rotation = Quaternion.Identity;
+            transform.position = Vector3.Zero;
+            transform.rotation = Quaternion.Identity;
 
             SceneManager.CurrentScene.GameObjects.Add(this);
 
@@ -260,8 +272,8 @@ namespace CoreEngine.Engine.Scene
         {
             base.Instantiate(position, rotation);
 
-            this.position = position;
-            this.rotation = rotation;
+            this.transform.position = position;
+            this.transform.rotation = rotation;
 
             SceneManager.CurrentScene.GameObjects.Add(this);
 
@@ -302,8 +314,8 @@ namespace CoreEngine.Engine.Scene
 
             sgo.Components = Components;
 
-            sgo.position = position;
-            sgo.rotation = rotation;
+            sgo.position = transform.position;
+            sgo.rotation = transform.rotation;
 
             return sgo;
         }

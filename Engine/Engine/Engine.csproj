@@ -76,6 +76,7 @@
     <Compile Include="Graphics\Mesh.cs" />
     <Compile Include="Graphics\PrimitiveFactory.cs" />
     <Compile Include="Interface\UI.cs" />
+    <Compile Include="Math\Transform.cs" />
     <Compile Include="Rendering\Camera.cs" />
     <Compile Include="Resources\Shader.cs" />
     <Compile Include="Graphics\VertexArray.cs" />
@@ -89,14 +90,15 @@
     <Compile Include="Scene\Scene.cs" />
     <Compile Include="Scene\SceneManager.cs" />
     <Compile Include="Time\CoreTime.cs" />
+    <Compile Include="Utils\ComponentUtils.cs" />
+    <Compile Include="Utils\ConverterLoaded.cs" />
+    <Compile Include="Utils\VectorConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Math\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Snippets.snippet" />
   </ItemGroup>

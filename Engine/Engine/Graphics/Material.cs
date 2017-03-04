@@ -120,12 +120,12 @@ namespace CoreEngine.Engine.Graphics
                 //Matrix4 model = Matrix4.CreateTranslation(parent.parent.position);
                 //model *= Matrix4.CreateRotationY(parent.parent.rotation.Xyz.Y);
 
-                Matrix4 model = Matrix4.CreateTranslation(go.position);
+                Matrix4 model = Matrix4.CreateTranslation(go.transform.position);
 
                 Vector3 axis;
                 float angle;
 
-                go.rotation.ToAxisAngle(out axis, out angle);
+                go.transform.rotation.ToAxisAngle(out axis, out angle);
 
                 model *= Matrix4.CreateFromAxisAngle(axis, angle);
 

@@ -63,12 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentVariableView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ComponentVariableView.Designer.cs">
-      <DependentUpon>ComponentVariableView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,14 +76,8 @@
     <Compile Include="InspectorComponentView.Designer.cs">
       <DependentUpon>InspectorComponentView.cs</DependentUpon>
     </Compile>
-    <Compile Include="InspectorWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ComponentVariableView.resx">
-      <DependentUpon>ComponentVariableView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Editor.resx">
       <DependentUpon>Editor.cs</DependentUpon>
     </EmbeddedResource>

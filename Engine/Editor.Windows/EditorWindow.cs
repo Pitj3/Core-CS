@@ -14,7 +14,11 @@ using CoreEngine.Engine.Rendering;
 using CoreEngine.Engine.Graphics;
 using CoreEngine.Engine.Components;
 using CoreEngine.Engine.Resources;
+using CoreEngine.Engine.Utils;
+
 using System.Windows.Forms;
+
+using System.Reflection;
 
 namespace Editor.Windows
 {
@@ -32,6 +36,8 @@ namespace Editor.Windows
 
         // References to controls
         private ComponentFactory.Krypton.Toolkit.KryptonTreeView _hierarchyTreeView;
+        private ComponentFactory.Krypton.Toolkit.KryptonPanel _inspectorComponentPanel;
+        private System.Windows.Forms.PropertyGrid _inspectorTransformGrid;
 
         public GameObject CurrentObject
         {
@@ -60,11 +66,16 @@ namespace Editor.Windows
         #region Events
         internal void OnLoad(EventArgs e)
         {
+            ConverterLoader.Load();
+
             Redraw();
 
             //this.AddComponentSelectionBox.Items.Add(new CoreEngine.Engine.Rendering.Camera());
 
             _hierarchyTreeView = Program.editor.GetHierarchy();
+            _inspectorComponentPanel = Program.editor.GetInspector();
+            _inspectorTransformGrid = Program.editor.GetInspectorTransformGrid();
+            _inspectorTransformGrid.Visible = false;
 
             sceneManager = new SceneManager();
 
@@ -158,12 +169,18 @@ namespace Editor.Windows
             AddObjectToHierarchy(obj);
         }
 
+        internal void ClickedHierarchyObject()
+        {
+            if (_hierarchyTreeView.SelectedNode != null)
+                CurrentObject = _hierarchyTreeView.SelectedNode.Tag as GameObject;
+        }
+
         internal void CreateCameraGameObject()
         {
             GameObject obj = GameObject.Instantiate(null) as GameObject;
             obj.Name = "Camera" + currentScene.GameObjects.Count;
 
-            obj.position = new Vector3(10, 10, 10);
+            obj.transform.position = new Vector3(10, 10, 10);
 
             Camera cam = obj.AddComponent<Camera>();
             cam.orthographic = false;
@@ -171,6 +188,22 @@ namespace Editor.Windows
             Camera.Current = cam;
 
             AddObjectToHierarchy(obj);
+        }
+
+        internal void CreateChildGameObject()
+        {
+            if (currentObject == null)
+            {
+                CreateEmptyGameObject();
+            }
+            else
+            {
+                GameObject go = GameObject.Instantiate(null) as GameObject;
+                go.Parent = currentObject;
+                go.Name = "Child" + currentObject.Children.Count;
+
+                AddObjectToHierarchy(go);
+            }
         }
 
         internal void Redraw()
@@ -182,23 +215,9 @@ namespace Editor.Windows
         internal void Clicked()
         {
             currentObject = null;
-            // Set inspector to nothing
+            // TODO: Set inspector to nothing
 
-            // check if we clicked another object
-        }
-
-        internal void CreateChildGameObject()
-        {
-            if (currentObject == null)
-                CreateEmptyGameObject();
-            else
-            {
-                GameObject go = GameObject.Instantiate(null) as GameObject;
-                go.Parent = currentObject;
-                go.Name = "Child" + currentObject.Children.Count;
-
-                UpdateHierarchy();
-            }
+            // TODO: Check if we clicked another object
         }
 
         internal void UpdateHierarchy()
@@ -233,20 +252,6 @@ namespace Editor.Windows
                 }
             }
         }
-
-        private void LoadChildrenIntoHierarchy(GameObject go, ref TreeNode node)
-        {
-            foreach (GameObject child in go.Children)
-            {
-                System.Windows.Forms.TreeNode n = new System.Windows.Forms.TreeNode();
-                n.Text = child.Name;
-                n.Tag = child;
-
-                LoadChildrenIntoHierarchy(child, ref n);
-
-                node.Nodes.Add(n);  
-            }
-        }
         #endregion
 
         #region Private API
@@ -254,23 +259,62 @@ namespace Editor.Windows
         {
             if(obj)
             {
+                _inspectorTransformGrid.SelectedObject = null;
+                _inspectorComponentPanel.Controls.Clear();
+
+                _inspectorTransformGrid.Visible = true;
+                _inspectorComponentPanel.Visible = true;
+
+                _inspectorTransformGrid.SelectedObject = obj.transform;
+
                 // new data
-                System.Reflection.FieldInfo[] fields = obj.GetType().GetFields();
-                Type fieldType = fields[0].FieldType;
+                foreach (CoreComponent comp in obj.Components)
+                {
+                    InspectorComponentView view = new InspectorComponentView();
+
+                    foreach (PropertyInfo prop in comp.GetType().GetProperties())
+                    {
+                        
+                    }
+
+                    view.Initialize(comp);
+                    view.Dock = DockStyle.Top;
+                    view.Height = 200;
+                    _inspectorComponentPanel.Controls.Add(view);
+                }
             }
             else
-            { 
-                // no update, clear inspector
+            {
+                _inspectorTransformGrid.Visible = false;
+                _inspectorComponentPanel.Visible = false;
+
+                _inspectorTransformGrid.SelectedObject = null;
+                _inspectorComponentPanel.Controls.Clear();
+                // no object, clear inspector
             }
         }
 
         private void AddObjectToHierarchy(GameObject obj)
         {
-            // add to list
-
             System.Windows.Forms.TreeNode node = new System.Windows.Forms.TreeNode(obj.Name);
             node.Checked = true;
             node.Tag = obj;
+
+            if(obj.Parent != null)
+            {
+                foreach (TreeNode n in _hierarchyTreeView.Nodes)
+                {
+                    if(n.Tag == obj.Parent)
+                    {
+                        n.Nodes.Add(node);
+                        break;
+                    }
+                }
+
+                Redraw();
+                return;
+            }
+
             _hierarchyTreeView.Nodes.Add(node);
 
             Redraw();

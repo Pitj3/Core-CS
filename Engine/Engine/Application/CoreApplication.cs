@@ -14,6 +14,8 @@ using CoreEngine.Engine.Scene;
 
 using CoreEngine.Engine.Interface;
 
+using CoreEngine.Engine.Utils;
+
 namespace CoreEngine.Engine.Application
 {
     #region Structs
@@ -91,6 +93,8 @@ namespace CoreEngine.Engine.Application
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            ConverterLoader.Load();
 
             Logger.OnLoad(e);
             Logger.Log(LogLevel.DEBUG, "CoreApplication:OnLoad(e)");

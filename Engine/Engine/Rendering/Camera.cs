@@ -41,14 +41,17 @@ namespace CoreEngine.Engine.Rendering
         [IgnoreInspector]
         public Matrix4 view;
 
-        public Color ClearColor;
+        public Color clearColor { get; set; }
 
-        public float znear, zfar;
-        public float fov;
+        public float znear { get; set; }
+        public float zfar { get; set; }
+        public float fov { get; set; }
 
-        private float _aspect;
+        public Vector2 renderSize { get; set; }
+        public ClearFlags clearFlags { get; set; }
+        public Vector3 look { get; set; }
+        public Vector3 up { get; set; }
 
-        private bool _ortho = true;
         public bool orthographic
         {
             get
@@ -63,8 +66,7 @@ namespace CoreEngine.Engine.Rendering
                     znear = -10;
                     zfar = 10;
 
-                    // create ortho matrix
-                    projection = Matrix4.CreateOrthographicOffCenter(0, RenderSize.X, RenderSize.Y, 0, znear, zfar);
+                    projection = Matrix4.CreateOrthographicOffCenter(0, renderSize.X, renderSize.Y, 0, znear, zfar);
                     view = Matrix4.Identity;
                 }
                 else
@@ -72,33 +74,29 @@ namespace CoreEngine.Engine.Rendering
                     znear = 0.01f;
                     zfar = 10000.0f;
 
-                    _aspect = RenderSize.X / RenderSize.Y;
+                    _aspect = renderSize.X / renderSize.Y;
 
                     projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);
-                    view = Matrix4.LookAt(eye, look, up);
+                    view = Matrix4.LookAt(parent.transform.position, look, up);
                 }
             }
         }
 
-        public Vector2 RenderSize;
-
-        public ClearFlags clearFlags;
-
+        private float _aspect;
         private Texture2D _renderTexture = null;
-
-        public Vector3 eye, look, up;
+        private bool _ortho = true;
 
         #endregion
 
         #region Construction
         public Camera()
         {
-            RenderSize = new Vector2(1280, 720);
+            renderSize = new Vector2(1280, 720);
             fov = 60.0f;
 
             clearFlags |= ClearFlags.Depth;
 
-            ClearColor = Color.CornflowerBlue;
+            clearColor = Color.CornflowerBlue;
 
             if (_ortho)
             {
@@ -117,22 +115,22 @@ namespace CoreEngine.Engine.Rendering
 
         public override void Awake()
         {
-            eye = new Vector3(10, 10, 10);
+            parent.transform.position = new Vector3(10, 10, 10);
             look = Vector3.Zero;
             up = new Vector3(0, 1, 0);
 
             if (_ortho)
             {
                 // create ortho matrix
-                projection = Matrix4.CreateOrthographicOffCenter(0, RenderSize.X, RenderSize.Y, 0, znear, zfar);
+                projection = Matrix4.CreateOrthographicOffCenter(0, renderSize.X, renderSize.Y, 0, znear, zfar);
                 view = Matrix4.Identity;
             }
             else
             {
-                _aspect = RenderSize.X / RenderSize.Y;
+                _aspect = renderSize.X / renderSize.Y;
 
                 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);
-                view = Matrix4.LookAt(eye, look, up);
+                view = Matrix4.LookAt(parent.transform.position, look, up);
             }
         }
 
@@ -145,8 +143,9 @@ namespace CoreEngine.Engine.Rendering
         {
             if (!_ortho)
             {
-                eye = parent.position;
-                view = Matrix4.LookAt(eye, look, up);
+                parent.transform.position = parent.transform.position;
+                projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);
+                view = Matrix4.LookAt(parent.transform.position, look, up);
             }
         }
 

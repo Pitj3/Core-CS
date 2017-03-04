@@ -46,6 +46,7 @@ namespace Editor.Windows
             this.TopMenuEditOption = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenuCreateOption = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateMenuGameObjectOption = new System.Windows.Forms.ToolStripMenuItem();
+            this.childToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cubeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,11 +67,12 @@ namespace Editor.Windows
             this.HierarchyTree = new ComponentFactory.Krypton.Toolkit.KryptonTreeView();
             this.InspectorPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.InspectorHeader = new ComponentFactory.Krypton.Toolkit.KryptonHeader();
+            this.TransformGrid = new System.Windows.Forms.PropertyGrid();
+            this.InspectorComponentsPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.MainEditorLeftPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.childToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorPanel)).BeginInit();
             this.MainEditorPanel.SuspendLayout();
@@ -84,6 +86,7 @@ namespace Editor.Windows
             this.HierarchyPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.InspectorPanel)).BeginInit();
             this.InspectorPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.InspectorComponentsPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorLeftPanel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -198,9 +201,17 @@ namespace Editor.Windows
             // 
             this.CreateMenuGameObjectOption.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.CreateMenuGameObjectOption.Name = "CreateMenuGameObjectOption";
-            this.CreateMenuGameObjectOption.Size = new System.Drawing.Size(152, 22);
+            this.CreateMenuGameObjectOption.Size = new System.Drawing.Size(140, 22);
             this.CreateMenuGameObjectOption.Text = "GameObject";
             this.CreateMenuGameObjectOption.Click += new System.EventHandler(this.GameObjectCreateButton);
+            // 
+            // childToolStripMenuItem
+            // 
+            this.childToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.childToolStripMenuItem.Name = "childToolStripMenuItem";
+            this.childToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.childToolStripMenuItem.Text = "Child";
+            this.childToolStripMenuItem.Click += new System.EventHandler(this.CreateChildGameObject);
             // 
             // dToolStripMenuItem
             // 
@@ -208,14 +219,14 @@ namespace Editor.Windows
             this.dToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cubeToolStripMenuItem});
             this.dToolStripMenuItem.Name = "dToolStripMenuItem";
-            this.dToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.dToolStripMenuItem.Text = "3D";
             // 
             // cubeToolStripMenuItem
             // 
             this.cubeToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.cubeToolStripMenuItem.Name = "cubeToolStripMenuItem";
-            this.cubeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cubeToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.cubeToolStripMenuItem.Text = "Cube";
             this.cubeToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreate3DCubeButton);
             // 
@@ -223,7 +234,7 @@ namespace Editor.Windows
             // 
             this.cameraToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
-            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.cameraToolStripMenuItem.Text = "Camera";
             this.cameraToolStripMenuItem.Click += new System.EventHandler(this.CreateMenuCreateCamera);
             // 
@@ -376,11 +387,13 @@ namespace Editor.Windows
             // InspectorPanel
             // 
             this.InspectorPanel.Controls.Add(this.InspectorHeader);
+            this.InspectorPanel.Controls.Add(this.TransformGrid);
+            this.InspectorPanel.Controls.Add(this.InspectorComponentsPanel);
             this.InspectorPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.InspectorPanel.Location = new System.Drawing.Point(0, 400);
             this.InspectorPanel.Name = "InspectorPanel";
             this.InspectorPanel.Size = new System.Drawing.Size(400, 561);
-            this.InspectorPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.InspectorPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.InspectorPanel.TabIndex = 1;
             // 
             // InspectorHeader
@@ -394,6 +407,41 @@ namespace Editor.Windows
             this.InspectorHeader.Values.Description = "The current object";
             this.InspectorHeader.Values.Heading = "Inspector";
             this.InspectorHeader.Values.Image = null;
+            // 
+            // TransformGrid
+            // 
+            this.TransformGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.TransformGrid.CanShowVisualStyleGlyphs = false;
+            this.TransformGrid.CategoryForeColor = System.Drawing.Color.White;
+            this.TransformGrid.CategorySplitterColor = System.Drawing.Color.White;
+            this.TransformGrid.CommandsForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.TransformGrid.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.TransformGrid.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.TransformGrid.HelpForeColor = System.Drawing.Color.White;
+            this.TransformGrid.HelpVisible = false;
+            this.TransformGrid.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.TransformGrid.Location = new System.Drawing.Point(0, 29);
+            this.TransformGrid.Margin = new System.Windows.Forms.Padding(0);
+            this.TransformGrid.Name = "TransformGrid";
+            this.TransformGrid.SelectedItemWithFocusBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.TransformGrid.SelectedItemWithFocusForeColor = System.Drawing.Color.White;
+            this.TransformGrid.Size = new System.Drawing.Size(400, 120);
+            this.TransformGrid.TabIndex = 5;
+            this.TransformGrid.ToolbarVisible = false;
+            this.TransformGrid.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.TransformGrid.ViewForeColor = System.Drawing.Color.White;
+            this.TransformGrid.Visible = false;
+            this.TransformGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(TransformGrid_PropertyValueChanged);
+            // 
+            // InspectorComponentsPanel
+            // 
+            this.InspectorComponentsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.InspectorComponentsPanel.Location = new System.Drawing.Point(0, 149);
+            this.InspectorComponentsPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.InspectorComponentsPanel.Name = "InspectorComponentsPanel";
+            this.InspectorComponentsPanel.Size = new System.Drawing.Size(400, 412);
+            this.InspectorComponentsPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.InspectorComponentsPanel.TabIndex = 0;
             // 
             // MainEditorLeftPanel
             // 
@@ -438,14 +486,6 @@ namespace Editor.Windows
             this.label4.TabIndex = 4;
             this.label4.Text = "CONSOLE";
             // 
-            // childToolStripMenuItem
-            // 
-            this.childToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.childToolStripMenuItem.Name = "childToolStripMenuItem";
-            this.childToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.childToolStripMenuItem.Text = "Child";
-            this.childToolStripMenuItem.Click += new System.EventHandler(this.CreateChildGameObject);
-            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -481,6 +521,7 @@ namespace Editor.Windows
             ((System.ComponentModel.ISupportInitialize)(this.InspectorPanel)).EndInit();
             this.InspectorPanel.ResumeLayout(false);
             this.InspectorPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.InspectorComponentsPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MainEditorLeftPanel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -529,6 +570,8 @@ namespace Editor.Windows
         private ComponentFactory.Krypton.Toolkit.KryptonHeader InspectorHeader;
         private ComponentFactory.Krypton.Toolkit.KryptonTreeView HierarchyTree;
         private ToolStripMenuItem childToolStripMenuItem;
+        private ComponentFactory.Krypton.Toolkit.KryptonPanel InspectorComponentsPanel;
+        private PropertyGrid TransformGrid;
     }
 }
 

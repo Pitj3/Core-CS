@@ -28,63 +28,80 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ComponentNameLabel = new System.Windows.Forms.Label();
-            this.ComponentEnabled = new System.Windows.Forms.CheckBox();
-            this.VariableViewPanel = new System.Windows.Forms.Panel();
-            this.ComponentVariableTable = new System.Windows.Forms.TableLayoutPanel();
-            this.VariableViewPanel.SuspendLayout();
+            this.MainPanel = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
+            this.ComponentHeader = new ComponentFactory.Krypton.Toolkit.KryptonHeader();
+            this.ComponentSeperator = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.ComponentProperties = new System.Windows.Forms.PropertyGrid();
+            ((System.ComponentModel.ISupportInitialize)(this.MainPanel)).BeginInit();
+            this.MainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // ComponentNameLabel
+            // MainPanel
             // 
-            this.ComponentNameLabel.AutoSize = true;
-            this.ComponentNameLabel.Location = new System.Drawing.Point(4, 4);
-            this.ComponentNameLabel.Name = "ComponentNameLabel";
-            this.ComponentNameLabel.Size = new System.Drawing.Size(35, 13);
-            this.ComponentNameLabel.TabIndex = 0;
-            this.ComponentNameLabel.Text = "label1";
+            this.MainPanel.Controls.Add(this.ComponentHeader);
+            this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainPanel.Location = new System.Drawing.Point(0, 0);
+            this.MainPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.MainPanel.Name = "MainPanel";
+            this.MainPanel.Size = new System.Drawing.Size(400, 199);
+            this.MainPanel.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.MainPanel.TabIndex = 0;
             // 
-            // ComponentEnabled
+            // ComponentHeader
             // 
-            this.ComponentEnabled.AutoSize = true;
-            this.ComponentEnabled.Location = new System.Drawing.Point(215, 3);
-            this.ComponentEnabled.Name = "ComponentEnabled";
-            this.ComponentEnabled.Size = new System.Drawing.Size(15, 14);
-            this.ComponentEnabled.TabIndex = 1;
-            this.ComponentEnabled.UseVisualStyleBackColor = true;
+            this.ComponentHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ComponentHeader.Location = new System.Drawing.Point(0, 0);
+            this.ComponentHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.ComponentHeader.Name = "ComponentHeader";
+            this.ComponentHeader.Size = new System.Drawing.Size(400, 29);
+            this.ComponentHeader.TabIndex = 0;
+            this.ComponentHeader.Values.Description = "Component description";
+            this.ComponentHeader.Values.Heading = "Component Name";
+            this.ComponentHeader.Values.Image = null;
             // 
-            // VariableViewPanel
+            // ComponentSeperator
             // 
-            this.VariableViewPanel.AutoSize = true;
-            this.VariableViewPanel.Controls.Add(this.ComponentVariableTable);
-            this.VariableViewPanel.Location = new System.Drawing.Point(7, 20);
-            this.VariableViewPanel.Name = "VariableViewPanel";
-            this.VariableViewPanel.Size = new System.Drawing.Size(220, 114);
-            this.VariableViewPanel.TabIndex = 2;
+            this.ComponentSeperator.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ComponentSeperator.Location = new System.Drawing.Point(0, 199);
+            this.ComponentSeperator.Name = "ComponentSeperator";
+            this.ComponentSeperator.Size = new System.Drawing.Size(400, 1);
+            this.ComponentSeperator.StateCommon.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             // 
-            // ComponentVariableTable
+            // ComponentProperties
             // 
-            this.ComponentVariableTable.AutoSize = true;
-            this.ComponentVariableTable.ColumnCount = 1;
-            this.ComponentVariableTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ComponentVariableTable.Location = new System.Drawing.Point(3, 3);
-            this.ComponentVariableTable.Name = "ComponentVariableTable";
-            this.ComponentVariableTable.RowCount = 1;
-            this.ComponentVariableTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ComponentVariableTable.Size = new System.Drawing.Size(214, 108);
-            this.ComponentVariableTable.TabIndex = 0;
+            this.ComponentProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.ComponentProperties.CanShowVisualStyleGlyphs = false;
+            this.ComponentProperties.CategoryForeColor = System.Drawing.Color.White;
+            this.ComponentProperties.CategorySplitterColor = System.Drawing.Color.White;
+            this.ComponentProperties.CommandsForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.ComponentProperties.DisabledItemForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.ComponentProperties.HelpBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.ComponentProperties.HelpForeColor = System.Drawing.Color.White;
+            this.ComponentProperties.HelpVisible = false;
+            this.ComponentProperties.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.ComponentProperties.Location = new System.Drawing.Point(0, 29);
+            this.ComponentProperties.Name = "ComponentProperties";
+            this.ComponentProperties.SelectedItemWithFocusBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.ComponentProperties.SelectedItemWithFocusForeColor = System.Drawing.Color.White;
+            this.ComponentProperties.Size = new System.Drawing.Size(400, 168);
+            this.ComponentProperties.TabIndex = 2;
+            this.ComponentProperties.ToolbarVisible = false;
+            this.ComponentProperties.ViewBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(36)))), ((int)(((byte)(36)))));
+            this.ComponentProperties.ViewForeColor = System.Drawing.Color.White;
+            this.ComponentProperties.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(ComponentProperties_PropertyValueChanged);
             // 
             // InspectorComponentView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.VariableViewPanel);
-            this.Controls.Add(this.ComponentEnabled);
-            this.Controls.Add(this.ComponentNameLabel);
+            this.Controls.Add(this.ComponentProperties);
+            this.Controls.Add(this.MainPanel);
+            this.Controls.Add(this.ComponentSeperator);
             this.Name = "InspectorComponentView";
-            this.Size = new System.Drawing.Size(233, 137);
-            this.VariableViewPanel.ResumeLayout(false);
-            this.VariableViewPanel.PerformLayout();
+            this.Size = new System.Drawing.Size(400, 200);
+            ((System.ComponentModel.ISupportInitialize)(this.MainPanel)).EndInit();
+            this.MainPanel.ResumeLayout(false);
+            this.MainPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -92,9 +109,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Label ComponentNameLabel;
-        private System.Windows.Forms.CheckBox ComponentEnabled;
-        private System.Windows.Forms.Panel VariableViewPanel;
-        private System.Windows.Forms.TableLayoutPanel ComponentVariableTable;
+        private ComponentFactory.Krypton.Toolkit.KryptonPanel MainPanel;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge ComponentSeperator;
+        private ComponentFactory.Krypton.Toolkit.KryptonHeader ComponentHeader;
+        private System.Windows.Forms.PropertyGrid ComponentProperties;
     }
 }

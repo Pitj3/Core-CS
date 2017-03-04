@@ -25,7 +25,7 @@ namespace Editor.Windows
     public partial class Editor : Form
     {
         #region Data
-        private EditorWindow _editorWindow;
+        public EditorWindow editorWindow;
         #endregion
 
         public Editor()
@@ -39,9 +39,9 @@ namespace Editor.Windows
         {
             base.OnLoad(e);
 
-            _editorWindow = new EditorWindow();
-            _editorWindow.GLView = this.GLView;
-            _editorWindow.OnLoad(e);
+            editorWindow = new EditorWindow();
+            editorWindow.GLView = this.GLView;
+            editorWindow.OnLoad(e);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -53,7 +53,7 @@ namespace Editor.Windows
 
         private void GLViewKeyDown(object sender, KeyEventArgs e)
         {
-            _editorWindow?.Redraw();
+            editorWindow?.Redraw();
         }
 
         internal KryptonTreeView GetHierarchy()
@@ -61,15 +61,25 @@ namespace Editor.Windows
             return this.HierarchyTree;
         }
 
+        internal KryptonPanel GetInspector()
+        {
+            return this.InspectorComponentsPanel;
+        }
+
+        internal PropertyGrid GetInspectorTransformGrid()
+        {
+            return this.TransformGrid;
+        }
+
         private void GLViewPaint(object sender, PaintEventArgs e)
         {
-            _editorWindow?.Redraw();
+            editorWindow?.Redraw();
         }
 
         private void GLViewResize(object sender, EventArgs e)
         {
             //resize
-            _editorWindow?.Redraw();
+            editorWindow?.Redraw();
         }
 
         private void AboutEditorButton(object sender, EventArgs e)
@@ -82,32 +92,19 @@ namespace Editor.Windows
             Environment.Exit(0);
         }
 
-        public void AddSceneItem(GameObject obj)
-        {
-            /*LogToConsolePanel("Created Object: " + obj.Name);
-
-            ListHierarchy.BeginUpdate();
-
-            ListHierarchy.Items.Add(obj);
-
-            ListHierarchy.EndUpdate();
-
-            Redraw();*/
-        }
-
         private void GameObjectCreateButton(object sender, EventArgs e)
         {
-            _editorWindow.CreateEmptyGameObject();
+            editorWindow.CreateEmptyGameObject();
         }
 
         private void CreateMenuCreate3DCubeButton(object sender, EventArgs e)
         {
-            _editorWindow.CreateCubeGameObject();
+            editorWindow.CreateCubeGameObject();
         }
 
         private void CreateMenuCreateCamera(object sender, EventArgs e)
         {
-            _editorWindow.CreateCameraGameObject();
+            editorWindow.CreateCameraGameObject();
         }
 
         private void FileMenuSaveOptionClicked(object sender, EventArgs e)
@@ -166,10 +163,9 @@ namespace Editor.Windows
 
         private void HierarchyTreeNodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            _editorWindow.Redraw();
+            editorWindow.Redraw();
 
-            if(HierarchyTree.SelectedNode != null)
-                _editorWindow.CurrentObject = HierarchyTree.SelectedNode.Tag as GameObject;
+            editorWindow.ClickedHierarchyObject();
         }
 
         private void GLViewLoaded(object sender, EventArgs e)
@@ -179,12 +175,17 @@ namespace Editor.Windows
 
         private void GLViewClicked(object sender, EventArgs e)
         {
-            _editorWindow.Clicked();
+            editorWindow.Clicked();
         }
 
         private void CreateChildGameObject(object sender, EventArgs e)
         {
-            _editorWindow.CreateChildGameObject();
+            editorWindow.CreateChildGameObject();
+        }
+
+        private void TransformGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            editorWindow.Redraw();
         }
     }
 }
