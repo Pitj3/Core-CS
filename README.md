@@ -2,6 +2,8 @@
 
 Website: TBA
 
+<b>Wiki: [Click here](https://github.com/Pitj3/Core-CS/wiki)</b>
+
 Email: roderick.griffioen@gmail.com
 
 | **Platform** | **32 Bit** | **64 Bit** |
