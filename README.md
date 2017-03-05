@@ -4,6 +4,10 @@ Website: TBA
 
 Email: roderick.griffioen@gmail.com
 
+| **Platform** | **32 Bit** | **64 Bit** |
+|---|---|---|
+|**Windows**         |[![Build status 32bit](https://ci.appveyor.com/api/projects/status/waje6rhqdkm8dkkn?svg=true)](https://ci.appveyor.com/project/Pitj3/core-cs) |[![Build status 64bit](https://ci.appveyor.com/api/projects/status/waje6rhqdkm8dkkn?svg=true)](https://ci.appveyor.com/project/Pitj3/core-cs) |
+
 # Core Engine
 #### Why Core Engine?
 
