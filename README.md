@@ -4,28 +4,16 @@ Website: TBA
 
 Email: roderick.griffioen@gmail.com
 
-# Changelog
-3-5-17
-- Added editor to project
-- Editor can now edit objects properties
-- Editor can create new object and add components
-- Editor can load and save with dialogs
-
-
-3-2-17
-- Wiki now contains sample code!
-- Components working properly now, they are saved as they should, including the resources they might use
-- Check the latest commit message to see the latest changes, screenshots and blog about the progress are in the makings!
-
-#### Isn't this engine also being made in C++?
-Yes, yes it is. I opted for trying this out in C# too since I am getting more fluent in C# and am finding it easier to work in so far.  
-I might find out that C++ is still the way to go, but I want to try this direction for a bit.
-
+# Core Engine
 #### Why Core Engine?
 
 The Core Engine is a powerful cross platform. Written in C# it delivers great performance and great quality.
 The engine is currently in very early baby stage. The community can pitch in and support me in building this engine (I am a one man dev team).
 I stream making parts of this engine on twitch where you can join in and have some chats or see how I go about making this engine.
+
+<b>The changelog can be found at the bottom of this page.</b>
+
+---
 
 #### Core Tech
 When the engine is finished it will be/contain:
@@ -51,20 +39,43 @@ Do you want to know what is planned in the future for the Core Engine?
 ---
 
 #### Looking For:
-I'm looking for people that like to help out with this engine, I don't require you to be full time, if you can spare a few hours a week to check/write code, implement data structures, design architectures or help me think about design and future additions I would be very pleased.
+I'm looking for people that like to help out with this engine, if you can spare some time to check/write code, implement data structures, design architectures or help me think about design and future additions please write me a line!
 
-Right now I need the most:
-- Proficient Direct X programmer (Currently I have abandoned DX dev, it's taking me too much time to get DX on the same level as GL, if I come across a willing DX dev, it's back on the table)
+<b>Right now I need the most:</b>
+- DirectX dev has been abandoned for the reason of it not being really needed. OpenGL is cross platform as is. (Also my skills in DirectX were lacking too much which slowed the development down loads)
 - Artist to help create art for the editor and possibly website.
 - Code Architecture designer to help properly structure the engine.
+- Proficient Winforms programmer / designer to help me make the editor even better.
 - You! I need anyone who wants to help out and make this a great engine, if you feel like you can offer something great to this engine, write me a line!
+
+---
+
+#### Isn't this engine also being made in C++?
+It was, C# has proven itself to be more suited for the way I want to make this engine. The old C++ source will stay available, but is discontinued. 
 
 ---
 
 #### Documentation
 
-Currently only local after cloning the repo, will be online soon! 
+Coming back online soon!
 
 ---
 
-Logo is made by Konstantinos Mourelas
+# Changelog
+3-5-17
+- Added editor to project
+- Editor can now edit objects properties
+- Editor can create new object and add components
+- Editor can load and save with dialogs
+
+
+3-2-17
+- Wiki now contains sample code!
+- Components working properly now, they are saved as they should, including the resources they might use
+- Check the latest commit message to see the latest changes, screenshots and blog about the progress are in the makings!
+
+---
+
+## Special thanks to:
+
+<b>Konstantinos Mourelas for making the sweet looking logo!</b>
