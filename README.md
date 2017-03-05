@@ -73,7 +73,8 @@ Coming back online soon!
 - Editor can now edit objects properties
 - Editor can create new object and add components
 - Editor can load and save with dialogs
-
+- New Project Launcher, can create projects. Syncs all current engine files and makes an empty project.
+- StaticModel class, loads all materials and textures recursively, support for many different model types
 
 3-2-17
 - Wiki now contains sample code!
