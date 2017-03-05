@@ -47,7 +47,30 @@ namespace CoreEngine.Tests
         {
             base.OnLoad(e);
 
-            SceneManager.LoadScene("Content/Scenes/Game.txt");
+            GL.Enable(EnableCap.DepthTest);
+
+            //SceneManager.LoadScene("Content/Scenes/bunny.txt");
+            SceneManager.CurrentScene = new Scene();
+
+            Material mat = new Material(new Shader("Content/Shaders/default"));
+            mat.diffuseTexture = new Texture2D("Content/Images/checker.png");
+
+            GameObject camera = GameObject.Instantiate(null) as GameObject;
+            camera.Name = "Main Camera";
+            camera.transform.position = new Vector3(10, 15, 10);
+
+            Camera camComponent = camera.AddComponent<Camera>();
+            camComponent.orthographic = false;
+            
+            GameObject quadObject = GameObject.Instantiate(null, Vector3.Zero, Quaternion.Identity) as GameObject;
+            quadObject.Name = "Bunny";
+            quadObject.transform.scale = new Vector3(0.05f, 0.05f, 0.05f);
+
+            MeshRenderer renderer = quadObject.AddComponent<MeshRenderer>();
+            renderer.materials.Add(mat);
+
+            StaticModel model = new StaticModel("Content/Models/muro.fbx");
+            renderer.mesh = model;
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)

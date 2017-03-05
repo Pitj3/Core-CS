@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
+using CoreEngine.Engine.Resources;
+
 namespace CoreEngine.Engine.Graphics
 {
     /// <summary>
@@ -26,7 +28,7 @@ namespace CoreEngine.Engine.Graphics
         /// <param name="y"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        public static Mesh CreateQuad(int x, int y, int width, int height)
+        public static StaticModel CreateQuad(int x, int y, int width, int height)
         {
             MeshVertex[] data = new MeshVertex[4];
 
@@ -48,10 +50,16 @@ namespace CoreEngine.Engine.Graphics
 
             ushort[] indices = new ushort[6] { 0, 1, 2, 2, 3, 0 };
             
-	        return new Mesh(data, indices);
+	        Mesh m = new Mesh(data, indices);
+
+            StaticModel model = new StaticModel();
+            model.meshes = new Mesh[1];
+            model.meshes[0] = m;
+
+            return model;
         }
 
-        public static Mesh CreateCube(float size)
+        public static StaticModel CreateCube(float size)
         {
             MeshVertex[] data = new MeshVertex[8];
 
@@ -96,7 +104,13 @@ namespace CoreEngine.Engine.Graphics
                         1, 5, 6, 6, 2, 1
             };
 
-            return new Mesh(data, indices);
+            Mesh m = new Mesh(data, indices);
+
+            StaticModel model = new StaticModel();
+            model.meshes = new Mesh[1];
+            model.meshes[0] = m;
+
+            return model;
         }
         #endregion
     }

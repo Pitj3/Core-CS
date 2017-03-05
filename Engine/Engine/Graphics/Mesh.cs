@@ -37,6 +37,8 @@ namespace CoreEngine.Engine.Graphics
         public MeshVertex[] vertices;
         public ushort[] indices;
 
+        public Material material;
+
         #endregion
 
         #region Constructors

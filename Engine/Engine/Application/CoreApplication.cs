@@ -138,7 +138,7 @@ namespace CoreEngine.Engine.Application
         {
             base.OnRenderFrame(e);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
 
             _scene?.Render();
@@ -181,8 +181,8 @@ namespace CoreEngine.Engine.Application
         /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
         {
-            if(SceneManager.CurrentScene != null)
-                SceneManager.CurrentScene.Save();
+            //if(SceneManager.CurrentScene != null)
+               //SceneManager.CurrentScene.Save(); // TODO: We don't want to save instantiated objects
 
             Logger.Log(LogLevel.DEBUG, "CoreApplication:OnClosed(e)");
             base.OnClosed(e);

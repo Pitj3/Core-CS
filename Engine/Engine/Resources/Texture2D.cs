@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
+using FreeImageAPI;
+
 namespace CoreEngine.Engine.Resources
 {
     /// <summary>
@@ -28,6 +30,10 @@ namespace CoreEngine.Engine.Resources
         public TextureUnit unit;
 
         public string path = "";
+
+        private FREE_IMAGE_FORMAT format;
+        private FIBITMAP bitmap;
+        private IntPtr pixels;
         #endregion
 
         #region Constructors
@@ -70,19 +76,27 @@ namespace CoreEngine.Engine.Resources
 
             GL.TexParameter(target, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TexParameter(target, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(target, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            
+
+            format = FreeImage.GetFileType(source, 0);
+            FIBITMAP temp = FreeImage.Load(format, source, FREE_IMAGE_LOAD_FLAGS.DEFAULT);
+
+            bitmap = FreeImage.ConvertTo32Bits(temp);
+            FreeImage.Unload(temp);
+
+            _width = FreeImage.GetWidth(bitmap);
+            _height = FreeImage.GetHeight(bitmap);
+
+            pixels = FreeImage.GetBits(bitmap);
+
+            GL.TexImage2D(target, 0, PixelInternalFormat.Rgba, (int)_width, (int)_height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, pixels);
+
+            GL.TexParameter(target, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
             GL.TexParameter(target, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
-            Bitmap bmp = new Bitmap(source);
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.GenerateTextureMipmap(_id);
 
-            GL.TexImage2D(target, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
-
-            _width = (uint)data.Width;
-            _height = (uint)data.Height;
-            _bpp = (uint)(data.Stride / data.Width);
-
-            bmp.UnlockBits(data);
+            _bpp = FreeImage.GetBPP(bitmap);
 
             return true;
         }

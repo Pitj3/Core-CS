@@ -17,7 +17,10 @@ out DATA
 
 void main(){
 
-    gl_Position = model * view * projection * vec4(position, 1.0);
+	mat4 mvp =  projection * view * model;
+	//mat4 mvp = model * view * projection;
+
+    gl_Position = mvp * vec4(position, 1.0);
 	vs_out.uv = texcoord;
 	vs_out.color = color;
 }

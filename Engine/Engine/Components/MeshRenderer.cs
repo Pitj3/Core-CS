@@ -1,4 +1,5 @@
 ﻿using CoreEngine.Engine.Graphics;
+using CoreEngine.Engine.Resources;
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -10,7 +11,7 @@ namespace CoreEngine.Engine.Components
     public class MeshRenderer : CoreComponent
     {
         #region Data
-        public Mesh mesh;
+        public StaticModel mesh;
         public List<Material> materials = new List<Material>();
         #endregion
 
@@ -29,17 +30,20 @@ namespace CoreEngine.Engine.Components
             if (mesh == null)
                 return;
 
-            materials[0]?.Bind();
+            foreach (Mesh m in mesh.meshes)
+            {
+                m.material?.Bind();
 
-            mesh.va.Bind();
-            mesh.ib.Bind();
+                m.va.Bind();
+                m.ib.Bind();
 
-            GL.DrawElements(BeginMode.Triangles, (int)mesh.ib.GetCount(), DrawElementsType.UnsignedShort, 0);
+                GL.DrawElements(BeginMode.Triangles, (int)m.ib.GetCount(), DrawElementsType.UnsignedShort, 0);
 
-            mesh.ib.Unbind();
-            mesh.va.Unbind();
+                m.ib.Unbind();
+                m.va.Unbind();
 
-            materials[0]?.Unbind();
+                m.material?.Unbind();
+            }
         }
         #endregion
 

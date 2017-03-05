@@ -117,17 +117,18 @@ namespace CoreEngine.Engine.Graphics
 
             if (go != null)
             {
-                //Matrix4 model = Matrix4.CreateTranslation(parent.parent.position);
-                //model *= Matrix4.CreateRotationY(parent.parent.rotation.Xyz.Y);
-
-                Matrix4 model = Matrix4.CreateTranslation(go.transform.position);
+                Matrix4 model = Matrix4.Identity;
 
                 Vector3 axis;
                 float angle;
 
                 go.transform.rotation.ToAxisAngle(out axis, out angle);
 
-                model *= Matrix4.CreateFromAxisAngle(axis, angle);
+                model = Matrix4.CreateFromAxisAngle(axis, angle);
+
+                model *= Matrix4.CreateTranslation(go.transform.position);
+
+                model *= Matrix4.CreateScale(go.transform.scale);
 
                 GL.UniformMatrix4(shaderMembers[2].location, false, ref model);
             }
