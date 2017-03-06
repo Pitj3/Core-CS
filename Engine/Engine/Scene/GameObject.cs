@@ -1,51 +1,31 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
+using System.Collections.Generic;
+using System.IO;
 
+using CoreEngine.Engine.Math;
 using CoreEngine.Engine.Core;
 using CoreEngine.Engine.Components;
 
 using OpenTK;
 
-using System.Collections.Generic;
-
-using Newtonsoft.Json;
-
-using CoreEngine.Engine.Math;
-
 namespace CoreEngine.Engine.Scene
 {
-    #region Save Data
-    /// <summary>
-    /// Save version of a GameObject
-    /// </summary>
-    public class SaveGameObject
-    {
-        public string Name;
-        public bool Static;
-        //public Prefab prefab;
-
-        public Vector3 position;
-        public Quaternion rotation;
-        public List<CoreComponent> Components;
-        public GameObject Parent;
-        public List<SaveGameObject> Children;
-    }
-    #endregion
-
     /// <summary>
     /// GameObject class
     /// </summary>
     public class GameObject : Object
     {
         #region Data
+        private static int staticID = 0;
+
         public bool Static;
         public List<GameObject> Children = new List<GameObject>();
         public List<CoreComponent> Components = new List<CoreComponent>();
         public GameObject Parent;
 
-        // TODO: transform
-        public Transform transform
+        public Transform LocalTransform
         {
             get
             {
@@ -66,6 +46,10 @@ namespace CoreEngine.Engine.Scene
             Name = "GameObject";
 
             _transform = new Math.Transform();
+
+            _transform.Scale = Vector3.One;
+
+            ID = staticID++;
         }
         #endregion
 
@@ -79,7 +63,7 @@ namespace CoreEngine.Engine.Scene
             T comp = new T();
             Components.Add(comp);
 
-            comp.parent = this;
+            comp.Parent = this;
 
             comp.Awake();
             comp.Start();
@@ -98,7 +82,7 @@ namespace CoreEngine.Engine.Scene
 
             Components.Add(instance);
 
-            instance.parent = this;
+            instance.Parent = this;
 
             instance.Awake();
             instance.Start();
@@ -117,7 +101,7 @@ namespace CoreEngine.Engine.Scene
 
             Components.Add(instance);
 
-            instance.parent = this;
+            instance.Parent = this;
 
             instance.Awake();
             instance.Start();
@@ -242,7 +226,6 @@ namespace CoreEngine.Engine.Scene
             Children.Clear();
             Components.Clear();
             Parent.Children.Remove(this);
-            Parent = null;
         }
 
         /// <summary>
@@ -252,8 +235,11 @@ namespace CoreEngine.Engine.Scene
         {
             base.Instantiate();
 
-            transform.position = Vector3.Zero;
-            transform.rotation = Quaternion.Identity;
+            this.LocalTransform = new Transform();
+
+            LocalTransform.Position = Vector3.Zero;
+            LocalTransform.Rotation = Quaternion.Identity;
+            this.LocalTransform.Scale = Vector3.One;
 
             SceneManager.CurrentScene.GameObjects.Add(this);
 
@@ -272,8 +258,11 @@ namespace CoreEngine.Engine.Scene
         {
             base.Instantiate(position, rotation);
 
-            this.transform.position = position;
-            this.transform.rotation = rotation;
+            this.LocalTransform = new Transform();
+
+            this.LocalTransform.Position = position;
+            this.LocalTransform.Rotation = rotation;
+            this.LocalTransform.Scale = Vector3.One;
 
             SceneManager.CurrentScene.GameObjects.Add(this);
 
@@ -282,6 +271,10 @@ namespace CoreEngine.Engine.Scene
             return this;
         }
 
+        /// <summary>
+        /// Finds the gameobject in a scene by name
+        /// </summary>
+        /// <param name="name"></param>
         public static GameObject Find(string name)
         {
             foreach(GameObject go in SceneManager.CurrentScene.GameObjects)
@@ -296,28 +289,202 @@ namespace CoreEngine.Engine.Scene
         }
 
         /// <summary>
-        /// Serialize this GameObject to save data
+        /// Finds all gameobjects in the scene which contain the component given
         /// </summary>
-        public SaveGameObject Serialize()
+        /// <typeparam name="T"></typeparam>
+        public static GameObject[] FindWithComponent<T>() where T: class
         {
-            SaveGameObject sgo = new SaveGameObject();
-            sgo.Name = Name;
-            sgo.Parent = Parent;
-            sgo.Static = Static;
-
-            List<SaveGameObject> childs = new List<SaveGameObject>();
-            foreach (GameObject child in Children)
+            List<GameObject> returnlist = new List<GameObject>();
+            foreach (GameObject go in SceneManager.CurrentScene.GameObjects)
             {
-                childs.Add(child.Serialize());
+                foreach (CoreComponent comp in go.Components)
+                {
+                    if(comp is T)
+                    {
+                        returnlist.Add(go);
+                    }
+                }
             }
-            sgo.Children = childs;
 
-            sgo.Components = Components;
+            return returnlist.ToArray();
+        }
 
-            sgo.position = transform.position;
-            sgo.rotation = transform.rotation;
+        #endregion
 
-            return sgo;
+        #region Internal API
+        /// <summary>
+        /// Loads the gameobject from a .casset file
+        /// </summary>
+        /// <param name="goid"></param>
+        internal static GameObject Load(int goid)
+        {
+            GameObject savedObject = null;
+
+            using (BinaryReader br = new BinaryReader(File.Open("Library/GO" + goid + ".casset", FileMode.Open)))
+            {
+                // header with id
+                int id = br.ReadInt32();
+
+                // name
+                string name = br.ReadString();
+
+                // enabled
+                bool enabled = br.ReadBoolean();
+
+                // transform
+                string posString = br.ReadString();
+                posString = posString.TrimStart('(');
+                posString = posString.TrimEnd(')');
+                string[] arr = posString.Split(',');
+                Vector3 position = new Vector3(float.Parse(arr[0]), float.Parse(arr[1]), float.Parse(arr[2]));
+
+                string scaleString = br.ReadString();
+                scaleString = scaleString.TrimStart('(');
+                scaleString = scaleString.TrimEnd(')');
+                arr = scaleString.Split(',');
+                Vector3 scale = new Vector3(float.Parse(arr[0]), float.Parse(arr[1]), float.Parse(arr[2]));
+
+                string eulerString = br.ReadString();
+                eulerString = eulerString.TrimStart('(');
+                eulerString = eulerString.TrimEnd(')');
+                arr = eulerString.Split(',');
+                Vector3 euler = new Vector3(float.Parse(arr[0]), float.Parse(arr[1]), float.Parse(arr[2]));
+
+                // parent id
+                bool hasParent = br.ReadBoolean();
+                int parentId = -1;
+                if (hasParent)
+                    parentId = br.ReadInt32();
+
+                // children ids
+                int childrenCount = br.ReadInt32();
+
+                int[] childIds = new int[childrenCount];
+                for (int i = 0; i < childrenCount; i++)
+                {
+                    childIds[i] = br.ReadInt32();
+                }
+
+                // is static
+                bool isStatic = br.ReadBoolean();
+
+                // component ids
+                int componentCount = br.ReadInt32();
+
+                int[] compIds = new int[componentCount];
+                for (int i = 0; i < componentCount; i++)
+                {
+                    compIds[i] = br.ReadInt32();
+                }
+
+                savedObject = GameObject.Instantiate(null, position, Quaternion.FromEulerAngles(euler)) as GameObject;
+                savedObject.LocalTransform.EulerRotation = euler;
+                savedObject.LocalTransform.Scale = scale;
+
+                savedObject.ID = id;
+                savedObject.Name = name;
+
+                if (parentId != -1)
+                {
+                    GameObject p = null;
+                    foreach (GameObject go in SceneManager.CurrentScene.GameObjects)
+                    {
+                        if (go.ID == parentId)
+                        {
+                            p = go;
+                            break;
+                        }
+                    }
+
+                    if (p != null)
+                    {
+                        savedObject.Parent = p;
+                    }
+                    else
+                    {
+                        p = GameObject.Load(parentId);
+                    }
+                }
+
+                savedObject.Static = isStatic;
+
+                for (int i = 0; i < childrenCount; i++)
+                {
+                    GameObject c = null;
+                    foreach (GameObject go in SceneManager.CurrentScene.GameObjects)
+                    {
+                        if (go.ID == childIds[i])
+                        {
+                            savedObject.Children.Add(go);
+                            c = go;
+                        }
+                    }
+
+                    if (c == null)
+                    {
+                        savedObject.Children.Add(GameObject.Load(childIds[i]));
+                    }
+                }
+
+                for (int i = 0; i < componentCount; i++)
+                {
+                    savedObject.AddComponent(CoreComponent.Load(compIds[i]));
+                }
+            }
+
+            return savedObject;
+        }
+
+        /// <summary>
+        /// Saves the gameobject to a .casset file
+        /// </summary>
+        internal void Save()
+        {
+            if(!Directory.Exists("Library"))
+            {
+                Directory.CreateDirectory("Library");
+            }
+
+            File.WriteAllText("Library/GO" + ID + ".casset", "");
+            using (BinaryWriter bw = new BinaryWriter(File.Open("Library/GO" + ID + ".casset", FileMode.Append)))
+            {
+                // header with id
+                bw.Write(ID);
+
+                // name
+                bw.Write(Name);
+
+                // enabled
+                bw.Write(Enabled);
+
+                // transform
+                bw.Write(LocalTransform.Position.ToString());
+                bw.Write(LocalTransform.Scale.ToString());
+                bw.Write(LocalTransform.EulerRotation.ToString());
+
+                // parent id
+                bw.Write(Parent != null);
+                if (Parent != null)
+                    bw.Write(Parent.ID);
+
+                // children ids
+                bw.Write(Children.Count);
+                foreach (GameObject child in Children)
+                {
+                    bw.Write(child.ID);
+                }
+
+                // is static
+                bw.Write(Static);
+
+                // component ids
+                bw.Write(Components.Count);
+                foreach (CoreComponent comp in Components)
+                {
+                    bw.Write(comp.ID);
+                    comp.Save();
+                }
+            }
         }
         #endregion
     }

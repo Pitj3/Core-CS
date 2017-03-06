@@ -1,15 +1,13 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
-
-using CoreEngine.Engine.Resources;
-
 using System.Drawing;
 using System.Collections.Generic;
-using System;
 
 using CoreEngine.Engine.Rendering;
-using CoreEngine.Engine.Components;
+using CoreEngine.Engine.Rendering.Lighting;
+using CoreEngine.Engine.Resources;
+using CoreEngine.Engine.Scene;
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -57,12 +55,12 @@ namespace CoreEngine.Engine.Graphics
     /// </summary>
     public struct MaterialVariable
     {
-        public MaterialVariableType type;
-        public MaterialVariableShaderType shaderType;
+        public MaterialVariableType VarType;
+        public MaterialVariableShaderType ShaderType;
 
-        public object value;
+        public object Value;
 
-        public int location;
+        public int Location;
     };
     #endregion
 
@@ -72,17 +70,17 @@ namespace CoreEngine.Engine.Graphics
     public class Material
     {
         #region Data
-        public Shader shader;
+        public Shader ShaderProgram;
 
-        public Color diffuseColor;
-        public Texture2D diffuseTexture;
+        public Color DiffuseColor;
 
-        public Texture2D normalTexture;
-        public Texture2D metallicTexture;
-        public Texture2D roughnessTexture;
-        public Texture2D heightTexture;
+        public Texture2D DiffuseTexture;
+        public Texture2D NormalTexture;
+        public Texture2D MetallicTexture;
+        public Texture2D RoughnessTexture;
+        public Texture2D HeightTexture;
 
-        public List<MaterialVariable> shaderMembers = new List<MaterialVariable>();
+        public List<MaterialVariable> ShaderMembers = new List<MaterialVariable>();
         #endregion
 
         #region Constructors
@@ -93,7 +91,7 @@ namespace CoreEngine.Engine.Graphics
 
         public Material(Shader shader)
         {
-            this.shader = shader;
+            this.ShaderProgram = shader;
 
             LoadShaderMembers(shader);
         }
@@ -105,15 +103,15 @@ namespace CoreEngine.Engine.Graphics
         /// </summary>
         public void Bind()
         {
-            shader.Bind();
+            ShaderProgram.Bind();
 
-            Matrix4 projection = Camera.Current.projection;
-            GL.UniformMatrix4(shaderMembers[0].location, false, ref projection);
+            Matrix4 projection = Camera.Current.Projection;
+            GL.UniformMatrix4(ShaderMembers[0].Location, false, ref projection);
 
-            Matrix4 view = Camera.Current.view;
-            GL.UniformMatrix4(shaderMembers[1].location, false, ref view);
+            Matrix4 view = Camera.Current.View;
+            GL.UniformMatrix4(ShaderMembers[1].Location, false, ref view);
 
-            Scene.GameObject go = Scene.SceneManager.CurrentScene.CurrentObject;
+            GameObject go = SceneManager.CurrentScene.CurrentObject;
 
             if (go != null)
             {
@@ -122,21 +120,43 @@ namespace CoreEngine.Engine.Graphics
                 Vector3 axis;
                 float angle;
 
-                go.transform.rotation.ToAxisAngle(out axis, out angle);
+                go.LocalTransform.Rotation.ToAxisAngle(out axis, out angle);
 
-                model = Matrix4.CreateFromAxisAngle(axis, angle);
+                model *= Matrix4.CreateScale(go.LocalTransform.Scale);
 
-                model *= Matrix4.CreateTranslation(go.transform.position);
+                model *= Matrix4.CreateFromAxisAngle(axis, angle);
 
-                model *= Matrix4.CreateScale(go.transform.scale);
+                model *= Matrix4.CreateTranslation(go.LocalTransform.Position);
 
-                GL.UniformMatrix4(shaderMembers[2].location, false, ref model);
+                GL.UniformMatrix4(ShaderMembers[2].Location, false, ref model);
             }
 
-            int loc = shader.GetVariableLocation("diffuse");
+            int locDiffuse = ShaderProgram.GetVariableLocation("diffuseMap");
 
-            GL.Uniform1(loc, 0);
-            diffuseTexture?.Bind();
+            GL.Uniform1(locDiffuse, 0);
+            DiffuseTexture?.Bind();
+
+            GameObject[] lights = GameObject.FindWithComponent<Light>();
+
+            if(lights.Length > 0)
+            {
+                int locNormal = ShaderProgram.GetVariableLocation("normalMap");
+
+                GL.Uniform1(locNormal, 1);
+                NormalTexture?.Bind();
+
+                foreach (GameObject light in lights) // TODO: fix this in shader
+                {
+                    int lightPosition = ShaderProgram.GetVariableLocation("lightPos");
+                    GL.Uniform3(lightPosition, light.LocalTransform.Position);
+                }
+
+                int camPosition = ShaderProgram.GetVariableLocation("viewPos");
+                GL.Uniform3(camPosition, Camera.Current.Parent.LocalTransform.Position);
+
+                int normalMappingTrueLoc = ShaderProgram.GetVariableLocation("normalMapping");
+                GL.Uniform1(normalMappingTrueLoc, 1);
+            } 
         }
 
         /// <summary>
@@ -144,8 +164,9 @@ namespace CoreEngine.Engine.Graphics
         /// </summary>
         public void Unbind()
         {
-            diffuseTexture?.Unbind();
-            shader.Unbind();
+            DiffuseTexture?.Unbind();
+            NormalTexture?.Unbind();
+            ShaderProgram.Unbind();
         }
         #endregion
 
@@ -153,17 +174,17 @@ namespace CoreEngine.Engine.Graphics
         private void LoadShaderMembers(Shader shader)
         {
             // load vertex variables
-            string[] vsLines = shader.vsSource.Split("/n".ToCharArray());
+            string[] vsLines = shader.VSSource.Split("/n".ToCharArray());
             //Logging.Logger.Log(Logging.LogLevel.DEBUG, vsLines.Length.ToString());
 
-            MaterialVariable projection = new MaterialVariable() { type = MaterialVariableType.MATRIX4, shaderType = MaterialVariableShaderType.VERTEX_SHADER, location = shader.GetVariableLocation("projection"), value = null };
-            shaderMembers.Add(projection);
+            MaterialVariable projection = new MaterialVariable() { VarType = MaterialVariableType.MATRIX4, ShaderType = MaterialVariableShaderType.VERTEX_SHADER, Location = shader.GetVariableLocation("projection"), Value = null };
+            ShaderMembers.Add(projection);
 
-            MaterialVariable view = new MaterialVariable() { type = MaterialVariableType.MATRIX4, shaderType = MaterialVariableShaderType.VERTEX_SHADER, location = shader.GetVariableLocation("view"), value = null };
-            shaderMembers.Add(view);
+            MaterialVariable view = new MaterialVariable() { VarType = MaterialVariableType.MATRIX4, ShaderType = MaterialVariableShaderType.VERTEX_SHADER, Location = shader.GetVariableLocation("view"), Value = null };
+            ShaderMembers.Add(view);
 
-            MaterialVariable model = new MaterialVariable() { type = MaterialVariableType.MATRIX4, shaderType = MaterialVariableShaderType.VERTEX_SHADER, location = shader.GetVariableLocation("model"), value = null };
-            shaderMembers.Add(model);
+            MaterialVariable model = new MaterialVariable() { VarType = MaterialVariableType.MATRIX4, ShaderType = MaterialVariableShaderType.VERTEX_SHADER, Location = shader.GetVariableLocation("model"), Value = null };
+            ShaderMembers.Add(model);
         }
         #endregion
     }

@@ -13,12 +13,15 @@ namespace CoreEngine.Engine.Resources
     {
         #region Data
         private string _name;
+        public string Source;
+
+        public static int StaticID = 0;
         #endregion
 
         #region Constructors
         public Resource()
         {
-
+            ID = StaticID++;
         }
 
         #endregion
@@ -30,6 +33,11 @@ namespace CoreEngine.Engine.Resources
         /// </summary>
         /// <param name="source">Source of the resource</param>
         public abstract bool Load(string source);
+
+        /// <summary>
+        /// Abstract save function
+        /// </summary>
+        public abstract void Save();
         #endregion
     }
 }

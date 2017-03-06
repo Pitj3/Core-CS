@@ -4,10 +4,8 @@
 
 using System.Collections.Generic;
 
-using CoreEngine.Engine.Core;
 using CoreEngine.Engine.Components;
 using CoreEngine.Engine.Rendering;
-using OpenTK;
 
 namespace CoreEngine.Engine.Scene
 {
@@ -22,14 +20,7 @@ namespace CoreEngine.Engine.Scene
         public static Scene CurrentScene = null;
         #endregion
 
-        #region Constructors
-        public SceneManager()
-        {
-            Instance = this;
-        }
-        #endregion
-
-        #region Static API
+        #region Public Static API
         /// <summary>
         /// Loads a scene
         /// </summary>
@@ -39,19 +30,13 @@ namespace CoreEngine.Engine.Scene
             Scene scene = new Scene();
             scene.Load(name);
         }
-
-        public static void LoadSceneByString(string data, string path)
-        {
-            Scene scene = new Scene();
-            scene.LoadByString(data, path);
-        }
         #endregion
 
-        #region Public API
+        #region Interal API
         /// <summary>
         /// Update the scene
         /// </summary>
-        public void Update()
+        internal static void Update()
         {
             if (CurrentScene == null)
                 return;
@@ -75,7 +60,7 @@ namespace CoreEngine.Engine.Scene
         /// <summary>
         /// Fixed update the scene
         /// </summary>
-        public void FixedUpdate()
+        internal static void FixedUpdate()
         {
             if (CurrentScene == null)
                 return;
@@ -99,7 +84,7 @@ namespace CoreEngine.Engine.Scene
         /// <summary>
         /// Render the scene
         /// </summary>
-        public void Render()
+        internal static void Render()
         {
             if (CurrentScene == null)
                 return;
@@ -129,13 +114,11 @@ namespace CoreEngine.Engine.Scene
                 OnPostRender();
             }
         }
-        #endregion
 
-        #region Interal API
         /// <summary>
         /// Pre render the scene
         /// </summary>
-        internal void OnPreRender()
+        internal static void OnPreRender()
         {
             Camera.Current.OnPreRender();
 
@@ -158,7 +141,7 @@ namespace CoreEngine.Engine.Scene
         /// <summary>
         /// Render the scene
         /// </summary>
-        internal void OnRenderObject()
+        internal static void OnRenderObject()
         {
             Camera.Current.OnRenderObject();
 
@@ -181,7 +164,7 @@ namespace CoreEngine.Engine.Scene
         /// <summary>
         /// Post render the scene
         /// </summary>
-        internal void OnPostRender()
+        internal static void OnPostRender()
         {
             Camera.Current.OnPostRender();
 

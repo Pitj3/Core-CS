@@ -1,56 +1,39 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
-
-using System;
 using System.Drawing;
-
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
 
 using CoreEngine.Engine.Resources;
 using CoreEngine.Engine.Components;
 
-using CoreEngine.Engine;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace CoreEngine.Engine.Rendering
 {
-    #region Enums
-    /// <summary>
-    /// Clear flags
-    /// </summary>
-    [Flags]
-    public enum ClearFlags
-    {
-        SolidColor = 0,
-        Depth = 1,
-        Nothing = 2
-    }
-    #endregion
-
     /// <summary>
     /// Camera class
     /// </summary>
     public class Camera : CoreComponent
     {
         #region Data
+
+        [IgnoreInSave]
         public static Camera Current;
 
-        [IgnoreInspector]
-        public Matrix4 projection;
-        [IgnoreInspector]
-        public Matrix4 view;
+        public Matrix4 Projection;
+        public Matrix4 View;
 
-        public Color clearColor { get; set; }
+        public Color ClearColor { get; set; }
 
-        public float znear { get; set; }
-        public float zfar { get; set; }
-        public float fov { get; set; }
+        public float ZNear { get; set; }
+        public float ZFar { get; set; }
+        public float Fov { get; set; }
 
-        public Vector2 renderSize { get; set; }
-        public ClearFlags clearFlags { get; set; }
-        public Vector3 look { get; set; }
-        public Vector3 up { get; set; }
+        public Vector2 RenderSize { get; set; }
+        public ClearBufferMask ClearFlags { get; set; }
+        public Vector3 Look { get; set; }
+        public Vector3 Up { get; set; }
 
         private bool _orthographic
         {
@@ -63,21 +46,24 @@ namespace CoreEngine.Engine.Rendering
                 orthographic = value;
                 if(value)
                 {
-                    znear = -10;
-                    zfar = 10;
+                    ZNear = -10;
+                    ZFar = 10;
 
-                    projection = Matrix4.CreateOrthographicOffCenter(0, renderSize.X, renderSize.Y, 0, znear, zfar);
-                    view = Matrix4.Identity;
+                    Projection = Matrix4.CreateOrthographicOffCenter(0, RenderSize.X, RenderSize.Y, 0, ZNear, ZFar);
+                    View = Matrix4.Identity;
                 }
                 else
                 {
-                    znear = 0.01f;
-                    zfar = 10000.0f;
+                    ZNear = 0.01f;
+                    ZFar = 10000.0f;
 
-                    _aspect = renderSize.X / renderSize.Y;
+                    _aspect = RenderSize.X / RenderSize.Y;
 
-                    projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);
-                    view = Matrix4.LookAt(parent.transform.position, look, up);
+                    if (Parent != null)
+                    {
+                        Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(Fov), _aspect, ZNear, ZFar);
+                        View = Matrix4.LookAt(Parent.LocalTransform.Position, Look, Up);
+                    }
                 }
             }
         }
@@ -91,25 +77,26 @@ namespace CoreEngine.Engine.Rendering
         #region Construction
         public Camera()
         {
-            renderSize = new Vector2(1280, 720);
-            fov = 60.0f;
+            RenderSize = new Vector2(1280, 720);
+            Fov = 60.0f;
 
-            clearFlags |= ClearFlags.Depth;
+            ClearFlags |= ClearBufferMask.ColorBufferBit;
+            ClearFlags |= ClearBufferMask.DepthBufferBit;
 
-            clearColor = Color.CornflowerBlue;
+            ClearColor = Color.FromArgb(1, 54, 57, 62);
 
-            orthographic = true;
+            orthographic = false;
 
             _orthographic = orthographic;
             if (_orthographic)
             {
-                znear = -10;
-                zfar = 10;
+                ZNear = -10;
+                ZFar = 10;
             }
             else
             {
-                znear = 0.01f;
-                zfar = 10000.0f;
+                ZNear = 0.01f;
+                ZFar = 10000.0f;
             }
         }
         #endregion
@@ -118,21 +105,21 @@ namespace CoreEngine.Engine.Rendering
 
         public override void Awake()
         {
-            look = Vector3.Zero;
-            up = new Vector3(0, 1, 0);
+            Look = Vector3.Zero;
+            Up = new Vector3(0, 1, 0);
 
             if (_orthographic)
             {
                 // create ortho matrix
-                projection = Matrix4.CreateOrthographicOffCenter(0, renderSize.X, renderSize.Y, 0, znear, zfar);
-                view = Matrix4.Identity;
+                Projection = Matrix4.CreateOrthographicOffCenter(0, RenderSize.X, RenderSize.Y, 0, ZNear, ZFar);
+                View = Matrix4.Identity;
             }
             else
             {
-                _aspect = renderSize.X / renderSize.Y;
+                _aspect = RenderSize.X / RenderSize.Y;
 
-                projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);
-                view = Matrix4.LookAt(parent.transform.position, look, up);
+                Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(Fov), _aspect, ZNear, ZFar);
+                View = Matrix4.LookAt(Parent.LocalTransform.Position, Look, Up);
             }
         }
 
@@ -147,9 +134,9 @@ namespace CoreEngine.Engine.Rendering
 
             if (!_orthographic)
             {
-                parent.transform.position = parent.transform.position;
-                projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fov), _aspect, znear, zfar);
-                view = Matrix4.LookAt(parent.transform.position, look, up);
+                Parent.LocalTransform.Position = Parent.LocalTransform.Position;
+                Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(Fov), _aspect, ZNear, ZFar);
+                View = Matrix4.LookAt(Parent.LocalTransform.Position, Look, Up);
             }
         }
 
@@ -165,20 +152,13 @@ namespace CoreEngine.Engine.Rendering
 
         public override void OnPreRender()
         {
-            
-            if(_renderTexture)
-            {
-                // render to texture
-            }
-            else
-            {
 
-            }
         }
 
         public override void OnRenderObject()
         {
-            
+            GL.Clear(ClearFlags);
+            GL.ClearColor(ClearColor);
         }
 
         public override void OnPostRender()

@@ -1,18 +1,17 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
-
 using System;
+
+using CoreEngine.Engine.Resources;
+using CoreEngine.Engine.Graphics;
 
 using OpenTK;
 
-using CoreEngine.Engine.Graphics;
-using CoreEngine.Engine.Resources;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
+// TODO: Check if still needed
 namespace CoreEngine.Engine.Core
 {
     #region Converter Extensions
@@ -147,8 +146,8 @@ namespace CoreEngine.Engine.Core
             Mesh mesh = (Mesh)value;
             serializer.Serialize(writer, new
             {
-                vertices = mesh.vertices,
-                indices = mesh.indices
+                vertices = mesh.Vertices,
+                indices = mesh.Indices
             });
         }
     }
@@ -163,7 +162,7 @@ namespace CoreEngine.Engine.Core
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject temp = JObject.Load(reader);
-            return new Shader(temp["path"].ToString());
+            return new Shader(temp["source"].ToString());
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -171,7 +170,7 @@ namespace CoreEngine.Engine.Core
             Shader shader = (Shader)value;
             serializer.Serialize(writer, new
             {
-                path = shader.path
+                source = shader.Source
             });
         }
     }
@@ -186,7 +185,7 @@ namespace CoreEngine.Engine.Core
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject temp = JObject.Load(reader);
-            return new Texture2D(temp["path"].ToString()); // TODO: Load other texture data
+            return new Texture2D(temp["source"].ToString()); // TODO: Load other texture data
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -194,7 +193,7 @@ namespace CoreEngine.Engine.Core
             Texture2D texture = (Texture2D)value;
             serializer.Serialize(writer, new
             {
-                path = texture.path // TODO: Write other texture data
+                source = texture.Source // TODO: Write other texture data
             });
         }
     }
@@ -209,8 +208,8 @@ namespace CoreEngine.Engine.Core
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject temp = JObject.Load(reader);
-            Material mat = new Material(new Shader(temp["shader"]["path"].ToString()));
-            mat.diffuseTexture = new Texture2D(temp["diffuseTexture"]["path"].ToString());
+            Material mat = new Material(new Shader(temp["shader"]["source"].ToString()));
+            mat.DiffuseTexture = new Texture2D(temp["diffuseTexture"]["source"].ToString());
 
             return mat;
         }
@@ -220,8 +219,8 @@ namespace CoreEngine.Engine.Core
             Material mat = (Material)value;
             serializer.Serialize(writer, new
             {
-                shader = mat.shader,
-                diffuseTexture = mat.diffuseTexture
+                shader = mat.ShaderProgram,
+                diffuseTexture = mat.DiffuseTexture
             });
         }
     }

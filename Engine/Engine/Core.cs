@@ -18,7 +18,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-using System;
 using System.Diagnostics;
 
 using CoreEngine.Engine.Application;
@@ -46,8 +45,6 @@ namespace CoreEngine.Engine
                 Debug.Assert(_currentApplication != null);
                 return _currentApplication;
             }
-
-            
             set
             {
                 if(value != null)

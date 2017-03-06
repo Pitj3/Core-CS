@@ -58,7 +58,7 @@ namespace Editor.Windows
         {
             this.component = comp;
 
-            string[] arr = comp.type.Split('.');
+            string[] arr = comp.TypeString.Split('.');
             string name = arr[arr.Length - 1];
             this.ComponentHeader.Text = name;
 

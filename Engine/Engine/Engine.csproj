@@ -78,6 +78,10 @@
       <HintPath>..\packages\FreeImageNET-PCL.3.17.1\lib\portable45-net45+win8+wpa81\FreeImageNET-PCL.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GlmNet, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GlmNet.0.5.1.0\lib\net40\GlmNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -124,6 +128,8 @@
     <Compile Include="Interface\UI.cs" />
     <Compile Include="Math\Transform.cs" />
     <Compile Include="Rendering\Camera.cs" />
+    <Compile Include="Rendering\Lighting\DirectionalLight.cs" />
+    <Compile Include="Rendering\Lighting\Light.cs" />
     <Compile Include="Resources\Shader.cs" />
     <Compile Include="Graphics\VertexArray.cs" />
     <Compile Include="Graphics\VertexBuffer.cs" />
@@ -138,7 +144,7 @@
     <Compile Include="Scene\SceneManager.cs" />
     <Compile Include="Time\CoreTime.cs" />
     <Compile Include="Utils\ComponentUtils.cs" />
-    <Compile Include="Utils\ConverterLoaded.cs" />
+    <Compile Include="Utils\ConverterLoader.cs" />
     <Compile Include="Utils\DirectoryUtils.cs" />
     <Compile Include="Utils\VectorConverter.cs" />
   </ItemGroup>

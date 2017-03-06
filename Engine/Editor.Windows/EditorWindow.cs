@@ -122,7 +122,7 @@ namespace Editor.Windows
 
         internal void OnUpdateFrame()
         {
-            sceneManager?.Update();
+            SceneManager.Update();
 
 
             if(_hierarchyTreeView != null)
@@ -147,10 +147,10 @@ namespace Editor.Windows
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.LoadMatrix(ref Camera.Current.projection);
+            GL.LoadMatrix(ref Camera.Current.Projection);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-            GL.LoadMatrix(ref Camera.Current.view);
+            GL.LoadMatrix(ref Camera.Current.View);
 
 
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
@@ -171,7 +171,7 @@ namespace Editor.Windows
             GL.PopMatrix();
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
-            sceneManager?.Render();
+            SceneManager.Render();
 
             GLView.SwapBuffers();
         }
@@ -193,11 +193,12 @@ namespace Editor.Windows
             obj.Name = "Cube" + currentScene.GameObjects.Count;
 
             Material mat = new Material(new Shader("Content/Shaders/default"));
-            mat.diffuseTexture = new Texture2D("Content/Images/cube.png");
+            mat.DiffuseTexture = new Texture2D("Content/Images/cube.png");
 
             MeshRenderer renderer = obj.AddComponent<MeshRenderer>();
-            renderer.mesh = PrimitiveFactory.CreateCube(1);
-            renderer.AddMaterial(mat);
+            renderer.StaticMesh = PrimitiveFactory.CreateCube(1);
+
+            renderer.StaticMesh.Meshes[0].MeshMaterial = mat;
 
             AddObjectToHierarchy(obj);
         }
@@ -213,7 +214,7 @@ namespace Editor.Windows
             GameObject obj = GameObject.Instantiate(null) as GameObject;
             obj.Name = "Camera" + currentScene.GameObjects.Count;
 
-            obj.transform.position = new Vector3(10, 10, 10);
+            obj.LocalTransform.Position = new Vector3(10, 10, 10);
 
             Camera cam = obj.AddComponent<Camera>();
             cam.orthographic = false;
@@ -296,7 +297,7 @@ namespace Editor.Windows
                 _inspectorTransformGrid.Visible = true;
                 _inspectorComponentPanel.Visible = true;
 
-                _inspectorTransformGrid.SelectedObject = obj.transform;
+                _inspectorTransformGrid.SelectedObject = obj.LocalTransform;
 
                 // new data
                 foreach (CoreComponent comp in obj.Components)

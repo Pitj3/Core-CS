@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-using CoreEngine.Engine.Logging;
-
 namespace CoreEngine.Engine.Graphics
 {
     #region Enums
@@ -18,12 +16,12 @@ namespace CoreEngine.Engine.Graphics
     /// </summary>
     public struct BufferElement
     {
-        public string name;
-        public VertexAttribPointerType type;
-        public uint size;
-        public uint count;
-        public uint offset;
-        public bool normalized;
+        public string Name;
+        public VertexAttribPointerType AttribType;
+        public uint Size;
+        public uint Count;
+        public uint Offset;
+        public bool Normalized;
     };
     #endregion
 
@@ -93,7 +91,7 @@ namespace CoreEngine.Engine.Graphics
             if (_layout == null)
                 _layout = new List<BufferElement>();
 
-            _layout.Add(new BufferElement() { name = name, type = type, size = size, count = count, offset = this._size, normalized = normalized });
+            _layout.Add(new BufferElement() { Name = name, AttribType = type, Size = size, Count = count, Offset = this._size, Normalized = normalized });
             this._size += size * count;
         }
         #endregion

@@ -1,13 +1,18 @@
-﻿using System;
+﻿// Copyright (C) 2017 Roderick Griffioen
+// This file is part of the "Core Engine".
+// For conditions of distribution and use, see copyright notice in Core.cs
+
+using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Drawing;
 
 using OpenTK;
 
-
 namespace CoreEngine.Engine.Utils
 {
+    /// <summary>
+    /// Vector converter used for the property grid
+    /// </summary>
     public class VectorConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)

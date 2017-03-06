@@ -1,10 +1,9 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
+using CoreEngine.Engine.Scene;
 
 using OpenTK;
-
-using CoreEngine.Engine.Scene;
 
 namespace CoreEngine.Engine.Core
 {
@@ -16,6 +15,8 @@ namespace CoreEngine.Engine.Core
         #region Data
         public bool Enabled = true;
         public string Name;
+
+        public int ID;
         #endregion
 
         #region Static API

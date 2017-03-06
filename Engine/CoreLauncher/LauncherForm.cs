@@ -162,6 +162,7 @@ namespace CoreLauncher
 
                         string[] arr = newItemPath.Split('\\');
                         string path = newItemPath.TrimEnd(arr[arr.Length - 1].ToCharArray());
+
                         if (!Directory.Exists(fullpath + "/Engine/" + path))
                         {
                             if(path != "" && path.Contains("bin") == false && path.Contains("obj") == false)

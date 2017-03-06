@@ -43,6 +43,10 @@
       <HintPath>..\packages\FreeImageNET-PCL.3.17.1\lib\portable45-net45+win8+wpa81\FreeImageNET-PCL.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GlmNet, Version=0.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GlmNet.0.5.1.0\lib\net40\GlmNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>

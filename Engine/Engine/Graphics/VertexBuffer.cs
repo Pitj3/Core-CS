@@ -4,7 +4,6 @@
 
 using System;
 
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace CoreEngine.Engine.Graphics
@@ -80,7 +79,7 @@ namespace CoreEngine.Engine.Graphics
             {
                 BufferElement element = layout.GetLayout()[i];
                 GL.EnableVertexAttribArray(i);
-                GL.VertexAttribPointer(i, (int)element.count, element.type, element.normalized, (int)layout.GetStride(), new IntPtr(element.offset));
+                GL.VertexAttribPointer(i, (int)element.Count, element.AttribType, element.Normalized, (int)layout.GetStride(), new IntPtr(element.Offset));
             }
         }
 

@@ -1,12 +1,9 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
-
-using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace CoreEngine.Engine.Graphics

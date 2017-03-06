@@ -1,19 +1,12 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
-
-using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 
 using CoreEngine.Engine.Components;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-using CoreEngine.Engine.Core;
-
-using OpenTK;
 
 namespace CoreEngine.Engine.Scene
 {
@@ -29,29 +22,13 @@ namespace CoreEngine.Engine.Scene
         private string _path = "Content/Scenes/";
         private string _jsonData = "";
 
-        private JsonSerializer _jsonSerializer;
-        private JsonConverter[] _converters;
-
         public GameObject CurrentObject;
         #endregion
 
         #region Constructors
         public Scene()
         {
-            _jsonSerializer = new JsonSerializer();
-            _jsonSerializer.Converters.Add(new VectorConverter());
-            _jsonSerializer.Converters.Add(new QuaternionConverter());
-            _jsonSerializer.Converters.Add(new Matrix4Converter());
-            _jsonSerializer.Converters.Add(new MeshConverter());
-            _jsonSerializer.Converters.Add(new ShaderConverter());
-            _jsonSerializer.Converters.Add(new Texture2DConverter());
-            _jsonSerializer.Converters.Add(new MaterialConverter());
 
-            _converters = new JsonConverter[_jsonSerializer.Converters.Count];
-            for (int j = 0; j < _jsonSerializer.Converters.Count; j++)
-            {
-                _converters[j] = _jsonSerializer.Converters[j];
-            }
         }
         #endregion
 
@@ -66,7 +43,7 @@ namespace CoreEngine.Engine.Scene
             // load objects and stuff from source.
             SceneManager.CurrentScene = this;
 
-            string[] arr = source.Split('\\');
+            string[] arr = source.Split('/');
             Name = arr[arr.Length - 1];
 
             _path = source;
@@ -107,38 +84,6 @@ namespace CoreEngine.Engine.Scene
             }
         }
 
-        public void LoadByString(string source, string path)
-        {
-            Name = path;
-            _path += path + ".txt";
-
-            // load objects and stuff from source.
-            SceneManager.CurrentScene = this;
-
-            _jsonData = source;
-
-            if (_jsonData.Length == 0)
-                return;
-
-            LoadGameObjects();
-
-            foreach (GameObject go in GameObjects)
-            {
-                foreach (CoreComponent comp in go.Components)
-                {
-                    comp.Awake();
-                }
-            }
-
-            foreach (GameObject go in GameObjects)
-            {
-                foreach (CoreComponent comp in go.Components)
-                {
-                    comp.Start();
-                }
-            }
-        }
-
         /// <summary>
         /// Saves the scene
         /// </summary>
@@ -149,29 +94,37 @@ namespace CoreEngine.Engine.Scene
                 _path = overridepath;
                 _path += Name;
             }
+            //_path += Name;
 
             string savefile = "";
-            SaveGameObject[] sgoList = new SaveGameObject[GameObjects.Count];
 
-            int i = 0;
-            foreach (GameObject go in GameObjects)
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+
+            using (JsonWriter jw = new JsonTextWriter(sw))
             {
-                sgoList[i] = go.Serialize();
-                i++;
+                jw.Formatting = Formatting.Indented;
+                jw.WriteStartArray();
+                foreach (GameObject go in GameObjects)
+                {
+                    jw.WriteStartObject();
+                    jw.WritePropertyName("GOID");
+                    jw.WriteValue(go.ID);
+                    jw.WriteEndObject();
+
+                    go.Save();
+                }
+                jw.WriteEndArray();
             }
 
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.Converters = _converters;
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
-            savefile = JsonConvert.SerializeObject(sgoList, Formatting.Indented, settings);
+            savefile = sw.ToString();
 
             if (!File.Exists(_path))
             {
-                using(StreamWriter sw = File.CreateText(_path))
+                using(StreamWriter writer = File.CreateText(_path))
                 {
-                    sw.Write(savefile);
-                    sw.Close();
+                    writer.Write(savefile);
+                    writer.Close();
                 }
             }
             else
@@ -184,80 +137,27 @@ namespace CoreEngine.Engine.Scene
 
         #region GameObject API
 
-        private int _currentObject = 0;
-
         /// <summary>
         /// Loads the game objects and components
         /// </summary>
         public void LoadGameObjects()
         {
-            _currentObject = 0;
-            SaveGameObject[] sgoList = null;
-
-            sgoList = JsonConvert.DeserializeObject<SaveGameObject[]>(_jsonData, _converters);
-            
-            foreach (SaveGameObject sgo in sgoList)
+            JsonTextReader reader = new JsonTextReader(new StringReader(_jsonData));
+            while(reader.Read())
             {
-                GameObject go = GameObject.Instantiate(null, sgo.position, sgo.rotation) as GameObject;
-                go.Name = sgo.Name;
-                go.Static = sgo.Static;
-                go.Parent = sgo.Parent;
-
-                LoadComponents(sgo, go);
-
-                _currentObject++;
-                LoadChildren(sgo, go);
-            }
-        }
-
-        /// <summary>
-        /// Loads the children of a savegameobject
-        /// </summary>
-        /// <param name="saveObj">Saved object</param>
-        /// <param name="parent">Parent to load the children to</param>
-        public void LoadChildren(SaveGameObject saveObj, GameObject parent)
-        {
-            foreach (SaveGameObject sgoChild in saveObj.Children)
-            {
-                GameObject goChild = GameObject.Instantiate(null, sgoChild.position, sgoChild.rotation) as GameObject;
-                goChild.Name = sgoChild.Name;
-                goChild.Static = sgoChild.Static;
-                goChild.Parent = parent;
-
-                LoadComponents(saveObj, parent);
-
-                _currentObject++;
-                LoadChildren(sgoChild, goChild);
-            }
-        }
-
-        /// <summary>
-        /// Loads the components of the supplied savegameobject
-        /// </summary>
-        /// <param name="saveObj">Components will be loaded from this savegameobject</param>
-        /// <param name="parent">GameObject to parent the component to</param>
-        public void LoadComponents(SaveGameObject saveObj, GameObject parent)
-        {
-            JArray arr = JArray.Parse(_jsonData);
-            JToken comps = arr[_currentObject]["Components"];
-
-            int _currComp = 0;
-
-            foreach (JToken token in comps.Children()) // for every comp
-            {
-                object t = null;
-                try
+                if(reader.Value != null)
                 {
-                    t = token.ToObject(saveObj.Components[_currComp].systemType, _jsonSerializer);
-                }
-                catch(JsonException e)
-                {
-                    Console.WriteLine(e);
-                }
+                    if(reader.TokenType == JsonToken.PropertyName)
+                    {
+                        if (reader.Value.ToString() == "GOID")
+                        {
+                            reader.Read();
+                            int goid = int.Parse(reader.Value.ToString());
 
-                parent.AddComponent(t);
-
-                _currComp++;
+                            GameObject.Load(goid);
+                        }
+                    }
+                }
             }
         }
         #endregion

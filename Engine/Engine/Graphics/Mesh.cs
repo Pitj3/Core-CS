@@ -1,15 +1,7 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 
 namespace CoreEngine.Engine.Graphics
 {
@@ -19,9 +11,12 @@ namespace CoreEngine.Engine.Graphics
     /// </summary>
     public struct MeshVertex
     {
-        public Vector3 position;
-        public Vector2 uv;
-        public Vector4 color;
+        public Vector3 Position;
+        public Vector2 UV;
+        public Vector3 Normal;
+        public Vector3 BiTangent;
+        public Vector3 Tangent;
+        public Vector4 Color;
     }
     #endregion
 
@@ -31,42 +26,44 @@ namespace CoreEngine.Engine.Graphics
     public class Mesh
     {
         #region Data
-        public VertexArray va;
-        public IndexBuffer ib;
+        public VertexArray VA;
+        public IndexBuffer IB;
 
-        public MeshVertex[] vertices;
-        public ushort[] indices;
+        public MeshVertex[] Vertices;
+        public ushort[] Indices;
 
-        public Material material;
+        public Material MeshMaterial;
 
         #endregion
 
         #region Constructors
         public Mesh(MeshVertex[] vertices, ushort[] indices)
         {
-            this.vertices = vertices;
-            this.indices = indices;
+            this.Vertices = vertices;
+            this.Indices = indices;
 
-            va = new VertexArray();
-            va.Bind();
+            VA = new VertexArray();
+            VA.Bind();
 
             VertexBuffer vb = new VertexBuffer();
             vb.SetData((uint)(System.Runtime.InteropServices.Marshal.SizeOf(typeof(MeshVertex)) * vertices.Length), vertices);
 
             BufferLayout layout = new BufferLayout();
 
-            // TODO: Make this the default mesh data
             layout.Push<Vector3>("POSITION");
             layout.Push<Vector2>("TEXCOORD");
+            layout.Push<Vector3>("NORMAL");
+            layout.Push<Vector3>("BITANGENT");
+            layout.Push<Vector3>("TANGENT");
             layout.Push<Vector4>("COLOR");
 
             vb.SetLayout(layout);
 
-            va.PushBuffer(vb);
+            VA.PushBuffer(vb);
 
-            ib = new IndexBuffer(indices, (uint)indices.Length);
+            IB = new IndexBuffer(indices, (uint)indices.Length);
 
-            va.Unbind();
+            VA.Unbind();
         }
         #endregion
     }

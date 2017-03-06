@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright (C) 2017 Roderick Griffioen
+// This file is part of the "Core Engine".
+// For conditions of distribution and use, see copyright notice in Core.cs
 
 using OpenTK;
 
-using System.ComponentModel;
-using CoreEngine.Engine.Utils;
-
 namespace CoreEngine.Engine.Math
 {
+    /// <summary>
+    /// Transform class
+    /// </summary>
     public class Transform
-    { 
-        public Vector3 position { get; set; }
-        public Vector3 scale { get; set; }
-        public Quaternion rotation;
-        public Vector3 eulerRotation
+    {
+        #region Data
+        public Vector3 Position { get; set; }
+        public Vector3 Scale { get; set; }
+        public Quaternion Rotation;
+        public Vector3 EulerRotation
         {
             get
             {
@@ -25,10 +24,11 @@ namespace CoreEngine.Engine.Math
             set
             {
                 _rotationEuler = value;
-                rotation = Quaternion.FromEulerAngles(value);
+                Rotation = Quaternion.FromEulerAngles(value);
             }
         }
 
         private Vector3 _rotationEuler;
+        #endregion
     }
 }

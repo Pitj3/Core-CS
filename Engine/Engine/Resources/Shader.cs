@@ -1,17 +1,13 @@
 ﻿// Copyright (C) 2017 Roderick Griffioen
 // This file is part of the "Core Engine".
 // For conditions of distribution and use, see copyright notice in Core.cs
-
-using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.IO;
 
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
-
 using CoreEngine.Engine.Logging;
+
+using OpenTK.Graphics.OpenGL;
 
 namespace CoreEngine.Engine.Resources
 {
@@ -23,16 +19,19 @@ namespace CoreEngine.Engine.Resources
         #region Data
         private uint _program;
 
-        public string vsSource = "";
-        public string fsSource = "";
-
-        public string path = "";
+        public string VSSource = "";
+        public string FSSource = "";
         #endregion
 
         #region Constructors
+        public Shader()
+        {
+
+        }
+
         public Shader(string filepath)
         {
-            path = filepath;
+            Source = filepath;
             Debug.Assert(Load(filepath));
         }
         #endregion
@@ -44,6 +43,12 @@ namespace CoreEngine.Engine.Resources
         /// <param name="source">Filepath (without extension)</param>
         public override bool Load(string source)
         {
+            if (source.Contains(".casset"))
+            {
+                return InternalLoad(source);
+            }
+
+            this.Source = source;
             if (!File.Exists(source + ".vs"))
             {
                 Logger.Log(LogLevel.ERROR, "Shader not found at location: " + source);
@@ -52,7 +57,7 @@ namespace CoreEngine.Engine.Resources
             {
                 using (StreamReader sr = File.OpenText(source + ".vs"))
                 {
-                    vsSource = sr.ReadToEnd();
+                    VSSource = sr.ReadToEnd();
                 }
             }
             if (!File.Exists(source + ".fs"))
@@ -63,14 +68,14 @@ namespace CoreEngine.Engine.Resources
             {
                 using (StreamReader sr = File.OpenText(source + ".fs"))
                 {
-                    fsSource = sr.ReadToEnd();
+                    FSSource = sr.ReadToEnd();
                 }
             }
 
             uint vertShader = (uint)GL.CreateShader(ShaderType.VertexShader);
             uint fragShader = (uint)GL.CreateShader(ShaderType.FragmentShader);
 
-            GL.ShaderSource((int)vertShader, vsSource);
+            GL.ShaderSource((int)vertShader, VSSource);
             GL.CompileShader(vertShader);
 
             int vertLogLength = 0;
@@ -78,7 +83,7 @@ namespace CoreEngine.Engine.Resources
             GL.GetShaderInfoLog(vertShader, 1024, out vertLogLength, outVertLog);
             if (vertLogLength > 1) Logger.Log(LogLevel.ERROR, outVertLog.ToString());
 
-            GL.ShaderSource((int)fragShader, fsSource);
+            GL.ShaderSource((int)fragShader, FSSource);
             GL.CompileShader(fragShader);
 
             int fragLogLength = 0;
@@ -100,6 +105,24 @@ namespace CoreEngine.Engine.Resources
             GL.DeleteShader(fragShader);
 
             return true;
+        }
+
+        /// <summary>
+        /// Saves the shader to a .casset file
+        /// </summary>
+        public override void Save()
+        {
+            if (!Directory.Exists("Library"))
+            {
+                Directory.CreateDirectory("Library");
+            }
+
+            File.WriteAllText("Library/RES" + ID + ".casset", "");  
+
+            using (BinaryWriter bw = new BinaryWriter(File.Open("Library/RES" + ID + ".casset", FileMode.Append)))
+            {
+                bw.Write(Source);
+            }
         }
 
         /// <summary>
@@ -135,6 +158,22 @@ namespace CoreEngine.Engine.Resources
             return _program;
         }
 
+        #endregion
+
+        #region Internal API
+        /// <summary>
+        /// loads the shader from a .casset file
+        /// </summary>
+        /// <param name="source"></param>
+        internal bool InternalLoad(string source)
+        {
+            using (BinaryReader br = new BinaryReader(File.Open(source, FileMode.Open)))
+            {
+                string s = br.ReadString();
+
+                return Load(s);
+            }
+        }
         #endregion
     }
 }

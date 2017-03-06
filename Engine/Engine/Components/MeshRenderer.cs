@@ -1,18 +1,22 @@
-﻿using CoreEngine.Engine.Graphics;
+﻿// Copyright (C) 2017 Roderick Griffioen
+// This file is part of the "Core Engine".
+// For conditions of distribution and use, see copyright notice in Core.cs
+
+using CoreEngine.Engine.Graphics;
 using CoreEngine.Engine.Resources;
+using CoreEngine.Engine.Rendering.Lighting;
 
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
-
-using System.Collections.Generic;
 
 namespace CoreEngine.Engine.Components
 {
+    /// <summary>
+    /// Mesh Renderer component
+    /// </summary>
     public class MeshRenderer : CoreComponent
     {
         #region Data
-        public StaticModel mesh;
-        public List<Material> materials = new List<Material>();
+        public StaticModel StaticMesh;
         #endregion
 
         #region Constructors
@@ -23,34 +27,46 @@ namespace CoreEngine.Engine.Components
         #endregion
 
         #region Events
+        /// <summary>
+        /// Called when the object is rendered
+        /// </summary>
         public override void OnRenderObject()
         {
             base.OnRenderObject();
 
-            if (mesh == null)
+            if (StaticMesh == null)
                 return;
 
-            foreach (Mesh m in mesh.meshes)
+            foreach (Mesh mesh in StaticMesh.Meshes)
             {
-                m.material?.Bind();
+                mesh.MeshMaterial?.Bind();
 
-                m.va.Bind();
-                m.ib.Bind();
+                foreach (CoreComponent comp in Parent.Components)
+                {
+                    if(comp is Light)
+                    {
+                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+                    }
+                }
 
-                GL.DrawElements(BeginMode.Triangles, (int)m.ib.GetCount(), DrawElementsType.UnsignedShort, 0);
+                mesh.VA.Bind();
+                mesh.IB.Bind();
 
-                m.ib.Unbind();
-                m.va.Unbind();
+                GL.DrawElements(BeginMode.Triangles, (int)mesh.IB.GetCount(), DrawElementsType.UnsignedShort, 0);
 
-                m.material?.Unbind();
+                mesh.IB.Unbind();
+                mesh.VA.Unbind();
+
+                foreach (CoreComponent comp in Parent.Components)
+                {
+                    if (comp is Light)
+                    {
+                        GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                    }
+                }
+
+                mesh.MeshMaterial?.Unbind();
             }
-        }
-        #endregion
-
-        #region Public API
-        public void AddMaterial(Material mat)
-        {
-            materials.Add(mat);
         }
         #endregion
     }

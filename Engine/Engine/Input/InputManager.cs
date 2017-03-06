@@ -3,6 +3,7 @@
 // For conditions of distribution and use, see copyright notice in Core.cs
 
 using System;
+
 using OpenTK;
 using OpenTK.Input;
 
@@ -781,7 +782,6 @@ namespace CoreEngine.Engine.Input
         #endregion
 
         #region Private API
-
         private static void SetupInputEvents()
         {
             CoreEngine.CurrentApplication.Keyboard.KeyDown += Keyboard_KeyDown;

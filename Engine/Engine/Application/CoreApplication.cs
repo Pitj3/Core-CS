@@ -3,18 +3,15 @@
 // For conditions of distribution and use, see copyright notice in Core.cs
 
 using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
 
 using CoreEngine.Engine.Input;
 using CoreEngine.Engine.Time;
 using CoreEngine.Engine.Logging;
-
 using CoreEngine.Engine.Scene;
-
-using CoreEngine.Engine.Interface;
-
 using CoreEngine.Engine.Utils;
+
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace CoreEngine.Engine.Application
 {
@@ -24,11 +21,11 @@ namespace CoreEngine.Engine.Application
     /// </summary>
     public struct CoreApplicationCreationParams
     {
-        public uint width;
-        public uint height;
-        public string title;
-        public bool fullscreen;
-        public bool vsync;
+        public uint Width;
+        public uint Height;
+        public string Title;
+        public bool Fullscreen;
+        public bool VSync;
     };
     #endregion
 
@@ -43,7 +40,6 @@ namespace CoreEngine.Engine.Application
         private uint _width, _height;
         private string _title;
         private bool _fullscreen, _vsync;
-        private SceneManager _scene;
         #endregion
 
         #region Constructors
@@ -65,11 +61,11 @@ namespace CoreEngine.Engine.Application
 
             _params = new CoreApplicationCreationParams()
             {
-                width = width,
-                height = height,
-                title = title,
-                fullscreen = fullscreen,
-                vsync = vsync
+                Width = width,
+                Height = height,
+                Title = title,
+                Fullscreen = fullscreen,
+                VSync = vsync
             };
 
             CoreEngine.CurrentApplication = this;
@@ -79,7 +75,7 @@ namespace CoreEngine.Engine.Application
         /// CoreApplication constructor
         /// </summary>
         /// <param name="param">Params of the window, see CoreApplicationCreationParams for values</param>
-        public CoreApplication(CoreApplicationCreationParams param) : this(param.width, param.height, param.title, param.fullscreen, param.vsync)
+        public CoreApplication(CoreApplicationCreationParams param) : this(param.Width, param.Height, param.Title, param.Fullscreen, param.VSync)
         {
 
         }
@@ -94,13 +90,13 @@ namespace CoreEngine.Engine.Application
         {
             base.OnLoad(e);
 
+            // We need this for the editor, TODO: Find a better way for this
             ConverterLoader.Load();
 
             Logger.OnLoad(e);
             Logger.Log(LogLevel.DEBUG, "CoreApplication:OnLoad(e)");
-            InputManager.OnLoad(e);
 
-            _scene = new SceneManager();
+            InputManager.OnLoad(e);
         }
 
         /// <summary>
@@ -122,12 +118,12 @@ namespace CoreEngine.Engine.Application
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
-            CoreTime.deltaTime = e.Time;
+            CoreTime.DeltaTime = e.Time;
 
-            if (InputManager.IsKeyDown(Key.Escape))
+            if (InputManager.IsKeyDown(Key.Escape)) // TODO: Shouldn't happen like this, user should specify this
                 Close();
 
-            _scene?.Update();
+            SceneManager.Update();
         }
 
         /// <summary>
@@ -138,10 +134,7 @@ namespace CoreEngine.Engine.Application
         {
             base.OnRenderFrame(e);
 
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.ClearColor(54.0f / 255.0f, 57.0f / 255.0f, 62.0f / 255.0f, 1);
-
-            _scene?.Render();
+            SceneManager.Render();
 
             InputManager.OnRenderFrame(e);
         }
@@ -181,9 +174,6 @@ namespace CoreEngine.Engine.Application
         /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
         {
-            //if(SceneManager.CurrentScene != null)
-               //SceneManager.CurrentScene.Save(); // TODO: We don't want to save instantiated objects
-
             Logger.Log(LogLevel.DEBUG, "CoreApplication:OnClosed(e)");
             base.OnClosed(e);
         }
