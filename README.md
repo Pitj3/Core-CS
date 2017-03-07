@@ -68,6 +68,14 @@ Coming back online soon!
 ---
 
 # Changelog
+3-6-17
+- Refactored saving and loading code, files are now saved in their own format (.casset) and loaded properly
+- Refactored some rendering code
+- Made interface for renderer
+- Made the basic architecture for deferred rendering
+- Added Light interface with directional light (currently functions as a point light)
+- Cleaned up code and documented undocumented functions
+
 3-5-17
 - Added editor to project
 - Editor can now edit objects properties
