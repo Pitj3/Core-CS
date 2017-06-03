@@ -44,23 +44,6 @@ Do you want to know what is planned in the future for the Core Engine?
 
 ---
 
-#### Looking For:
-I'm looking for people that like to help out with this engine, if you can spare some time to check/write code, implement data structures, design architectures or help me think about design and future additions please write me a line!
-
-<b>Right now I need the most:</b>
-- DirectX dev has been abandoned for the reason of it not being really needed. OpenGL is cross platform as is. (Also my skills in DirectX were lacking too much which slowed the development down loads)
-- Artist to help create art for the editor and possibly website.
-- Code Architecture designer to help properly structure the engine.
-- Proficient Winforms programmer / designer to help me make the editor even better.
-- You! I need anyone who wants to help out and make this a great engine, if you feel like you can offer something great to this engine, write me a line!
-
----
-
-#### Isn't this engine also being made in C++?
-It was, C# has proven itself to be more suited for the way I want to make this engine. The old C++ source will stay available, but is discontinued. 
-
----
-
 #### Documentation
 
 Coming back online soon!
